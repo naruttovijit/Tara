@@ -1,0 +1,408 @@
+﻿@page "/Data/ProjectCreate"
+
+@using ModelM2s;
+@using ModelM2s.Json;
+@using Data;
+
+@inject ProjectData pj;
+
+<h3>Create New Project</h3>
+
+@*Create Project HD*@
+<EditForm Model="formmain">
+    &nbsp;<label>Main Project Name :</label> &nbsp; <InputText id="MainName" @bind-Value="formmain.ProjectName"></InputText><br /><br />
+    &nbsp;<label>Description :</label> &nbsp; <InputText id="MainDesc" @bind-Value="formmain.Description"></InputText><br /><br />
+    &nbsp;<label>Remarked :</label> &nbsp; <InputText id="MainRemark" @bind-Value="formmain.Remark"></InputText><br /><br />
+    &nbsp;<label>Customer Infomation :</label> &nbsp; <InputSelect id="MainCustomer" @bind-Value="customerid">
+        <option value="0">------------Select Customer------------</option>
+        @if (customer is not null)
+        {
+            foreach (var list in customer)
+            {
+                <option value="@list.id">@list.CompanyNameEN (@list.CompanyNameTH)</option>
+            }
+        }
+    </InputSelect><br /><br />
+    <p style="background-color:white; border:solid">
+        &nbsp;<h4>Contact Infomation</h4>
+        <table style="width:100%">
+            <tr>
+                <th>Name</th>
+                <th>Address</th>
+                <th>Tel.</th>
+                <th>Delete</th>
+            </tr>
+            @if (ListContact is not null)
+            {
+                foreach (var list in ListContact)
+                {
+                    <tr>
+                        <td>@list.name</td>
+                        <td>@list.address</td>
+                        <td>@list.tel</td>
+                        <td>
+                            <button @onclick="() => ListContact.Remove(list)">
+                                X
+                            </button>
+                        </td>
+                    </tr>
+                }
+            }
+
+        </table>
+        <div>
+            <InputSelect id="MainContact" @bind-Value="contactid">
+                <option value="0">------------Select Contact------------</option>
+                @if (contact is not null)
+                {
+                    foreach (var list in contact)
+                    {
+                        <option value="@list.id">@list.name</option>
+                    }
+                }
+            </InputSelect> &nbsp;&nbsp;
+            <button @onclick="()=>SaveContact(contactid)">Add Contact</button><br /><br />
+        </div>
+    </p>
+
+    &nbsp;<label>Budget :</label> &nbsp; <InputNumber id="MainBudget" @bind-Value="formmain.Budget"></InputNumber> THB <br /><br />
+    &nbsp;<label>Started Date :</label> &nbsp; <InputDate id="MainStartDate" @bind-Value="formmain.PlanStartDate"></InputDate> &nbsp;&nbsp;&nbsp;
+    &nbsp;<label>Finished Date :</label> &nbsp; <InputDate id="MainFinishDate" @bind-Value="formmain.PlanFinishDate"></InputDate><br /><br />
+    &nbsp;
+    @if(MainSaveshow)
+    {
+        <button @onclick="SaveProjectMain">Next</button>
+    }
+    
+</EditForm>
+
+@*Create Project Sub*@
+@if (Subshow)
+{
+    if (formmain.ProjectSubProjectTls is not null)
+    {
+        foreach (var sub in formmain.ProjectSubProjectTls)
+        {
+            <p style="background-color:white; border:solid">
+                <button style="align-items:end" @onclick="() => formmain.ProjectSubProjectTls.Remove(sub)">Delete</button><br />
+                &nbsp;<label>Project Sub Running No. : @sub.ProjectSubRunNo</label><br /><br />
+                &nbsp;<label>Project Sub Name : @sub.ProjectSubName</label><br /><br />
+                &nbsp;<label>Description : @sub.Description</label> <br /><br />
+                &nbsp;<label>Remarked : @sub.Remark</label> <br /><br />
+                &nbsp;<label>Budget : @sub.Budget</label> <br /><br />
+                &nbsp;<label>Started Date : @sub.PlanStartDate</label> &nbsp;&nbsp;&nbsp;
+                &nbsp;<label>Finished Date : @sub.PlanFinishDate</label> <br /><br />
+                &nbsp;
+                @foreach (var list in @sub.ProjectRatypeTls)
+                {
+                    var ra = ratype.Where(w => w.Id == list.RatypeMasterId).FirstOrDefault();
+                    <label>RA Type : @ra.Name</label> <br />
+                    <label>Category</label>
+                    <br />
+                    @if (list.MemberCapability is not null)
+                    {
+                        ShowCategory(list.MemberCapability);
+                        if(showcate is not null)
+                        {
+                            <table style="width:100%">
+                                @foreach (var categorylist in showcate)
+                                {
+                                    <tr>
+                                        <td>@categorylist.SystemName - @categorylist.SubSystemName</td>
+                                    </tr>
+                                }
+                            </table>
+                        }
+                    }
+                }
+            </p>
+
+        }
+    }
+
+    <EditForm Model="formsub">
+        <h4>Create Project Sub</h4>
+        <p style="background-color:white; border:solid">
+            <br />
+            &nbsp;<label>Project Sub Name :</label> &nbsp; <InputText id="SubName" @bind-Value="formsub.ProjectSubName"></InputText><br /><br />
+            &nbsp;<label>Description :</label> &nbsp; <InputText id="SubDesc" @bind-Value="formsub.Description"></InputText><br /><br />
+            &nbsp;<label>Remarked :</label> &nbsp; <InputText id="SubRemark" @bind-Value="formsub.Remark"></InputText><br /><br />
+            &nbsp;<label>Budget :</label> &nbsp; <InputNumber id="SubBudget" @bind-Value="formsub.Budget"></InputNumber> THB <br /><br />
+            &nbsp;<label>Started Date :</label> &nbsp; <InputDate id="SubStartDate" @bind-Value="formsub.PlanStartDate"></InputDate> &nbsp;&nbsp;&nbsp;
+            &nbsp;<label>Finished Date :</label> &nbsp; <InputDate id="SubFinishDate" @bind-Value="formsub.PlanFinishDate"></InputDate>&nbsp;&nbsp;<br /><br />
+
+            &nbsp;<label>RA Type :</label> &nbsp; <InputSelect id="SubRAType" @bind-Value="formRAType.RatypeMasterId">
+                <option value="0">------------Select RA Type------------</option>
+                @if (ratype is not null)
+                {
+                    foreach (var list in ratype)
+                    {
+                        <option value="@list.Id">@list.Name</option>
+                    }
+                }
+            </InputSelect><br /><br />
+
+
+        <p style="background-color:white; border:solid">
+            &nbsp;<h4>Category</h4>
+            <table style="width:100%">
+                <tr>
+                    <th>Category</th>
+                    <th>Category Sub</th>
+                    <th>Delete</th>
+                </tr>
+                    @if (ListCategory is not null)
+                    {
+                        foreach (var list in ListCategory)
+                        {
+                        <tr>
+                            <td>@list.SystemName</td>
+                            <td>@list.SubSystemName</td>
+                            <td>
+                                <button @onclick="() => ListCategory.Remove(list)">X</button>
+                            </td>
+                        </tr>
+                        }
+                    }
+            </table>
+            <div>
+                <InputSelect id="SubCategory" @bind-Value="categoryid">
+                    <option value="0">------------Select Category------------</option>
+                        @if (category is not null)
+                        {
+                            foreach (var list in category)
+                            {
+                            <option value="@list.id">@list.SystemName - @list.SubSystemName</option>
+                            }
+                        }
+                </InputSelect> &nbsp;&nbsp;
+                <button @onclick="()=>SaveCategory(categoryid)">Add Category</button><br /><br />
+            </div>
+        </p>
+        <br /><br />
+        &nbsp;<button @onclick="SaveProjectSub">Add</button>
+        <br /><br />
+
+        &nbsp;<button @onclick="SaveAll">Save All</button>
+        </p>
+
+    </EditForm>
+}
+
+@code {
+    public ProjectHd formmain { get; set; } = new ProjectHd();
+    public ProjectSubProjectTl formsub { get; set; } = new ProjectSubProjectTl();
+    public ProjectRatypeTl formRAType { get; set; } = new ProjectRatypeTl();
+    public List<ContactInfo> ListContact { get; set; } = new List<ContactInfo>();
+    public List<Category> ListCategory { get; set; } = new List<Category>();
+    public List<CustomerInfo> ListCustomer { get; set; } = new List<CustomerInfo>();
+    public List<ProjectHdhistory> HDhis { get; set; } = new List<ProjectHdhistory>();
+    public List<ProjectSubProjectTlhistory> Subhis { get; set; } = new List<ProjectSubProjectTlhistory>();
+
+    private List<CustomerInfo> customer;
+    private List<ContactInfo> contact;
+    private List<Category> category;
+    private List<RatypeMaster> ratype;
+    private List<Member> member;
+    private List<Category> showcate;
+    string mem = @"
+[{
+    id:'5',
+    name:'กิติยศ สาคริก',
+    company_en:'Busarakham Hospital',
+    company_th:'โรงพยาบาลบุษราคัม',
+    address:'อาคารอิมแพคชาเลนเจอร์ 2 Popular 1 Rd, Tambon Ban Mai, Amphoe Pak Kret, Chang Wat Nonthaburi 11120',
+    tel:'02 029 1661'
+},
+{
+    id:'6',
+    name:'ทวี ภาวนากร',
+    company_en:'Forth Corporation Public Company Limited',
+    company_th:'บริษัท ฟอร์ท คอร์ปอเรชั่น จำกัด (มหาชน)',
+    address:'1053/1 Phahonyothin Road, Phayathai, Phayathai, Bangkok 10400',
+    tel:''
+},
+{
+    id:'7',
+    name:'วีรยา บรรลือทรัพย์',
+    company_en:'InGenium Group CO.,LTD.',
+    company_th:'บริษัท อินจีเนียม จำกัด (สำนักงานใหญ่)',
+    address:'25/38 Moo 4, Banhphai, Muang Nonthaburi, Nonthaburi 11000 Thailand.',
+    tel:'+66(0)2 117-4619'
+}]
+";
+    string cust = @"
+[{
+    id:'1',
+    CompanyNameEN:'Ministry of public health',
+    CompanyNameTH:'กระทรวงสาธารณสุข',
+    //address:'ถนนติวานนท์ ต.ตลาดขวัญ อ.เมือง จ.นนทบุรี 11000',
+    WebSite:'https://www.moph.go.th/',
+    Email:'moph0200@saraban.mail.go.th',
+    Telephone:'02-590-1000'
+},
+{
+    id:'2',
+    CompanyNameEN:'Busarakham Hospital',
+    CompanyNameTH:'โรงพยาบาลบุษราคัม',
+    //address:'อาคารอิมแพคชาเลนเจอร์ 2 Popular 1 Rd, Tambon Ban Mai, Amphoe Pak Kret, Chang Wat Nonthaburi 11120',
+    WebSite:'',
+    Email:'',
+    Telephone:'02 029 1661'
+},
+{
+    id:'3',
+    CompanyNameEN:'Forth Corporation Public Company Limited',
+    CompanyNameTH:'บริษัท ฟอร์ท คอร์ปอเรชั่น จำกัด (มหาชน)',
+    //address:'1053/1 Phahonyothin Road, Phayathai, Phayathai, Bangkok 10400',
+    WebSite:'https://www.forth.co.th/',
+    Email:'',
+    Telephone:''
+}]
+";
+    string cont = @"
+[{
+    id:'1',
+    name:'นิรุตต์ เฉลิมศรีเมือง',
+    address:'อาคารอิมแพคชาเลนเจอร์ 2 Popular 1 Rd, Tambon Ban Mai, Amphoe Pak Kret, Chang Wat Nonthaburi 11120',
+    tel:'02 029 1661'
+},
+{
+    id:'2',
+    name:'ธัญญารัตน์ วาวจันทึก',
+    address:'1053/1 Phahonyothin Road, Phayathai, Phayathai, Bangkok 10400',
+    tel:''
+},
+{
+    id:'3',
+    name:'ปนัสยา  ทองดี',
+    address:'25/38 Moo 4, Banhphai, Muang Nonthaburi, Nonthaburi 11000 Thailand.',
+    tel:'+66(0)2 117-4619'
+}]
+";
+    string cate = @"
+[{
+    id:'1',
+    SystemName:'Non Operational Caring Activities',
+    SubSystemName:'Front and Lobby Service Support'
+},
+{
+    id:'2',
+    SystemName:'Non Operational Caring Activities',
+    SubSystemName:'Check-in/Departments Service Support'
+},
+{
+    id:'3',
+    SystemName:'Non Operational Caring Activities',
+    SubSystemName:'Pharmaceutical Service Support'
+},
+{
+    id:'4',
+    SystemName:'Non Operational Caring Activities',
+    SubSystemName:'Check-out/Payment Service Support'
+},
+{
+    id:'5',
+    SystemName:'Operational Caring Activities',
+    SubSystemName:'Patients and Staff Indoor Tracking'
+},
+{
+    id:'6',
+    SystemName:'Operational Caring Activities',
+    SubSystemName:'Hospital Logistic'
+},
+{
+    id:'7',
+    SystemName:'Operational Caring Activities',
+    SubSystemName:'Hospital Utilities Management'
+},
+{
+    id:'8',
+    SystemName:'Operational Caring Activities',
+    SubSystemName:'Hospital Process Information Managemet'
+}]
+";
+
+    int customerid;
+    int contactid;
+    int categoryid;
+
+    private bool Subshow = false;
+    private bool MainSaveshow = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        ratype = await pj.GetRAType();
+        member = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Member>>(mem);
+        customer = Newtonsoft.Json.JsonConvert.DeserializeObject<List<CustomerInfo>>(cust);
+        contact = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ContactInfo>>(cont);
+        category = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Category>>(cate);
+        StateHasChanged();
+    }
+
+    void SaveContact(int id) //Add contact to Project HD 
+    {
+        var result = contact.Where(w => w.id == id.ToString()).FirstOrDefault();
+        ListContact.Add(new ContactInfo() { id = result.id , name = result.name , address = result.address , tel = result.tel });
+    }
+
+    void SaveCategory(int id) //Add category to Project Sub
+    {
+        var result = category.Where(c => c.id == id.ToString()).FirstOrDefault();
+        ListCategory.Add(new Category() { id = result.id, SystemName = result.SystemName, SubSystemName = result.SubSystemName });
+    }
+
+    void SaveProjectMain() //Add data to Project HD List<>
+    {
+        HDSave();
+        ListCustomer = new List<CustomerInfo>();
+        var result = customer.Where(c => c.id == customerid.ToString()).FirstOrDefault();
+        ListCustomer.Add(new CustomerInfo() { id = result.id, CompanyNameEN = result.CompanyNameEN, CompanyNameTH = result.CompanyNameTH, Email = result.Email, Telephone = result.Telephone, WebSite = result.WebSite });
+        formmain.CustomerInfo = Newtonsoft.Json.JsonConvert.SerializeObject(ListCustomer);
+        formmain.ContactInfo = Newtonsoft.Json.JsonConvert.SerializeObject(ListContact);
+        formmain.ProjectHdhistories.Add(new ProjectHdhistory() {Remark = "Create", EditorId = 1});
+        formmain.ProjectHdstatus = "Open";
+        formmain.Active = "Y";
+        formsub.ProjectHdid = formmain.Id;
+        Showsub();
+        formsub.ProjectSubName = formmain.ProjectName;
+        formsub.Description = formmain.Description;
+        formsub.Remark = formmain.Remark;
+        formsub.Budget = formmain.Budget;
+        formsub.PlanStartDate = formmain.PlanStartDate;
+        formsub.PlanFinishDate = formmain.PlanFinishDate;
+    }
+
+    void SaveProjectSub() //Add data to Project Sub List<>
+    {
+        formRAType.MemberCapability = Newtonsoft.Json.JsonConvert.SerializeObject(ListCategory);
+        formsub.ProjectRatypeTls.Add(formRAType);
+        formsub.ProjectSubProjectTlhistories.Add(new ProjectSubProjectTlhistory() { Remark = "Create", EditorId = 1 });
+        formsub.ProjectSubStatus = "Open";
+        formsub.Active = "Y";
+        forms
+        formmain.ProjectSubProjectTls.Add(formsub);
+
+    }
+
+    void SaveAll()
+    {
+        //formmain.ProjectSubProjectTls.Add(formsub);
+    }
+
+    private void ShowCategory(string cate) //Get category from Project Sub List<> to json format and show in page
+    {
+        showcate = new List<Category>();
+        showcate = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Category>>(cate);
+    }
+
+    private void Showsub() //After click next in Project HD show  Project sub area
+    {
+        Subshow = true;
+    }
+
+    private void HDSave() //After click next in Project HD hide button
+    {
+        MainSaveshow = false;
+    }
+}

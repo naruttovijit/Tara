@@ -1,0 +1,140 @@
+﻿@page "/Data/ProjectDetail/{id:int}"
+
+@using Data;
+@using ModelM2s;
+@using ModelM2s.Json;
+
+@inject ProjectData pj;
+
+<h3>Project Details</h3>
+<br />
+<br />
+<p font-size:25px> <b>Running Number :</b> @projecthd.ProjectHdrunNo  </p>
+<p font-size:25px> <b>Project Name :</b> @projecthd.ProjectName  </p>
+<p font-size:25px> <b>Description :</b> @projecthd.Description  </p>
+<p font-size:25px> <b>Remarked :</b> @projecthd.Remark </p>
+
+@if (string.IsNullOrEmpty(projecthd.Budget.ToString()))
+{
+    <p font-size:25px> <b>Budget :</b> 0 THB</p>
+}
+else
+{
+    <p font-size:25px> <b>Budget :</b> @projecthd.Budget THB</p>
+}
+
+
+@if (string.IsNullOrEmpty(projecthd.PlanStartDate.ToString()))
+{
+    <p font-size:25px> <b>Started Date :</b> Not Planed</p>
+}
+else
+{
+    <p font-size:25px> <b>Started Date :</b> @projecthd.PlanStartDate</p>
+}
+
+@if (string.IsNullOrEmpty(projecthd.PlanFinishDate.ToString()))
+{
+    <p font-size:25px> <b>Finished Date :</b> Not Planed</p>
+}
+else
+{
+    <p font-size:25px> <b>Finished Date :</b> @projecthd.PlanFinishDate</p>
+}
+
+@if (customerinfo is null)
+{
+
+}
+else
+{
+    <p style="background-color:white; border:solid">
+    <p><b>&nbsp; Customer Information</b></p>
+        @foreach (var record in customerinfo)
+        {
+        <p>
+            &nbsp; English Name :  @record.CompanyNameEN <br />
+            &nbsp; Thai Name :  @record.CompanyNameTH <br />
+            @*&nbsp; Address :  @record. <br />*@
+            &nbsp; Telephone :  @record.Telephone <br />
+            &nbsp; E-Mail :  @record.Email <br />
+            &nbsp; Website :  @record.WebSite <br />
+            &nbsp; Facebook :  @record.Facebook <br />
+        </p>
+        }
+        </p>
+}
+
+@if (contactinfo is null)
+{
+
+}
+else
+{
+    <p style="background-color:white; border:solid">
+    <p><b>&nbsp; Contact Information</b></p>
+
+    @foreach (ContactInfo record in contactinfo)
+    {
+        <p>
+            &nbsp; Name :  @record.name <br />
+            &nbsp; Address :  @record.address <br />
+            &nbsp; Telephone :  @record.tel <br />
+            &nbsp; Line :  <br />
+            &nbsp; E-Mail :  <br />
+        </p>
+    }
+    </p>
+}
+
+<br />
+
+<table class="table table-striped" style="background-color:white; border:solid">
+    <thead>
+        <tr>
+            <th>Running Number</th>
+            <th>Project Sub Name</th>
+            <th>Remarked</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th>Project Sub</th>
+            <th>Assignment</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (projecthd.ProjectSubProjectTls != null)
+        {
+            @foreach (var sub in projecthd.ProjectSubProjectTls)
+            {
+                <tr>
+                    <td>@sub.ProjectSubRunNo</td>
+                    <td>@sub.ProjectSubName</td>
+                    <td>@sub.Remark</td>
+                    <td>@sub.Description</td>
+                    <td>@sub.ProjectSubStatus</td>
+                    <td><a href="/Data/ProjectSubDetail/@sub.Id">Link</a></td>
+                    <td><a href="/Data/MemberAssign/@sub.Id">Link</a></td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+@code {
+    [Parameter]
+    public int id { get; set; }
+
+    public ProjectHd projecthd { get; set; } = new ProjectHd();
+    public ProjectSubProjectTl formsub { get; set; } = new ProjectSubProjectTl();
+
+    private List<CustomerInfo> customerinfo;
+    private List<ContactInfo> contactinfo;
+
+    protected override async Task OnInitializedAsync()
+    {
+        projecthd = await pj.GetProjectHDbyID(id);
+        customerinfo = Newtonsoft.Json.JsonConvert.DeserializeObject<List<CustomerInfo>>("[" + projecthd.CustomerInfo + "]");
+        contactinfo = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ContactInfo>>("[" + projecthd.ContactInfo + "]");
+        StateHasChanged();
+    }
+}

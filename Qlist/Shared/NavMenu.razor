@@ -1,0 +1,69 @@
+<nav class="navbar navbar-expand-lg navbar-toggleable-lg navbar-dark bg-dark border-bottom box-shadow mb-3">
+   
+    <a class="navbar-brand" href=""><img src="/images/logo.png" height="40"></a>
+    <button class="navbar-toggler" type="button" @onclick="ToggleNavMenu">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="@NavMenuCssClass"  @onclick="ToggleNavMenu">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <NavLink class="nav-link " href="" Match="NavLinkMatch.All">
+                    HOME
+                </NavLink>                
+            </li>
+            <li class="nav-item">
+                <NavLink class="nav-link " href="counter">
+                    DIRECTORY
+                </NavLink>
+            </li>
+            <li class="nav-item">
+                <NavLink class="nav-link " href="fetchdata">
+                    ABOUT US
+                </NavLink>
+            </li>
+            <li class="nav-item">
+                <NavLink class="nav-link " href="fetchdata">
+                    NEWS & EVENTS
+                </NavLink>
+            </li>
+            <li>
+                <NavLink class="nav-link " href="/Data/Project">
+                    View Queue
+                </NavLink>
+            </li>
+            <li>
+                <NavLink class="nav-link " href="/Data/ProjectCreate">
+                    Create Project
+                </NavLink>
+            </li>
+            <li class="nav-item">
+                <NavLink class="nav-link " href="fetchdata">
+                    SEMINAR
+                </NavLink>
+            </li>
+            <li class="nav-item">
+                <NavLink class="nav-link " href="fetchdata">
+                    HOW TO JOIN
+                </NavLink>
+            </li>
+            <li class="nav-item">
+                <NavLink class="nav-link " href="fetchdata">
+                    CONTACT US
+                </NavLink>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+@code {
+    bool collapseNavMenu = true;
+
+    string baseMenuClass = "navbar-collapse d-lg-inline-flex flex-sm-row-reverse";
+
+    string NavMenuCssClass => baseMenuClass + (collapseNavMenu ? " collapse" : "");
+
+    void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+}

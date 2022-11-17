@@ -1,0 +1,182 @@
+﻿@page "/Data/ProjectSubDetail/{id:int}"
+
+@using Data;
+@using ModelM2s;
+@using ModelM2s.Json;
+
+@inject ProjectData pj;
+
+<h3>ProjectSubDetails</h3>
+<br /><br />
+<p font-size:25px> <b>Project Sub Running Number :</b> @projectsub.ProjectSubRunNo  </p>
+<p font-size:25px> <b>Project Sub Name :</b> @projectsub.ProjectSubName  </p>
+<p font-size:25px> <b>Description :</b> @projectsub.Description  </p>
+<p font-size:25px> <b>Remarked :</b> @projectsub.Remark </p>
+
+@if (string.IsNullOrEmpty(projectsub.Budget.ToString()))
+{
+    <p font-size:25px> <b>Budget :</b> 0 THB</p>
+}
+else
+{
+    <p font-size:25px> <b>Budget :</b> @projectsub.Budget THB</p>
+}
+
+<p font-size:25px> <b>Status :</b> @projectsub.ProjectSubStatus</p>
+
+@if (string.IsNullOrEmpty(projectsub.PlanStartDate.ToString()))
+{
+    <p font-size:25px> <b>Started Date :</b> Not Planed</p>
+}
+else
+{
+    <p font-size:25px> <b>Started Date :</b> @projectsub.PlanStartDate</p>
+}
+
+@if (string.IsNullOrEmpty(projectsub.PlanFinishDate.ToString()))
+{
+    <p font-size:25px> <b>Finished Date :</b> Not Planed</p>
+}
+else
+{
+    <p font-size:25px> <b>Finished Date :</b> @projectsub.PlanFinishDate</p>
+}
+
+<br />
+<br />
+<h4><b>Project Category</b></h4>
+@if (category is null)
+{
+    <p><em>No Category</em></p>
+}
+else
+{
+    <table class="table table-striped" style="background-color:white; border:solid">
+        <thead>
+            <tr>
+                <th>Category Name</th>
+                <th>Category Sub Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var cat in category)
+            {
+                <tr>
+                    <td>@cat.SystemName</td>
+                    <td>@cat.SubSystemName</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<br />
+<br />
+
+<h4><b>Project Document</b></h4>
+@if (projectsub.ProjectDocuments.Count == 0)
+{
+    <p><em>No Document</em></p>
+}
+else
+{
+    <table class="table table-striped" style="background-color:white; border:solid">
+        <thead>
+            <tr>
+                <th>Document Name</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var doc in projectsub.ProjectDocuments)
+            {
+                <tr>
+                    <td><a href=@doc.DocumentPath>Link</a>@Path.GetFileName(doc.DocumentPath)</td>
+                    <td>@doc.Description</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<br />
+<br />
+
+<h4><b>Membership Assignments</b></h4>
+@if (projectsub.ProjectSubMemberAsgmts.Count == 0)
+{
+    <p><em>No Membership Assignments</em></p>
+}
+else
+{
+    int no = 0;
+    foreach (var member in projectsub.ProjectSubMemberAsgmts)
+    {
+        var item = contact.Where(w => w.id == member.MemberId.ToString()).FirstOrDefault();
+        <p style="background-color:white; border:solid">
+            &nbsp; No. @no <br />
+            &nbsp; Thai Name : @item.FirstNameTH &nbsp; @item.LastNameTH <br />
+            &nbsp; English Name : @item.FirstNameEN &nbsp; @item.LastNameEN <br />
+            &nbsp; Telephone : @item.PhoneNo <br />
+            &nbsp; Mobile : @item.MobileNo <br />
+            &nbsp; Email : @item.Email <br />
+            &nbsp; Line : @item.LineID <br />
+            &nbsp; Date Confirmed : @member.DateConfirm <br />
+            &nbsp; Awarded : @member.Awarded
+        </p>
+    }
+}
+
+<button type="submit" class="btn btn-primary" style="float:right;" <a href="/Data/Project"></a>Project Main</button>
+<button type="submit" class="btn btn-primary" style="float:right;" <a href="/Data/ProjectDetail/@id"></a>Go Back</button>
+<br />
+<br />
+
+@code {
+    [Parameter]
+    public int id { get; set; }
+
+    public ProjectSubProjectTl projectsub { get; set; } = new ProjectSubProjectTl();
+    private List<Category> category;
+    private List<Contact> contact;
+    string JsonCat;
+//    string mem = @"
+//[{
+//id:'5',
+//name:'กิติยศ สาคริก',
+//company_en:'Busarakham Hospital',
+//company_th:'โรงพยาบาลบุษราคัม',
+//address:'อาคารอิมแพคชาเลนเจอร์ 2 Popular 1 Rd, Tambon Ban Mai, Amphoe Pak Kret, Chang Wat Nonthaburi 11120',
+//tel:'02 029 1661'
+//},
+//{
+//id:'6',
+//name:'ทวี ภาวนากร',
+//company_en:'Forth Corporation Public Company Limited',
+//company_th:'บริษัท ฟอร์ท คอร์ปอเรชั่น จำกัด (มหาชน)',
+//address:'1053/1 Phahonyothin Road, Phayathai, Phayathai, Bangkok 10400',
+//tel:''
+//},
+//{
+//id:'7',
+//name:'วีรยา บรรลือทรัพย์',
+//company_en:'InGenium Group CO.,LTD.',
+//company_th:'บริษัท อินจีเนียม จำกัด (สำนักงานใหญ่)',
+//address:'25/38 Moo 4, Banhphai, Muang Nonthaburi, Nonthaburi 11000 Thailand.',
+//tel:'+66(0)2 117-4619'
+//}]
+//";
+
+    protected override async Task OnInitializedAsync()
+    {
+        projectsub = await pj.GetProjectSubProjectTLbyID(id);
+        JsonCat = string.Empty;
+        foreach (var projectsubcat in projectsub.ProjectRatypeTls)
+        {
+            JsonCat = projectsubcat.MemberCapability;
+        }
+        category = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Category>>(JsonCat);
+        //contact = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Contact>>(mem);
+        StateHasChanged();
+    }
+}

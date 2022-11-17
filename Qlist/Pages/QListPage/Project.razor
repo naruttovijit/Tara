@@ -1,0 +1,49 @@
+﻿@page "/Data/Project"
+
+@using ModelM2s;
+@using Data;
+
+@inject ProjectData pj;
+
+<h3>Project</h3>
+@if (project is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Running Number</th>
+                <th>Project Name</th>
+                <th>Remarked</th>
+                <th>Description</th>
+                <th>Project Sub Count</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var project in project)
+            {
+                <tr>
+                    <td>@project.ProjectHdrunNo</td>
+                    <td>@project.ProjectName</td>
+                    <td>@project.Remark</td>
+                    <td>@project.Description</td>
+                    <td>@project.ProjectSubProjectTls.Count()</td>
+                    <td><a href="/Data/ProjectDetail/@project.Id">Link</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<ProjectHd> project;
+
+    protected override async Task OnInitializedAsync()
+    {
+        project = await pj.GetProjectHD();
+        StateHasChanged();
+    }
+}
