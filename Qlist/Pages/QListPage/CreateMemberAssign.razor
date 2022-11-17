@@ -73,8 +73,8 @@ else
 
 <br />
 <br />
-<EditForm Model="assign">
-    <h4>Add Member Assignment</h4>
+<h4>Add Member Assignment</h4>
+<EditForm Model="memberassign">
     <p style="background-color:white; border:solid">
         <table style="width:100%">
             <tr>
@@ -82,28 +82,49 @@ else
                 <th>Company Name TH</th>
                 <th>Company Name EN</th>
                 <th>Telephone</th>
+                <th>Awarded</th>
                 <th>Delete</th>
             </tr>
             @if (assign is not null)
             {
+                var test = assign.Where(w => w.Awarded == "Y");
+                int t = test.Count();
                 int no = 0;
-                foreach (var list in memberassign)
+                foreach (var list in assign)
                 {
-                    var item = member.Where(w => w.id == assign.MemberId.ToString()).FirstOrDefault();
+                    no++;
+                    var item = member.Where(w => w.id == list.MemberId.ToString()).FirstOrDefault();
                     <tr>
                         <td>@no</td>
                         <td>@item.CompanyNameTH</td>
                         <td>@item.CompanyNameEN</td>
                         <td>@item.Telephone</td>
-                        <td>
-                            <button @onclick="() => memberassign.Remove(list)">X</button>
-                        </td>
+                        <td>@list.Awarded</td>
+                        <td><button @onclick="() => assign.Remove(list)">X</button></td>
                     </tr>
                 }
             }
         </table>
     </p>
+
+    <InputSelect id="AssignMember" @bind-Value="memberid">
+    <option value="0">------------Select Member------------</option>
+        @if (member is not null)
+        {
+            foreach (var list in member)
+            {
+                    <option value="@list.id">@list.CompanyNameEN</option>
+            }
+        }
+    </InputSelect> &nbsp;&nbsp; 
+    <button @onclick="()=>AddMember(memberid)">Add Member</button>
 </EditForm>
+<br />
+<button @onclick="()=>UpdateMemberAssign()">Update</button>
+
+<br />
+<br />
+
 
 
 @code {
@@ -111,11 +132,12 @@ else
     public int id { get; set; }
 
     public ProjectSubProjectTl projectsub { get; set; } = new ProjectSubProjectTl();
-    public ProjectSubMemberAsgmt assign { get; set; } = new ProjectSubMemberAsgmt();
+    public ProjectSubMemberAsgmt memberassign { get; set; } = new ProjectSubMemberAsgmt();
     private List<Category> category;
     private List<Contact> contact;
     private List<Member> member;
-    private List<ProjectSubMemberAsgmt> memberassign;
+    private List<ProjectSubMemberAsgmt> listassign;
+    private List<ProjectSubMemberAsgmt> assign;
 
     string JsonCat;
     int memberid;
@@ -124,26 +146,26 @@ else
 [{
     id:'5',
     name:'กิติยศ สาคริก',
-    company_en:'Busarakham Hospital',
-    company_th:'โรงพยาบาลบุษราคัม',
+    CompanyNameEN:'Busarakham Hospital',
+    CompanyNameTH:'โรงพยาบาลบุษราคัม',
     address:'อาคารอิมแพคชาเลนเจอร์ 2 Popular 1 Rd, Tambon Ban Mai, Amphoe Pak Kret, Chang Wat Nonthaburi 11120',
-    tel:'02 029 1661'
+    Telephone:'02 029 1661'
 },
 {
     id:'6',
     name:'ทวี ภาวนากร',
-    company_en:'Forth Corporation Public Company Limited',
-    company_th:'บริษัท ฟอร์ท คอร์ปอเรชั่น จำกัด (มหาชน)',
+    CompanyNameEN:'Forth Corporation Public Company Limited',
+    CompanyNameTH:'บริษัท ฟอร์ท คอร์ปอเรชั่น จำกัด (มหาชน)',
     address:'1053/1 Phahonyothin Road, Phayathai, Phayathai, Bangkok 10400',
-    tel:''
+    Telephone:''
 },
 {
     id:'7',
     name:'วีรยา บรรลือทรัพย์',
-    company_en:'InGenium Group CO.,LTD.',
-    company_th:'บริษัท อินจีเนียม จำกัด (สำนักงานใหญ่)',
+    CompanyNameEN:'InGenium Group CO.,LTD.',
+    CompanyNameTH:'บริษัท อินจีเนียม จำกัด (สำนักงานใหญ่)',
     address:'25/38 Moo 4, Banhphai, Muang Nonthaburi, Nonthaburi 11000 Thailand.',
-    tel:'+66(0)2 117-4619'
+    Telephone:'+66(0)2 117-4619'
 }]
 ";
     string cust = @"
@@ -241,6 +263,9 @@ else
     protected override async Task OnInitializedAsync()
     {
         projectsub = await pj.GetProjectSubProjectTLbyID(id);
+        listassign = await pj.GetAllMemberAssign();
+        assign = listassign.Where(w => w.ProjectSubProjectTlid == id).ToList();
+
         JsonCat = string.Empty;
         foreach (var projectsubcat in projectsub.ProjectRatypeTls)
         {
@@ -251,10 +276,21 @@ else
         StateHasChanged();
     }
 
-    //void SaveMember(int id) //Add contact to Project HD
-    //{
-    //    var result = contact.Where(w => w.id == id.ToString()).FirstOrDefault();
-    //    ListContact.Add(new ContactInfo() { id = result.id, name = result.name, address = result.address, tel = result.tel });
-    //}
+    void AddMember(int id) //Add contact to Project HD
+    {
+        var result = member.Where(w => w.id == id.ToString()).FirstOrDefault();
+        assign.Add(new ProjectSubMemberAsgmt() { MemberId = int.Parse(result.id), ProjectSubProjectTlid = id, Active = "Y", EditorId = 1 });
+    }
+
+    void UpdateMemberAssign() //Update member assignment in table
+    {
+
+    }
+
+    void Checkbox(string id) //Update member assignment in table
+    {
+
+    }
+
 
 }

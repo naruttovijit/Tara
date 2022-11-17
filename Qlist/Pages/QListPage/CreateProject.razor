@@ -360,9 +360,9 @@
         ListCustomer.Add(new CustomerInfo() { id = result.id, CompanyNameEN = result.CompanyNameEN, CompanyNameTH = result.CompanyNameTH, Email = result.Email, Telephone = result.Telephone, WebSite = result.WebSite });
         formmain.CustomerInfo = Newtonsoft.Json.JsonConvert.SerializeObject(ListCustomer);
         formmain.ContactInfo = Newtonsoft.Json.JsonConvert.SerializeObject(ListContact);
-        formmain.ProjectHdhistories.Add(new ProjectHdhistory() {Remark = "Create", EditorId = 1});
         formmain.ProjectHdstatus = "Open";
         formmain.Active = "Y";
+        formmain.ProjectHdhistories.Add(new ProjectHdhistory() { ProjectHdid = formmain.Id, Remark = "Create", EditorId = 1 });
         formsub.ProjectHdid = formmain.Id;
         Showsub();
         formsub.ProjectSubName = formmain.ProjectName;
@@ -377,12 +377,13 @@
     {
         formRAType.MemberCapability = Newtonsoft.Json.JsonConvert.SerializeObject(ListCategory);
         formsub.ProjectRatypeTls.Add(formRAType);
-        formsub.ProjectSubProjectTlhistories.Add(new ProjectSubProjectTlhistory() { Remark = "Create", EditorId = 1 });
         formsub.ProjectSubStatus = "Open";
         formsub.Active = "Y";
-        formsub = new ProjectSubProjectTl();
+        formsub.ProjectSubProjectTlhistories.Add(new ProjectSubProjectTlhistory() { ProjectSubProjectTlid = formsub.Id, Remark = "Create", EditorId = 1 });
         formmain.ProjectSubProjectTls.Add(formsub);
 
+        formsub = new ProjectSubProjectTl();
+        formsub.ProjectHdid = formmain.Id;
     }
 
     void SaveAll()

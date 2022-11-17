@@ -26,6 +26,15 @@ namespace Qlist.Data
             return obj;
         }
 
+        public async Task<List<ProjectSubProjectTl>> GetProjectSubProjectTL() //get project sub by project master id
+        {
+            HttpClient hc = new HttpClient();
+            var response = await hc.GetAsync("https://taraapi.ddns.net/api/ProjectSubProjectTl/");
+
+            var obj = await response.Content.ReadFromJsonAsync<List<ProjectSubProjectTl>>();
+            return obj;
+        }
+
         public async Task<ProjectSubProjectTl> GetProjectSubProjectTLbyID(int id) //get project sub by project master id
         {
             HttpClient hc = new HttpClient();
@@ -41,6 +50,15 @@ namespace Qlist.Data
             var response = await hc.GetAsync("https://taraapi.ddns.net/api/RatypeMaster/");
 
             var obj = await response.Content.ReadFromJsonAsync<List<RatypeMaster>>();
+            return obj;
+        }
+
+        public async Task<List<ProjectSubMemberAsgmt>> GetAllMemberAssign() //get all RA Type master data
+        {
+            HttpClient hc = new HttpClient();
+            var response = await hc.GetAsync("https://taraapi.ddns.net/api/ProjectSubMemberAsgmt/");
+
+            var obj = await response.Content.ReadFromJsonAsync<List<ProjectSubMemberAsgmt>>();
             return obj;
         }
     }
