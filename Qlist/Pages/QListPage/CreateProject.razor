@@ -3,7 +3,9 @@
 @using ModelM2s;
 @using ModelM2s.Json;
 @using Data;
+@using System.IO
 
+@inject IWebHostEnvironment env
 @inject ProjectData pj;
 
 <h3>Create New Project</h3>
@@ -179,14 +181,17 @@
                 <button @onclick="()=>SaveCategory(categoryid)">Add Category</button><br /><br />
             </div>
         </p>
+        &nbsp;<InputFile OnChange="OnInputFileChange" />
         <br /><br />
+        @*<button type="submit" @onclick="OnSubmit">Upload Selected File</button>
+        <br /><br />*@
         &nbsp;<button @onclick="SaveProjectSub">Add</button>
-        <br /><br />
-
-        &nbsp;<button @onclick="SaveAll">Save All</button>
         </p>
-
     </EditForm>
+    <p>
+        &nbsp;<button @onclick="SaveAll">Save All</button>
+    </p>
+    
 }
 
 @code {
@@ -330,6 +335,9 @@
     private bool Subshow = false;
     private bool MainSaveshow = true;
 
+    string Message = "No file(s) selected";
+    IReadOnlyList<IBrowserFile> selectedFiles;
+
     protected override async Task OnInitializedAsync()
     {
         ratype = await pj.GetRAType();
@@ -384,6 +392,7 @@
 
         formsub = new ProjectSubProjectTl();
         formsub.ProjectHdid = formmain.Id;
+        ListCategory = new List<Category>();
     }
 
     void SaveAll()
@@ -405,5 +414,27 @@
     private void HDSave() //After click next in Project HD hide button
     {
         MainSaveshow = false;
+    }
+
+    private void OnInputFileChange(InputFileChangeEventArgs e)
+    {
+        selectedFiles = e.GetMultipleFiles();
+        Message = $"{selectedFiles.Count} file selected";
+        this.StateHasChanged();
+    }
+
+    private async void OnSubmit()
+    {
+        //foreach (var file in selectedFiles)
+        //{
+        //    Stream stream = file.OpenReadStream();
+        //    var path = $"{env.WebRootPath}\\{file.Name}";
+        //    FileStream fs = File.Create(path);
+        //    await stream.CopyToAsync(fs);
+        //    stream.Close();
+        //    fs.Close();
+        //}
+        //Message = $"{selectedFiles.Count} file uploaded on server";
+        //this.StateHasChanged();
     }
 }

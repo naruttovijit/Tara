@@ -99,7 +99,15 @@ else
                         <td>@item.CompanyNameTH</td>
                         <td>@item.CompanyNameEN</td>
                         <td>@item.Telephone</td>
-                        <td>@list.Awarded</td>
+                        @if (list.Awarded == "Y")
+                        {
+                            <td><input type="checkbox" checked @onchange="EventArgs => { CheckboxClicked(list,EventArgs.Value);}" /></td>
+                        }
+                        else
+                        {
+                            <td><input type="checkbox" @onchange="EventArgs => { CheckboxClicked(list,EventArgs.Value);}" /></td>
+                        }
+                        
                         <td><button @onclick="() => assign.Remove(list)">X</button></td>
                     </tr>
                 }
@@ -130,7 +138,7 @@ else
 @code {
     [Parameter]
     public int id { get; set; }
-
+    public List<string> CheckBox { get; set; } = new List<string>();
     public ProjectSubProjectTl projectsub { get; set; } = new ProjectSubProjectTl();
     public ProjectSubMemberAsgmt memberassign { get; set; } = new ProjectSubMemberAsgmt();
     private List<Category> category;
@@ -287,9 +295,16 @@ else
 
     }
 
-    void Checkbox(string id) //Update member assignment in table
+    void CheckboxClicked(ProjectSubMemberAsgmt assignmember, object checkedValue)
     {
-
+        if ((bool)checkedValue)
+        {
+            assignmember.Awarded = "Y";
+        }
+        else
+        {
+            assignmember.Awarded = string.Empty;
+        }
     }
 
 
