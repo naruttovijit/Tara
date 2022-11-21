@@ -91,7 +91,18 @@ else
             @foreach (var doc in projectsub.ProjectDocuments)
             {
                 <tr>
-                    <td><a href=@doc.DocumentPath>Link</a>@Path.GetFileName(doc.DocumentPath)</td>
+                    if (doc.DocumentPath.ToUpper().Contains("PDFFILES"))
+                    {
+                        <td>
+                        <a href="@doc.DocumentPath">@Path.GetFileName(doc.DocumentPath)</a>
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                        <img src="@doc.DocumentPath" width="300px" />
+                        </td>
+                    }
                     <td>@doc.Description</td>
                 </tr>
             }

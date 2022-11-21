@@ -117,6 +117,19 @@
                         }
                     }
                 }
+                &nbsp;
+                @foreach (var file in sub.ProjectDocuments)
+                {
+                    if (file.DocumentPath.ToUpper().Contains("PDFFILES"))
+                    {
+                        <a href="@file.DocumentPath">Link</a>
+                    }
+                    else
+                    {
+                        <img src="@file.DocumentPath" width="300px" />
+                    }
+                    <br />
+                }
             </p>
 
         }
@@ -183,8 +196,11 @@
         </p>
         &nbsp;<InputFile OnChange="OnInputFileChange" />
         <br /><br />
-        @*<button type="submit" @onclick="OnSubmit">Upload Selected File</button>
-        <br /><br />*@
+        @if (uploadfile)
+        {
+            <button type="submit" @onclick="OnSubmit">Upload Selected File</button>
+        }        
+        <br /><br />
         &nbsp;<button @onclick="SaveProjectSub">Add</button>
         </p>
     </EditForm>
@@ -334,6 +350,7 @@
 
     private bool Subshow = false;
     private bool MainSaveshow = true;
+    private bool uploadfile = true;
 
     string Message = "No file(s) selected";
     IReadOnlyList<IBrowserFile> selectedFiles;
@@ -393,6 +410,9 @@
         formsub = new ProjectSubProjectTl();
         formsub.ProjectHdid = formmain.Id;
         ListCategory = new List<Category>();
+
+        uploadfile = true;
+        this.StateHasChanged();
     }
 
     void SaveAll()
@@ -425,16 +445,31 @@
 
     private async void OnSubmit()
     {
-        //foreach (var file in selectedFiles)
-        //{
-        //    Stream stream = file.OpenReadStream();
-        //    var path = $"{env.WebRootPath}\\{file.Name}";
-        //    FileStream fs = File.Create(path);
-        //    await stream.CopyToAsync(fs);
-        //    stream.Close();
-        //    fs.Close();
-        //}
-        //Message = $"{selectedFiles.Count} file uploaded on server";
-        //this.StateHasChanged();
+        foreach (var file in selectedFiles)
+        {
+            Stream stream = file.OpenReadStream();
+            string filename = formsub.ProjectSubRunNo + "_" + file.Name;
+            string filetype = string.Empty;
+            string filepath = string.Empty;
+            if (file.Name.ToUpper().Contains("PDF"))
+            {
+                filetype = "\\PDFFiles\\" + filename;
+                filepath = "/PDFFiles/" + filename;
+            }
+            else
+            {
+                filetype = "\\PicFiles\\" + filename;
+                filepath = "/PicFiles/" + filename;
+            }
+            var path = $"{env.WebRootPath}{filetype}";
+            FileStream fs = File.Create(path);
+            await stream.CopyToAsync(fs);
+            stream.Close();
+            fs.Close();
+
+            formsub.ProjectDocuments.Add(new ProjectDocument() { ProjectSubProjectTlid = formsub.Id, DocumentPath = filepath, Active = "Y", EditorId = 1 });
+        }
+        uploadfile = false;
+        this.StateHasChanged();
     }
 }
