@@ -387,6 +387,7 @@
         formmain.ContactInfo = Newtonsoft.Json.JsonConvert.SerializeObject(ListContact);
         formmain.ProjectHdstatus = "Open";
         formmain.Active = "Y";
+        formmain.CreateDated = DateTime.Now;
         formmain.ProjectHdhistories.Add(new ProjectHdhistory() { ProjectHdid = formmain.Id, Remark = "Create", EditorId = 1 });
         formsub.ProjectHdid = formmain.Id;
         Showsub();
@@ -404,6 +405,7 @@
         formsub.ProjectRatypeTls.Add(formRAType);
         formsub.ProjectSubStatus = "Open";
         formsub.Active = "Y";
+        formsub.CreateDated = DateTime.Now;
         formsub.ProjectSubProjectTlhistories.Add(new ProjectSubProjectTlhistory() { ProjectSubProjectTlid = formsub.Id, Remark = "Create", EditorId = 1 });
         formmain.ProjectSubProjectTls.Add(formsub);
 
@@ -443,7 +445,7 @@
         this.StateHasChanged();
     }
 
-    private async void OnSubmit()
+    private async void OnSubmit() //Upload file (image,pdf) to local folders
     {
         foreach (var file in selectedFiles)
         {
@@ -471,5 +473,5 @@
         }
         uploadfile = false;
         this.StateHasChanged();
-    }
+    } 
 }

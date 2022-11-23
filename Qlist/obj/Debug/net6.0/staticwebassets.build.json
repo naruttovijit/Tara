@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "wNY2ts1ldGFdV7XqqnDH4dXRBsr8xcK6ZW3eoaMR82c=",
+  "Hash": "jfQo5pcSKjKIZiUJ1jwEJRG4WeY6Qc4G+e4yOqm5U80=",
   "Source": "Qlist",
   "BasePath": "_content/Qlist",
   "Mode": "Default",
@@ -306,6 +306,23 @@
       "OriginalItemSpec": "wwwroot\\images\\logo.png"
     },
     {
+      "Identity": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\PDFFiles\\_pincode.pdf",
+      "SourceId": "Qlist",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\",
+      "BasePath": "_content/Qlist",
+      "RelativePath": "PDFFiles/_pincode.pdf",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\PDFFiles\\_pincode.pdf"
+    },
+    {
       "Identity": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\PDFFiles\\_TR.02_CartonBarcodeScanned.pdf",
       "SourceId": "Qlist",
       "SourceType": "Discovered",
@@ -338,40 +355,6 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\PicFiles\\_Screenshot 2022-03-22 152836.png"
-    },
-    {
-      "Identity": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\PicFiles\\Screenshot 2022-03-22 152836.png",
-      "SourceId": "Qlist",
-      "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\",
-      "BasePath": "_content/Qlist",
-      "RelativePath": "PicFiles/Screenshot 2022-03-22 152836.png",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\PicFiles\\Screenshot 2022-03-22 152836.png"
-    },
-    {
-      "Identity": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\Screenshot 2022-03-22 152836.png",
-      "SourceId": "Qlist",
-      "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\",
-      "BasePath": "_content/Qlist",
-      "RelativePath": "Screenshot 2022-03-22 152836.png",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\Screenshot 2022-03-22 152836.png"
     }
   ]
 }

@@ -61,5 +61,14 @@ namespace Qlist.Data
             var obj = await response.Content.ReadFromJsonAsync<List<ProjectSubMemberAsgmt>>();
             return obj;
         }
+
+        public async Task<List<ProjectRunNo>> GetRunnNo() //get all project master data
+        {
+            HttpClient hc = new HttpClient();
+            var response = await hc.GetAsync("https://taraapi.ddns.net/api/ProjectHD/");
+
+            var obj = await response.Content.ReadFromJsonAsync<List<ProjectRunNo>>();
+            return obj;
+        }
     }
 }
