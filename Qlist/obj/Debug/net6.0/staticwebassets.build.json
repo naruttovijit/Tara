@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "jfQo5pcSKjKIZiUJ1jwEJRG4WeY6Qc4G+e4yOqm5U80=",
+  "Hash": "EEJF+cQ4nq+TS3qVpbd1zHWUBSaCEs76UZSUTjRuxNo=",
   "Source": "Qlist",
   "BasePath": "_content/Qlist",
   "Mode": "Default",
@@ -355,6 +355,40 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\PicFiles\\_Screenshot 2022-03-22 152836.png"
+    },
+    {
+      "Identity": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\PicFiles\\_Screenshot 2022-03-22 153833.png",
+      "SourceId": "Qlist",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\",
+      "BasePath": "_content/Qlist",
+      "RelativePath": "PicFiles/_Screenshot 2022-03-22 153833.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\PicFiles\\_Screenshot 2022-03-22 153833.png"
+    },
+    {
+      "Identity": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\PicFiles\\_Screenshot 2022-03-22 153854.png",
+      "SourceId": "Qlist",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\",
+      "BasePath": "_content/Qlist",
+      "RelativePath": "PicFiles/_Screenshot 2022-03-22 153854.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\PicFiles\\_Screenshot 2022-03-22 153854.png"
     }
   ]
 }

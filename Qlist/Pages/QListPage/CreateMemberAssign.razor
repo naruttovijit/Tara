@@ -74,6 +74,8 @@ else
 <br />
 <br />
 <h4>Add Member Assignment</h4>
+
+
 <EditForm Model="memberassign">
     <p style="background-color:white; border:solid">
         <table style="width:100%">
@@ -87,8 +89,6 @@ else
             </tr>
             @if (assign is not null)
             {
-                var test = assign.Where(w => w.Awarded == "Y");
-                int t = test.Count();
                 int no = 0;
                 foreach (var list in assign)
                 {
@@ -107,29 +107,27 @@ else
                         {
                             <td><input type="checkbox" @onchange="EventArgs => { CheckboxClicked(list,EventArgs.Value);}" /></td>
                         }
-                        
+
                         <td><button @onclick="() => assign.Remove(list)">X</button></td>
                     </tr>
                 }
             }
         </table>
     </p>
-
     <InputSelect id="AssignMember" @bind-Value="memberid">
     <option value="0">------------Select Member------------</option>
-        @if (member is not null)
+    @if (member is not null)
+    {
+        foreach (var list in member)
         {
-            foreach (var list in member)
-            {
-                    <option value="@list.id">@list.CompanyNameEN</option>
-            }
+            <option value="@list.id">@list.CompanyNameEN</option>
         }
-    </InputSelect> &nbsp;&nbsp; 
-    <button @onclick="()=>AddMember(memberid)">Add Member</button>
+    }
+    </InputSelect> &nbsp;&nbsp;
+<button @onclick="()=>AddMember(memberid)">Add Member</button>
 </EditForm>
 <br />
 <button @onclick="()=>UpdateMemberAssign()">Update</button>
-
 <br />
 <br />
 
@@ -288,11 +286,13 @@ else
     {
         var result = member.Where(w => w.id == id.ToString()).FirstOrDefault();
         assign.Add(new ProjectSubMemberAsgmt() { MemberId = int.Parse(result.id), ProjectSubProjectTlid = id, Active = "Y", EditorId = 1 });
+
     }
 
-    void UpdateMemberAssign() //Update member assignment in table
+    async void UpdateMemberAssign() //Update member assignment in table
     {
-
+        
+        //var result = await pj.SaveMemberAssign();
     }
 
     void CheckboxClicked(ProjectSubMemberAsgmt assignmember, object checkedValue)

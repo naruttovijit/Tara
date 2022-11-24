@@ -74,7 +74,7 @@ else
 <br />
 
 <h4><b>Project Document</b></h4>
-@if (projectsub.ProjectDocuments.Count == 0)
+@if (showdoc is null)
 {
     <p><em>No Document</em></p>
 }
@@ -88,13 +88,13 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (var doc in projectsub.ProjectDocuments)
+            @foreach (var doc in showdoc)
             {
                 <tr>
-                    if (doc.DocumentPath.ToUpper().Contains("PDFFILES"))
+                    @if (doc.DocumentPath.ToUpper().Contains("PDFFILES"))
                     {
                         <td>
-                        <a href="@doc.DocumentPath">@Path.GetFileName(doc.DocumentPath)</a>
+                        <a href="@doc.DocumentPath">Link</a>
                         </td>
                     }
                     else
@@ -114,26 +114,23 @@ else
 <br />
 
 <h4><b>Membership Assignments</b></h4>
-@if (projectsub.ProjectSubMemberAsgmts.Count == 0)
+@if (showmem is null)
 {
     <p><em>No Membership Assignments</em></p>
 }
 else
 {
     int no = 0;
-    foreach (var member in projectsub.ProjectSubMemberAsgmts)
+    foreach (var list in showmem)
     {
-        var item = contact.Where(w => w.id == member.MemberId.ToString()).FirstOrDefault();
+        var item = member.Where(w => w.id == list.MemberId.ToString()).FirstOrDefault();
         <p style="background-color:white; border:solid">
             &nbsp; No. @no <br />
-            &nbsp; Thai Name : @item.FirstNameTH &nbsp; @item.LastNameTH <br />
-            &nbsp; English Name : @item.FirstNameEN &nbsp; @item.LastNameEN <br />
-            &nbsp; Telephone : @item.PhoneNo <br />
-            &nbsp; Mobile : @item.MobileNo <br />
-            &nbsp; Email : @item.Email <br />
-            &nbsp; Line : @item.LineID <br />
-            &nbsp; Date Confirmed : @member.DateConfirm <br />
-            &nbsp; Awarded : @member.Awarded
+            &nbsp; Thai Name : @item.CompanyNameTH <br />
+            &nbsp; English Name : @item.CompanyNameEN <br />
+            &nbsp; Telephone : @item.Telephone <br />
+            &nbsp; Date Confirmed : @list.DateConfirm <br />
+            &nbsp; Awarded : @list.Awarded
         </p>
     }
 }
@@ -149,45 +146,55 @@ else
 
     public ProjectSubProjectTl projectsub { get; set; } = new ProjectSubProjectTl();
     private List<Category> category;
-    private List<Contact> contact;
+    private List<Member> member;
+    private List<ProjectDocument> projectdoc;
+    private List<ProjectDocument> showdoc;
+    private List<ProjectRatypeTl> projectra;
+    private List<ProjectSubMemberAsgmt> projectmem;
+    private List<ProjectSubMemberAsgmt> showmem;
     string JsonCat;
-    //    string mem = @"
-    //[{
-    //id:'5',
-    //name:'กิติยศ สาคริก',
-    //company_en:'Busarakham Hospital',
-    //company_th:'โรงพยาบาลบุษราคัม',
-    //address:'อาคารอิมแพคชาเลนเจอร์ 2 Popular 1 Rd, Tambon Ban Mai, Amphoe Pak Kret, Chang Wat Nonthaburi 11120',
-    //tel:'02 029 1661'
-    //},
-    //{
-    //id:'6',
-    //name:'ทวี ภาวนากร',
-    //company_en:'Forth Corporation Public Company Limited',
-    //company_th:'บริษัท ฟอร์ท คอร์ปอเรชั่น จำกัด (มหาชน)',
-    //address:'1053/1 Phahonyothin Road, Phayathai, Phayathai, Bangkok 10400',
-    //tel:''
-    //},
-    //{
-    //id:'7',
-    //name:'วีรยา บรรลือทรัพย์',
-    //company_en:'InGenium Group CO.,LTD.',
-    //company_th:'บริษัท อินจีเนียม จำกัด (สำนักงานใหญ่)',
-    //address:'25/38 Moo 4, Banhphai, Muang Nonthaburi, Nonthaburi 11000 Thailand.',
-    //tel:'+66(0)2 117-4619'
-    //}]
-    //";
+    string mem = @"
+[{
+    id:'5',
+    name:'กิติยศ สาคริก',
+    CompanyNameEN:'Busarakham Hospital',
+    CompanyNameTH:'โรงพยาบาลบุษราคัม',
+    address:'อาคารอิมแพคชาเลนเจอร์ 2 Popular 1 Rd, Tambon Ban Mai, Amphoe Pak Kret, Chang Wat Nonthaburi 11120',
+    Telephone:'02 029 1661'
+},
+{
+    id:'6',
+    name:'ทวี ภาวนากร',
+    CompanyNameEN:'Forth Corporation Public Company Limited',
+    CompanyNameTH:'บริษัท ฟอร์ท คอร์ปอเรชั่น จำกัด (มหาชน)',
+    address:'1053/1 Phahonyothin Road, Phayathai, Phayathai, Bangkok 10400',
+    Telephone:''
+},
+{
+    id:'7',
+    name:'วีรยา บรรลือทรัพย์',
+    CompanyNameEN:'InGenium Group CO.,LTD.',
+    CompanyNameTH:'บริษัท อินจีเนียม จำกัด (สำนักงานใหญ่)',
+    address:'25/38 Moo 4, Banhphai, Muang Nonthaburi, Nonthaburi 11000 Thailand.',
+    Telephone:'+66(0)2 117-4619'
+}]
+";
 
     protected override async Task OnInitializedAsync()
     {
         projectsub = await pj.GetProjectSubProjectTLbyID(id);
+        projectdoc = await pj.GetAllProjectDocument();
+        projectra = await pj.GetAllProjectRAType();
+        projectmem = await pj.GetAllMemberAssign();
         JsonCat = string.Empty;
-        foreach (var projectsubcat in projectsub.ProjectRatypeTls)
+        foreach (var projectsubcat in projectra.Where(w => w.ProjectSubProjectTlid == id).ToList())
         {
             JsonCat = projectsubcat.MemberCapability;
         }
         category = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Category>>(JsonCat);
-        //contact = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Contact>>(mem);
+        member = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Member>>(mem);
+        showdoc = projectdoc.Where(w => w.ProjectSubProjectTlid == id).ToList();
+        showmem = projectmem.Where(w => w.ProjectSubProjectTlid == id).ToList();
         StateHasChanged();
     }
 }

@@ -387,9 +387,10 @@
         formmain.ContactInfo = Newtonsoft.Json.JsonConvert.SerializeObject(ListContact);
         formmain.ProjectHdstatus = "Open";
         formmain.Active = "Y";
-        formmain.CreateDated = DateTime.Now;
-        formmain.ProjectHdhistories.Add(new ProjectHdhistory() { ProjectHdid = formmain.Id, Remark = "Create", EditorId = 1 });
+        //formmain.CreateDated = DateTime.Now;
+        formmain.ProjectHdhistories.Add(new ProjectHdhistory() { ProjectHdid = formmain.Id, Remark = "Create", EditorId = 1});
         formsub.ProjectHdid = formmain.Id;
+        
         Showsub();
         formsub.ProjectSubName = formmain.ProjectName;
         formsub.Description = formmain.Description;
@@ -405,8 +406,8 @@
         formsub.ProjectRatypeTls.Add(formRAType);
         formsub.ProjectSubStatus = "Open";
         formsub.Active = "Y";
-        formsub.CreateDated = DateTime.Now;
-        formsub.ProjectSubProjectTlhistories.Add(new ProjectSubProjectTlhistory() { ProjectSubProjectTlid = formsub.Id, Remark = "Create", EditorId = 1 });
+        //formsub.CreateDated = DateTime.Now;
+        formsub.ProjectSubProjectTlhistories.Add(new ProjectSubProjectTlhistory() { ProjectSubProjectTlid = formsub.Id, Remark = "Create", EditorId = 1});
         formmain.ProjectSubProjectTls.Add(formsub);
 
         formsub = new ProjectSubProjectTl();
@@ -417,9 +418,9 @@
         this.StateHasChanged();
     }
 
-    void SaveAll()
+    async void SaveAll()
     {
-        //formmain.ProjectSubProjectTls.Add(formsub);
+        var result = await pj.SaveProjectHD(formmain);
     }
 
     private void ShowCategory(string cate) //Get category from Project Sub List<> to json format and show in page

@@ -133,8 +133,8 @@ else
     protected override async Task OnInitializedAsync()
     {
         projecthd = await pj.GetProjectHDbyID(id);
-        customerinfo = Newtonsoft.Json.JsonConvert.DeserializeObject<List<CustomerInfo>>("[" + projecthd.CustomerInfo + "]");
-        contactinfo = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ContactInfo>>("[" + projecthd.ContactInfo + "]");
+        customerinfo = Newtonsoft.Json.JsonConvert.DeserializeObject<List<CustomerInfo>>(projecthd.CustomerInfo);
+        contactinfo = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ContactInfo>>(projecthd.ContactInfo);
         StateHasChanged();
     }
 }

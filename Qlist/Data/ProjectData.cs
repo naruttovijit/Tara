@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using Qlist.ModelM2s;
 
 namespace Qlist.Data
@@ -53,7 +54,25 @@ namespace Qlist.Data
             return obj;
         }
 
-        public async Task<List<ProjectSubMemberAsgmt>> GetAllMemberAssign() //get all RA Type master data
+        public async Task<List<ProjectDocument>> GetAllProjectDocument() //get all project document data
+        {
+            HttpClient hc = new HttpClient();
+            var response = await hc.GetAsync("https://taraapi.ddns.net/api/ProjectDocument");
+
+            var obj = await response.Content.ReadFromJsonAsync<List<ProjectDocument>>();
+            return obj;
+        }
+
+        public async Task<List<ProjectRatypeTl>> GetAllProjectRAType() //get all project RA type data
+        {
+            HttpClient hc = new HttpClient();
+            var response = await hc.GetAsync("https://taraapi.ddns.net/api/ProjectRatypeTl");
+
+            var obj = await response.Content.ReadFromJsonAsync<List<ProjectRatypeTl>>();
+            return obj;
+        }
+
+        public async Task<List<ProjectSubMemberAsgmt>> GetAllMemberAssign() //get all member assignment data
         {
             HttpClient hc = new HttpClient();
             var response = await hc.GetAsync("https://taraapi.ddns.net/api/ProjectSubMemberAsgmt/");
@@ -62,13 +81,26 @@ namespace Qlist.Data
             return obj;
         }
 
-        public async Task<List<ProjectRunNo>> GetRunnNo() //get all project master data
+        public async Task<ProjectHd> SaveProjectHD(ProjectHd projecthd) //save all data
         {
             HttpClient hc = new HttpClient();
-            var response = await hc.GetAsync("https://taraapi.ddns.net/api/ProjectHD/");
+            var json = JsonConvert.SerializeObject(projecthd);
+            var data = new StringContent(json, Encoding.UTF8, "application/json");
+            var response = await hc.PostAsync("https://taraapi.ddns.net/api/ProjectHD/", data);
 
-            var obj = await response.Content.ReadFromJsonAsync<List<ProjectRunNo>>();
-            return obj;
+            var result = await response.Content.ReadFromJsonAsync<ProjectHd>();
+            return result;
+        }
+
+        public async Task<ProjectSubMemberAsgmt> SaveMemberAssign(ProjectSubMemberAsgmt memberassign) //save member assign data
+        {
+            HttpClient hc = new HttpClient();
+            var json = JsonConvert.SerializeObject(memberassign);
+            var data = new StringContent(json, Encoding.UTF8, "application/json");
+            var response = await hc.PostAsync("https://taraapi.ddns.net/api/ProjectSubMemberAsgmt/", data);
+
+            var result = await response.Content.ReadFromJsonAsync<ProjectSubMemberAsgmt>();
+            return result;
         }
     }
 }
