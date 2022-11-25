@@ -144,6 +144,7 @@ else
     private List<Member> member;
     private List<ProjectSubMemberAsgmt> listassign;
     private List<ProjectSubMemberAsgmt> assign;
+    private List<ProjectRatypeTl> projectra;
 
     string JsonCat;
     int memberid;
@@ -270,10 +271,10 @@ else
     {
         projectsub = await pj.GetProjectSubProjectTLbyID(id);
         listassign = await pj.GetAllMemberAssign();
+        projectra = await pj.GetAllProjectRAType();
         assign = listassign.Where(w => w.ProjectSubProjectTlid == id).ToList();
-
         JsonCat = string.Empty;
-        foreach (var projectsubcat in projectsub.ProjectRatypeTls)
+        foreach (var projectsubcat in projectra.Where(w => w.ProjectSubProjectTlid == id).ToList())
         {
             JsonCat = projectsubcat.MemberCapability;
         }

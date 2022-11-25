@@ -92,15 +92,15 @@ namespace Qlist.Data
             return result;
         }
 
-        public async Task<ProjectSubMemberAsgmt> SaveMemberAssign(ProjectSubMemberAsgmt memberassign) //save member assign data
+        public async Task SaveMemberAssign(string memberassign) //save member assign data
         {
             HttpClient hc = new HttpClient();
-            var json = JsonConvert.SerializeObject(memberassign);
-            var data = new StringContent(json, Encoding.UTF8, "application/json");
+            //var json = JsonConvert.SerializeObject(memberassign);
+            var data = new StringContent(memberassign, Encoding.UTF8, "application/json");
             var response = await hc.PostAsync("https://taraapi.ddns.net/api/ProjectSubMemberAsgmt/", data);
 
             var result = await response.Content.ReadFromJsonAsync<ProjectSubMemberAsgmt>();
-            return result;
+            //return result;
         }
     }
 }
