@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Qlist.ModelM2s;
 
@@ -92,15 +93,15 @@ namespace Qlist.Data
             return result;
         }
 
-        public async Task SaveMemberAssign(string memberassign) //save member assign data
+        public async Task<ProjectSubProjectTl> SaveSubProjectMember(ProjectSubProjectTl memberassign) //save member assign data
         {
             HttpClient hc = new HttpClient();
-            //var json = JsonConvert.SerializeObject(memberassign);
-            var data = new StringContent(memberassign, Encoding.UTF8, "application/json");
-            var response = await hc.PostAsync("https://taraapi.ddns.net/api/ProjectSubMemberAsgmt/", data);
+            var json = JsonConvert.SerializeObject(memberassign);
+            var data = new StringContent(json, Encoding.UTF8, "application/json");
+            var response = await hc.PostAsync("https://taraapi.ddns.net/api/ProjectSubProjectTl/", data);
 
-            var result = await response.Content.ReadFromJsonAsync<ProjectSubMemberAsgmt>();
-            //return result;
+            var result = await response.Content.ReadFromJsonAsync<ProjectSubProjectTl>();
+            return result;
         }
     }
 }

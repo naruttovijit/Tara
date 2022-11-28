@@ -74,47 +74,46 @@ else
 <br />
 <br />
 <h4>Add Member Assignment</h4>
+<p style="background-color:white; border:solid">
+    <table style="width:100%">
+        <tr>
+            <th>No.</th>
+            <th>Company Name TH</th>
+            <th>Company Name EN</th>
+            <th>Telephone</th>
+            <th>Awarded</th>
+            <th>Delete</th>
+        </tr>
+        @if (projectsub.ProjectSubMemberAsgmts is not null)
+        {
+            int no = 0;
+            foreach (var list in projectsub.ProjectSubMemberAsgmts)
+            {
+                no++;
+                var item = member.Where(w => w.id == list.MemberId.ToString()).FirstOrDefault();
+                <tr>
+                    <td>@no</td>
+                    <td>@item.CompanyNameTH</td>
+                    <td>@item.CompanyNameEN</td>
+                    <td>@item.Telephone</td>
+                    @if (list.Awarded == "Y")
+                    {
+                        <td><input type="checkbox" checked @onchange="EventArgs => { CheckboxClicked(list,EventArgs.Value);}" /></td>
+                    }
+                    else
+                    {
+                        <td><input type="checkbox" @onchange="EventArgs => { CheckboxClicked(list,EventArgs.Value);}" /></td>
+                    }
 
+                    <td><button @onclick="() => projectsub.ProjectSubMemberAsgmts.Remove(list)">X</button></td>
+                </tr>
+            }
+        }
+    </table>
+</p>
 
 <EditForm Model="memberassign">
-    <p style="background-color:white; border:solid">
-        <table style="width:100%">
-            <tr>
-                <th>No.</th>
-                <th>Company Name TH</th>
-                <th>Company Name EN</th>
-                <th>Telephone</th>
-                <th>Awarded</th>
-                <th>Delete</th>
-            </tr>
-            @if (assign is not null)
-            {
-                int no = 0;
-                foreach (var list in assign)
-                {
-                    no++;
-                    var item = member.Where(w => w.id == list.MemberId.ToString()).FirstOrDefault();
-                    <tr>
-                        <td>@no</td>
-                        <td>@item.CompanyNameTH</td>
-                        <td>@item.CompanyNameEN</td>
-                        <td>@item.Telephone</td>
-                        @if (list.Awarded == "Y")
-                        {
-                            <td><input type="checkbox" checked @onchange="EventArgs => { CheckboxClicked(list,EventArgs.Value);}" /></td>
-                        }
-                        else
-                        {
-                            <td><input type="checkbox" @onchange="EventArgs => { CheckboxClicked(list,EventArgs.Value);}" /></td>
-                        }
-
-                        <td><button @onclick="() => assign.Remove(list)">X</button></td>
-                    </tr>
-                }
-            }
-        </table>
-    </p>
-    <InputSelect id="AssignMember" @bind-Value="memberid">
+    <InputSelect id="AssignMember" @bind-Value="memberassign.MemberId">
     <option value="0">------------Select Member------------</option>
     @if (member is not null)
     {
@@ -124,7 +123,7 @@ else
         }
     }
     </InputSelect> &nbsp;&nbsp;
-<button @onclick="()=>AddMember(memberid)">Add Member</button>
+    <button @onclick="()=>AddMember(memberassign.MemberId)">Add Member</button>
 </EditForm>
 <br />
 <button @onclick="()=>UpdateMemberAssign()">Update</button>
@@ -139,11 +138,12 @@ else
     public List<string> CheckBox { get; set; } = new List<string>();
     public ProjectSubProjectTl projectsub { get; set; } = new ProjectSubProjectTl();
     public ProjectSubMemberAsgmt memberassign { get; set; } = new ProjectSubMemberAsgmt();
+    public ProjectSubMemberAsgmt createmember { get; set; } = new ProjectSubMemberAsgmt();
     private List<Category> category;
     private List<Contact> contact;
     private List<Member> member;
     private List<ProjectSubMemberAsgmt> listassign;
-    private List<ProjectSubMemberAsgmt> assign;
+    //private List<ProjectSubMemberAsgmt> assign;
     private List<ProjectRatypeTl> projectra;
 
     string JsonCat;
@@ -272,7 +272,7 @@ else
         projectsub = await pj.GetProjectSubProjectTLbyID(id);
         listassign = await pj.GetAllMemberAssign();
         projectra = await pj.GetAllProjectRAType();
-        assign = listassign.Where(w => w.ProjectSubProjectTlid == id).ToList();
+        //assign = listassign.Where(w => w.ProjectSubProjectTlid == id).ToList();
         JsonCat = string.Empty;
         foreach (var projectsubcat in projectra.Where(w => w.ProjectSubProjectTlid == id).ToList())
         {
@@ -285,15 +285,19 @@ else
 
     void AddMember(int id) //Add contact to Project HD
     {
-        var result = member.Where(w => w.id == id.ToString()).FirstOrDefault();
-        assign.Add(new ProjectSubMemberAsgmt() { MemberId = int.Parse(result.id), ProjectSubProjectTlid = id, Active = "Y", EditorId = 1 });
-
+        memberassign.ProjectSubProjectTlid = id;
+        memberassign.Active = "Y";
+        memberassign.EditorId = 1;
+        //memberassign.DateCreated = DateTime.Now;
+        //memberassign.LastUpdated = DateTime.Now;
+        projectsub.ProjectSubMemberAsgmts.Add(memberassign);
+        memberassign = new ProjectSubMemberAsgmt();
     }
 
     async void UpdateMemberAssign() //Update member assignment in table
     {
-        
-        //var result = await pj.SaveMemberAssign();
+        projectsub.ProjectSubProjectTlhistories.Add(new ProjectSubProjectTlhistory() { ProjectSubProjectTlid = projectsub.Id, Remark = "Update Member Assignments", EditorId = 1 });
+        var result = await pj.SaveSubProjectMember(projectsub);
     }
 
     void CheckboxClicked(ProjectSubMemberAsgmt assignmember, object checkedValue)
@@ -301,10 +305,12 @@ else
         if ((bool)checkedValue)
         {
             assignmember.Awarded = "Y";
+            assignmember.DateConfirm = DateTime.Now;
         }
         else
         {
             assignmember.Awarded = string.Empty;
+            assignmember.DateConfirm = null;
         }
     }
 
