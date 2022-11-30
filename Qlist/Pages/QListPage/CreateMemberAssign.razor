@@ -81,6 +81,8 @@ else
             <th>Company Name TH</th>
             <th>Company Name EN</th>
             <th>Telephone</th>
+            <th>Comfirm Date</th>
+            <th>Comfirm</th>
             <th>Awarded</th>
             <th>Delete</th>
         </tr>
@@ -96,15 +98,16 @@ else
                     <td>@item.CompanyNameTH</td>
                     <td>@item.CompanyNameEN</td>
                     <td>@item.Telephone</td>
-                    @if (list.Awarded == "Y")
+                    <td>@list.DateConfirm</td>
+                    @if (list.DateConfirm is not null)
                     {
-                        <td><input type="checkbox" checked @onchange="EventArgs => { CheckboxClicked(list,EventArgs.Value);}" /></td>
+                        <td></td>
                     }
                     else
                     {
                         <td><input type="checkbox" @onchange="EventArgs => { CheckboxClicked(list,EventArgs.Value);}" /></td>
                     }
-
+                    <td><a href="/Data/ProjectMemberAssignAwarded/@list.Id">Link</a></td>
                     <td><button @onclick="() => projectsub.ProjectSubMemberAsgmts.Remove(list)">X</button></td>
                 </tr>
             }
@@ -142,8 +145,6 @@ else
     private List<Category> category;
     private List<Contact> contact;
     private List<Member> member;
-    private List<ProjectSubMemberAsgmt> listassign;
-    //private List<ProjectSubMemberAsgmt> assign;
     private List<ProjectRatypeTl> projectra;
 
     string JsonCat;
@@ -270,9 +271,7 @@ else
     protected override async Task OnInitializedAsync()
     {
         projectsub = await pj.GetProjectSubProjectTLbyID(id);
-        listassign = await pj.GetAllMemberAssign();
         projectra = await pj.GetAllProjectRAType();
-        //assign = listassign.Where(w => w.ProjectSubProjectTlid == id).ToList();
         JsonCat = string.Empty;
         foreach (var projectsubcat in projectra.Where(w => w.ProjectSubProjectTlid == id).ToList())
         {
@@ -288,8 +287,6 @@ else
         memberassign.ProjectSubProjectTlid = id;
         memberassign.Active = "Y";
         memberassign.EditorId = 1;
-        //memberassign.DateCreated = DateTime.Now;
-        //memberassign.LastUpdated = DateTime.Now;
         projectsub.ProjectSubMemberAsgmts.Add(memberassign);
         memberassign = new ProjectSubMemberAsgmt();
     }
@@ -297,6 +294,7 @@ else
     async void UpdateMemberAssign() //Update member assignment in table
     {
         projectsub.ProjectSubProjectTlhistories.Add(new ProjectSubProjectTlhistory() { ProjectSubProjectTlid = projectsub.Id, Remark = "Update Member Assignments", EditorId = 1 });
+        projectsub.ProjectSubStatus = "Member Assignment";
         var result = await pj.SaveSubProjectMember(projectsub);
     }
 
@@ -304,13 +302,7 @@ else
     {
         if ((bool)checkedValue)
         {
-            assignmember.Awarded = "Y";
             assignmember.DateConfirm = DateTime.Now;
-        }
-        else
-        {
-            assignmember.Awarded = string.Empty;
-            assignmember.DateConfirm = null;
         }
     }
 

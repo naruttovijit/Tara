@@ -114,14 +114,14 @@ else
 <br />
 
 <h4><b>Membership Assignments</b></h4>
-@if (showmem is null)
+@if (projectsub.ProjectSubMemberAsgmts is null)
 {
     <p><em>No Membership Assignments</em></p>
 }
 else
 {
     int no = 0;
-    foreach (var list in showmem)
+    foreach (var list in projectsub.ProjectSubMemberAsgmts)
     {
         var item = member.Where(w => w.id == list.MemberId.ToString()).FirstOrDefault();
         <p style="background-color:white; border:solid">
@@ -150,8 +150,6 @@ else
     private List<ProjectDocument> projectdoc;
     private List<ProjectDocument> showdoc;
     private List<ProjectRatypeTl> projectra;
-    private List<ProjectSubMemberAsgmt> projectmem;
-    private List<ProjectSubMemberAsgmt> showmem;
     string JsonCat;
     string mem = @"
 [{
@@ -185,7 +183,6 @@ else
         projectsub = await pj.GetProjectSubProjectTLbyID(id);
         projectdoc = await pj.GetAllProjectDocument();
         projectra = await pj.GetAllProjectRAType();
-        projectmem = await pj.GetAllMemberAssign();
         JsonCat = string.Empty;
         foreach (var projectsubcat in projectra.Where(w => w.ProjectSubProjectTlid == id).ToList())
         {
@@ -194,7 +191,6 @@ else
         category = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Category>>(JsonCat);
         member = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Member>>(mem);
         showdoc = projectdoc.Where(w => w.ProjectSubProjectTlid == id).ToList();
-        showmem = projectmem.Where(w => w.ProjectSubProjectTlid == id).ToList();
         StateHasChanged();
     }
 }

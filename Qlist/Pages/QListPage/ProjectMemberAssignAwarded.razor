@@ -1,0 +1,117 @@
+﻿@page "/Data/ProjectMemberAssignAwarded/{id:int}"
+
+@using Data;
+@using ModelM2s;
+@using ModelM2s.Json;
+
+@inject ProjectData pj;
+
+<h3>Project Sub Detail</h3>
+<br />
+@if (awarded.Id > 0)
+{
+    <p font-size:25px> <b>Project Sub Running Number :</b> @awarded.ProjectSubProjectTl.ProjectSubRunNo  </p>
+    <p font-size:25px> <b>Project Sub Name :</b> @awarded.ProjectSubProjectTl.ProjectSubName  </p>
+    <p font-size:25px> <b>Description :</b> @awarded.ProjectSubProjectTl.Description  </p>
+    <p font-size:25px> <b>Remarked :</b> @awarded.ProjectSubProjectTl.Remark </p>
+
+    @if (string.IsNullOrEmpty(awarded.ProjectSubProjectTl.Budget.ToString()))
+    {
+        <p font-size:25px> <b>Budget :</b> 0 THB</p>
+    }
+    else
+    {
+        <p font-size:25px> <b>Budget :</b> @awarded.ProjectSubProjectTl.Budget THB</p>
+    }
+
+    <p font-size:25px> <b>Status :</b> @awarded.ProjectSubProjectTl.ProjectSubStatus</p>
+
+    @if (string.IsNullOrEmpty(awarded.ProjectSubProjectTl.PlanStartDate.ToString()))
+    {
+        <p font-size:25px> <b>Started Date :</b> Not Planed</p>
+    }
+    else
+    {
+        <p font-size:25px> <b>Started Date :</b> @awarded.ProjectSubProjectTl.PlanStartDate</p>
+    }
+
+    @if (string.IsNullOrEmpty(awarded.ProjectSubProjectTl.PlanFinishDate.ToString()))
+    {
+        <p font-size:25px> <b>Finished Date :</b> Not Planed</p>
+    }
+    else
+    {
+        <p font-size:25px> <b>Finished Date :</b> @awarded.ProjectSubProjectTl.PlanFinishDate</p>
+    }
+}
+
+<br />
+<br />
+<br />
+<h3>Member Assignment</h3>
+<br />
+
+@if(awarded.MemberId > 0)
+{
+    var item = member.Where(w => w.id == awarded.MemberId.ToString()).FirstOrDefault();
+    <p>
+        &nbsp; Thai Name : @item.CompanyNameTH <br />
+        &nbsp; English Name : @item.CompanyNameEN <br />
+        &nbsp; Telephone : @item.Telephone <br />
+    </p>
+}
+<br />
+<p>Is Awarded ?</p>
+<br />
+<button @onclick="()=>UpdateAwarded()">Yes</button> &nbsp;&nbsp; <button>No</button>
+
+
+@code {
+    [Parameter]
+    public int id { get; set; }
+
+    public ProjectSubMemberAsgmt awarded { get; set; } = new ProjectSubMemberAsgmt();
+    private List<Member> member;
+
+    string mem = @"
+[{
+    id:'5',
+    name:'กิติยศ สาคริก',
+    CompanyNameEN:'Busarakham Hospital',
+    CompanyNameTH:'โรงพยาบาลบุษราคัม',
+    address:'อาคารอิมแพคชาเลนเจอร์ 2 Popular 1 Rd, Tambon Ban Mai, Amphoe Pak Kret, Chang Wat Nonthaburi 11120',
+    Telephone:'02 029 1661'
+},
+{
+    id:'6',
+    name:'ทวี ภาวนากร',
+    CompanyNameEN:'Forth Corporation Public Company Limited',
+    CompanyNameTH:'บริษัท ฟอร์ท คอร์ปอเรชั่น จำกัด (มหาชน)',
+    address:'1053/1 Phahonyothin Road, Phayathai, Phayathai, Bangkok 10400',
+    Telephone:''
+},
+{
+    id:'7',
+    name:'วีรยา บรรลือทรัพย์',
+    CompanyNameEN:'InGenium Group CO.,LTD.',
+    CompanyNameTH:'บริษัท อินจีเนียม จำกัด (สำนักงานใหญ่)',
+    address:'25/38 Moo 4, Banhphai, Muang Nonthaburi, Nonthaburi 11000 Thailand.',
+    Telephone:'+66(0)2 117-4619'
+}]
+";
+
+    protected override async Task OnInitializedAsync()
+    {
+        awarded = await pj.GetMemberAssign(id);
+        member = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Member>>(mem);
+        StateHasChanged();
+    }
+
+    void UpdateAwarded()
+    {
+        awarded.Awarded = "Y";
+        awarded.MemberAsgmtawardedHistories.Add(new MemberAsgmtawardedHistory() { MemberAssignmentId = awarded.MemberId, DateAwarded = DateTime.Now, Active = "Y", LastUpdated = DateTime.Now, EditorId = 1 });
+        //var result = await pj.SaveAwarded(awarded);
+    }
+
+}
