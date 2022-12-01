@@ -73,7 +73,7 @@ else
 
 <br />
 <br />
-<h4>Add Member Assignment</h4>
+<h4>Member Assignment</h4>
 <p style="background-color:white; border:solid">
     <table style="width:100%">
         <tr>
@@ -102,34 +102,49 @@ else
                     @if (list.DateConfirm is not null)
                     {
                         <td></td>
+                        @if (awarded)
+                        {
+                            <td>@list.Awarded</td>
+                        }
+                        else
+                        {
+                            if (list.Id > 0)
+                            {
+                                <td><a href="/Data/ProjectMemberAssignAwarded/@list.Id">Link</a></td>
+                            }
+                        }
+                        <td></td>
                     }
                     else
                     {
                         <td><input type="checkbox" @onchange="EventArgs => { CheckboxClicked(list,EventArgs.Value);}" /></td>
+                        <td></td>
+                        <td><button @onclick="() => projectsub.ProjectSubMemberAsgmts.Remove(list)">X</button></td>
                     }
-                    <td><a href="/Data/ProjectMemberAssignAwarded/@list.Id">Link</a></td>
-                    <td><button @onclick="() => projectsub.ProjectSubMemberAsgmts.Remove(list)">X</button></td>
                 </tr>
             }
         }
     </table>
 </p>
 
-<EditForm Model="memberassign">
-    <InputSelect id="AssignMember" @bind-Value="memberassign.MemberId">
-    <option value="0">------------Select Member------------</option>
-    @if (member is not null)
-    {
-        foreach (var list in member)
-        {
-            <option value="@list.id">@list.CompanyNameEN</option>
-        }
-    }
-    </InputSelect> &nbsp;&nbsp;
-    <button @onclick="()=>AddMember(memberassign.MemberId)">Add Member</button>
-</EditForm>
-<br />
-<button @onclick="()=>UpdateMemberAssign()">Update</button>
+@if (!awarded)
+{
+    <EditForm Model="memberassign">
+        <InputSelect id="AssignMember" @bind-Value="memberassign.MemberId">
+            <option value="0">------------Select Member------------</option>
+            @if (member is not null)
+            {
+                foreach (var list in member)
+                {
+                    <option value="@list.id">@list.CompanyNameEN</option>
+                }
+            }
+        </InputSelect> &nbsp;&nbsp;
+        <button @onclick="()=>AddMember(memberassign.MemberId)">Add Member</button>
+    </EditForm>
+    <br />
+    <button @onclick="()=>UpdateMemberAssign()">Update</button>
+}
 <br />
 <br />
 
@@ -141,11 +156,11 @@ else
     public List<string> CheckBox { get; set; } = new List<string>();
     public ProjectSubProjectTl projectsub { get; set; } = new ProjectSubProjectTl();
     public ProjectSubMemberAsgmt memberassign { get; set; } = new ProjectSubMemberAsgmt();
-    public ProjectSubMemberAsgmt createmember { get; set; } = new ProjectSubMemberAsgmt();
     private List<Category> category;
     private List<Contact> contact;
     private List<Member> member;
     private List<ProjectRatypeTl> projectra;
+    private List<ProjectSubMemberAsgmt> assign;
 
     string JsonCat;
     int memberid;
@@ -267,6 +282,8 @@ else
     SubSystemName:'Hospital Process Information Managemet'
 }]
 ";
+    bool awarded = false;
+
 
     protected override async Task OnInitializedAsync()
     {
@@ -279,6 +296,14 @@ else
         }
         category = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Category>>(JsonCat);
         member = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Member>>(mem);
+        foreach (var list in projectsub.ProjectSubMemberAsgmts)
+        {
+            if (list.MemberAsgmtawardedHistories.Count > 0)
+            {
+                awarded = true;
+                break;
+            }
+        }
         StateHasChanged();
     }
 
@@ -295,7 +320,8 @@ else
     {
         projectsub.ProjectSubProjectTlhistories.Add(new ProjectSubProjectTlhistory() { ProjectSubProjectTlid = projectsub.Id, Remark = "Update Member Assignments", EditorId = 1 });
         projectsub.ProjectSubStatus = "Member Assignment";
-        var result = await pj.SaveSubProjectMember(projectsub);
+        var result = await pj.SaveSubProject(projectsub);
+        StateHasChanged();
     }
 
     void CheckboxClicked(ProjectSubMemberAsgmt assignmember, object checkedValue)

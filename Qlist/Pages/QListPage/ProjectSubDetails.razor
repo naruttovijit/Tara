@@ -123,6 +123,7 @@ else
     int no = 0;
     foreach (var list in projectsub.ProjectSubMemberAsgmts)
     {
+        no++;
         var item = member.Where(w => w.id == list.MemberId.ToString()).FirstOrDefault();
         <p style="background-color:white; border:solid">
             &nbsp; No. @no <br />

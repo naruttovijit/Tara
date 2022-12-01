@@ -71,6 +71,8 @@
     public int id { get; set; }
 
     public ProjectSubMemberAsgmt awarded { get; set; } = new ProjectSubMemberAsgmt();
+    public ProjectSubProjectTl projectsub { get; set; } = new ProjectSubProjectTl();
+    public ProjectHd projecthd { get; set; } = new ProjectHd();
     private List<Member> member;
 
     string mem = @"
@@ -107,11 +109,37 @@
         StateHasChanged();
     }
 
-    void UpdateAwarded()
+    async void UpdateAwarded()
     {
-        awarded.Awarded = "Y";
-        awarded.MemberAsgmtawardedHistories.Add(new MemberAsgmtawardedHistory() { MemberAssignmentId = awarded.MemberId, DateAwarded = DateTime.Now, Active = "Y", LastUpdated = DateTime.Now, EditorId = 1 });
-        //var result = await pj.SaveAwarded(awarded);
+        int hiscount = awarded.MemberAsgmtawardedHistories.Count;
+        if (hiscount < 1)
+        {
+            awarded.Awarded = "Y";
+            awarded.ProjectSubProjectTl.ProjectSubStatus = "Closed";
+            awarded.MemberAsgmtawardedHistories.Add(new MemberAsgmtawardedHistory() { MemberAssignmentId = awarded.MemberId, DateAwarded = DateTime.Now, Active = "Y", LastUpdated = DateTime.Now, EditorId = 1 });
+            awarded.ProjectSubProjectTl.ProjectSubProjectTlhistories.Add(new ProjectSubProjectTlhistory() { ProjectSubProjectTlid = awarded.ProjectSubProjectTlid, Remark = "Closed with Member Assignments Awarded", EditorId = 1 });
+            var result = await pj.SaveMemberAssign(awarded);
+
+            UpdateProjectHD();
+        }
+    }
+
+    async void UpdateProjectHD()
+    {
+        projectsub = await pj.GetProjectSubProjectTLbyID(awarded.ProjectSubProjectTlid);
+        projecthd = await pj.GetProjectHDbyID(projectsub.ProjectHdid);
+        int subcount = projecthd.ProjectSubProjectTls.Count;
+        int closed = 0;
+        foreach (var list in projecthd.ProjectSubProjectTls)
+        {
+            if (list.ProjectSubStatus == "Closed") closed++;
+        }
+
+        if (subcount == closed)
+        {
+            projecthd.ProjectHdstatus = "Closed";
+            var result = await pj.SaveProjectHD(projecthd);
+        }
     }
 
 }

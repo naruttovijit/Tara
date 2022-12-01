@@ -73,7 +73,7 @@ namespace Qlist.Data
             return obj;
         }
 
-        public async Task<ProjectSubMemberAsgmt> GetMemberAssign(int id) //get member assignment data
+        public async Task<ProjectSubMemberAsgmt> GetMemberAssign(int id) //get member assignment data by id
         {
             HttpClient hc = new HttpClient();
             var response = await hc.GetAsync("https://taraapi.ddns.net/api/ProjectSubMemberAsgmt/" + id.ToString());
@@ -93,10 +93,10 @@ namespace Qlist.Data
             return result;
         }
 
-        public async Task<ProjectSubProjectTl> SaveSubProjectMember(ProjectSubProjectTl memberassign) //save member assign data
+        public async Task<ProjectSubProjectTl> SaveSubProject(ProjectSubProjectTl subproject) //save member assign data
         {
             HttpClient hc = new HttpClient();
-            var json = JsonConvert.SerializeObject(memberassign);
+            var json = JsonConvert.SerializeObject(subproject);
             var data = new StringContent(json, Encoding.UTF8, "application/json");
             var response = await hc.PostAsync("https://taraapi.ddns.net/api/ProjectSubProjectTl/", data);
 
@@ -104,10 +104,10 @@ namespace Qlist.Data
             return result;
         }
 
-        public async Task<ProjectSubMemberAsgmt> SaveAwarded(ProjectSubMemberAsgmt award) //save member assign data
+        public async Task<ProjectSubMemberAsgmt> SaveMemberAssign(ProjectSubMemberAsgmt assign) //save member assign award data
         {
             HttpClient hc = new HttpClient();
-            var json = JsonConvert.SerializeObject(award);
+            var json = JsonConvert.SerializeObject(assign);
             var data = new StringContent(json, Encoding.UTF8, "application/json");
             var response = await hc.PostAsync("https://taraapi.ddns.net/api/ProjectSubMemberAsgmt/", data);
 
