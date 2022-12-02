@@ -18,8 +18,10 @@ else
                 <th>Running Number</th>
                 <th>Project Name</th>
                 <th>Remarked</th>
-                <th>Description</th>
+                <th>Status</th>
                 <th>Project Sub Count</th>
+                <th>Project Sub Detail</th>
+                <th>Edit</th>
             </tr>
         </thead>
         <tbody>
@@ -29,9 +31,10 @@ else
                     <td>@project.ProjectHdrunNo</td>
                     <td>@project.ProjectName</td>
                     <td>@project.Remark</td>
-                    <td>@project.Description</td>
+                    <td>@project.ProjectHdstatus</td>
                     <td>@project.ProjectSubProjectTls.Count()</td>
                     <td><a href="/Data/ProjectDetail/@project.Id">Link</a></td>
+                    <td><a href="/Data/ProjectEdit/@project.Id">Edit</a></td>
                 </tr>
             }
         </tbody>

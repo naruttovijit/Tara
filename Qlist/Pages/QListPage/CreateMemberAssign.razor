@@ -287,6 +287,11 @@ else
 
     protected override async Task OnInitializedAsync()
     {
+        await Initial();
+    }
+
+    private async Task Initial()
+    {
         projectsub = await pj.GetProjectSubProjectTLbyID(id);
         projectra = await pj.GetAllProjectRAType();
         JsonCat = string.Empty;
@@ -321,7 +326,8 @@ else
         projectsub.ProjectSubProjectTlhistories.Add(new ProjectSubProjectTlhistory() { ProjectSubProjectTlid = projectsub.Id, Remark = "Update Member Assignments", EditorId = 1 });
         projectsub.ProjectSubStatus = "Member Assignment";
         var result = await pj.SaveSubProject(projectsub);
-        StateHasChanged();
+        
+        await Initial();
     }
 
     void CheckboxClicked(ProjectSubMemberAsgmt assignmember, object checkedValue)

@@ -60,10 +60,19 @@
         &nbsp; Telephone : @item.Telephone <br />
     </p>
 }
-<br />
-<p>Is Awarded ?</p>
-<br />
-<button @onclick="()=>UpdateAwarded()">Yes</button> &nbsp;&nbsp; <button>No</button>
+@if (awarded.Awarded == "Y")
+{
+
+}
+else
+{
+    <br />
+    <p>Is Awarded ?</p>
+    <br />
+    <button @onclick="()=>UpdateAwarded()">Yes</button>
+    <button>No</button>
+}
+
 
 
 @code {
@@ -74,7 +83,6 @@
     public ProjectSubProjectTl projectsub { get; set; } = new ProjectSubProjectTl();
     public ProjectHd projecthd { get; set; } = new ProjectHd();
     private List<Member> member;
-
     string mem = @"
 [{
     id:'5',
@@ -102,7 +110,12 @@
 }]
 ";
 
+
     protected override async Task OnInitializedAsync()
+    {
+        await Initial();
+    }
+    private async Task Initial()
     {
         awarded = await pj.GetMemberAssign(id);
         member = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Member>>(mem);
@@ -121,6 +134,7 @@
             var result = await pj.SaveMemberAssign(awarded);
 
             UpdateProjectHD();
+            await Initial();
         }
     }
 
@@ -137,6 +151,7 @@
 
         if (subcount == closed)
         {
+            projecthd.ProjectHdhistories.Add(new ProjectHdhistory() { ProjectHdid = projecthd.Id, Remark = "Project Closed", TimeStamp = DateTime.Now, EditorId = 1});
             projecthd.ProjectHdstatus = "Closed";
             var result = await pj.SaveProjectHD(projecthd);
         }

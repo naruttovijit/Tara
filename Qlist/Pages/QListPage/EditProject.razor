@@ -1,0 +1,118 @@
+﻿@page "/Data/ProjectEdit/{id:int}"
+
+@using ModelM2s;
+@using ModelM2s.Json;
+@using Data;
+@using System.IO
+
+@inject IWebHostEnvironment env
+@inject ProjectData pj;
+
+<h3>Edit Project</h3>
+<EditForm Model="projecthd">
+    &nbsp;<label>Main Project Name :</label> &nbsp; <InputText id="MainName" @bind-Value="projecthd.ProjectName"></InputText><br /><br />
+    &nbsp;<label>Description :</label> &nbsp; <InputText id="MainDesc" @bind-Value="projecthd.Description"></InputText><br /><br />
+    &nbsp;<label>Remarked :</label> &nbsp; <InputText id="MainRemark" @bind-Value="projecthd.Remark"></InputText><br /><br />
+    &nbsp;<label>Customer Infomation :</label> &nbsp; <InputSelect id="MainCustomer" @bind-Value="customerid">
+        <option value="0">------------Select Customer------------</option>
+        @if (customer is not null)
+        {
+            foreach (var list in customer)
+            {
+                <option value="@list.id">@list.CompanyNameEN (@list.CompanyNameTH)</option>
+            }
+        }
+    </InputSelect><br /><br />
+    <p style="background-color:white; border:solid">
+        &nbsp;<h4>Contact Infomation</h4>
+        <table style="width:100%">
+            <tr>
+                <th>Name</th>
+                <th>Address</th>
+                <th>Tel.</th>
+                <th>Delete</th>
+            </tr>
+            @if (ListContact is not null)
+            {
+                foreach (var list in ListContact)
+                {
+                    <tr>
+                        <td>@list.name</td>
+                        <td>@list.address</td>
+                        <td>@list.tel</td>
+                        <td>
+                            <button @onclick="() => ListContact.Remove(list)">
+                                X
+                            </button>
+                        </td>
+                    </tr>
+                }
+            }
+
+        </table>
+        <div>
+            <InputSelect id="MainContact" @bind-Value="contactid">
+                <option value="0">------------Select Contact------------</option>
+                @if (contact is not null)
+                {
+                    foreach (var list in contact)
+                    {
+                        <option value="@list.id">@list.name</option>
+                    }
+                }
+            </InputSelect> &nbsp;&nbsp;
+            <button @onclick="()=>SaveContact(contactid)">Add Contact</button><br /><br />
+        </div>
+    </p>
+
+    &nbsp;<label>Budget :</label> &nbsp; <InputNumber id="MainBudget" @bind-Value="projecthd.Budget"></InputNumber> THB <br /><br />
+    &nbsp;<label>Started Date :</label> &nbsp; <InputDate id="MainStartDate" @bind-Value="projecthd.PlanStartDate"></InputDate> &nbsp;&nbsp;&nbsp;
+    &nbsp;<label>Finished Date :</label> &nbsp; <InputDate id="MainFinishDate" @bind-Value="projecthd.PlanFinishDate"></InputDate><br /><br />
+    &nbsp;
+
+
+</EditForm>
+
+@code {
+    [Parameter]
+    public int id { get; set; }
+
+    public ProjectHd projecthd { get; set; } = new ProjectHd();
+    public List<ContactInfo> ListContact { get; set; } = new List<ContactInfo>();
+    public List<Category> ListCategory { get; set; } = new List<Category>();
+    private List<CustomerInfo> customerinfo;
+    private List<ContactInfo> contactinfo;
+    private List<CustomerInfo> customer;
+    private List<ContactInfo> contact;
+    private List<Category> category;
+
+    int customerid;
+    int contactid;
+    int categoryid;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Initial();
+    }
+
+    private async Task Initial()
+    {
+        projecthd = await pj.GetProjectHDbyID(id);
+        customerinfo = Newtonsoft.Json.JsonConvert.DeserializeObject<List<CustomerInfo>>(projecthd.CustomerInfo);
+        contactinfo = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ContactInfo>>(projecthd.ContactInfo);
+        StateHasChanged();
+    }
+
+    void SaveContact(int id) //Add contact to Project HD
+    {
+        var result = contact.Where(w => w.id == id.ToString()).FirstOrDefault();
+        ListContact.Add(new ContactInfo() { id = result.id, name = result.name, address = result.address, tel = result.tel });
+    }
+
+    void SaveCategory(int id) //Add category to Project Sub
+    {
+        var result = category.Where(c => c.id == id.ToString()).FirstOrDefault();
+        ListCategory.Add(new Category() { id = result.id, SystemName = result.SystemName, SubSystemName = result.SubSystemName });
+    }
+
+}
