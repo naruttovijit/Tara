@@ -75,14 +75,13 @@ else
     <p style="background-color:white; border:solid">
     <p><b>&nbsp; Contact Information</b></p>
 
-    @foreach (ContactInfo record in contactinfo)
+    @foreach (var record in contactinfo)
     {
         <p>
-            &nbsp; Name :  @record.name <br />
-            &nbsp; Address :  @record.address <br />
-            &nbsp; Telephone :  @record.tel <br />
-            &nbsp; Line :  <br />
-            &nbsp; E-Mail :  <br />
+            &nbsp; Name :  @record.FirstNameTH <br />
+            &nbsp; Telephone :  @record.MobileNo <br />
+            &nbsp; Line : @record.LineID <br />
+            &nbsp; E-Mail : @record.Email <br />
         </p>
     }
     </p>
@@ -128,14 +127,14 @@ else
     public ProjectHd projecthd { get; set; } = new ProjectHd();
     public ProjectSubProjectTl formsub { get; set; } = new ProjectSubProjectTl();
 
-    private List<CustomerInfo> customerinfo;
-    private List<ContactInfo> contactinfo;
+    private List<Member> customerinfo;
+    private List<Contact> contactinfo;
 
     protected override async Task OnInitializedAsync()
     {
         projecthd = await pj.GetProjectHDbyID(id);
-        customerinfo = Newtonsoft.Json.JsonConvert.DeserializeObject<List<CustomerInfo>>(projecthd.CustomerInfo);
-        contactinfo = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ContactInfo>>(projecthd.ContactInfo);
+        customerinfo = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Member>>(projecthd.CustomerInfo);
+        contactinfo = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Contact>>(projecthd.ContactInfo);
         StateHasChanged();
     }
 }

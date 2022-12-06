@@ -37,9 +37,8 @@
                 foreach (var list in ListContact)
                 {
                     <tr>
-                        <td>@list.name</td>
-                        <td>@list.address</td>
-                        <td>@list.tel</td>
+                        <td>@list.FirstNameTH</td>
+                        <td>@list.MobileNo</td>
                         <td>
                             <button @onclick="() => ListContact.Remove(list)">
                                 X
@@ -57,7 +56,7 @@
                 {
                     foreach (var list in contact)
                     {
-                        <option value="@list.id">@list.name</option>
+                        <option value="@list.id">@list.FirstNameTH</option>
                     }
                 }
             </InputSelect> &nbsp;&nbsp;
@@ -78,12 +77,12 @@
     public int id { get; set; }
 
     public ProjectHd projecthd { get; set; } = new ProjectHd();
-    public List<ContactInfo> ListContact { get; set; } = new List<ContactInfo>();
+    public List<Contact> ListContact { get; set; } = new List<Contact>();
     public List<Category> ListCategory { get; set; } = new List<Category>();
-    private List<CustomerInfo> customerinfo;
-    private List<ContactInfo> contactinfo;
-    private List<CustomerInfo> customer;
-    private List<ContactInfo> contact;
+    private List<Member> customerinfo;
+    private List<Contact> contactinfo;
+    private List<Member> customer;
+    private List<Contact> contact;
     private List<Category> category;
 
     int customerid;
@@ -98,15 +97,15 @@
     private async Task Initial()
     {
         projecthd = await pj.GetProjectHDbyID(id);
-        customerinfo = Newtonsoft.Json.JsonConvert.DeserializeObject<List<CustomerInfo>>(projecthd.CustomerInfo);
-        contactinfo = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ContactInfo>>(projecthd.ContactInfo);
+        customerinfo = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Member>>(projecthd.CustomerInfo);
+        contactinfo = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Contact>>(projecthd.ContactInfo);
         StateHasChanged();
     }
 
     void SaveContact(int id) //Add contact to Project HD
     {
         var result = contact.Where(w => w.id == id.ToString()).FirstOrDefault();
-        ListContact.Add(new ContactInfo() { id = result.id, name = result.name, address = result.address, tel = result.tel });
+        ListContact.Add(new Contact() { id = result.id, FirstNameTH = result.FirstNameTH, MobileNo = result.MobileNo });
     }
 
     void SaveCategory(int id) //Add category to Project Sub

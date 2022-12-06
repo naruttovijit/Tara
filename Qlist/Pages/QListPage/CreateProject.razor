@@ -30,7 +30,6 @@
         <table style="width:100%">
             <tr>
                 <th>Name</th>
-                <th>Address</th>
                 <th>Tel.</th>
                 <th>Delete</th>
             </tr>
@@ -39,9 +38,8 @@
                 foreach (var list in ListContact)
                 {
                     <tr>
-                        <td>@list.name</td>
-                        <td>@list.address</td>
-                        <td>@list.tel</td>
+                        <td>@list.FirstNameTH</td>
+                        <td>@list.MobileNo</td>
                         <td>
                             <button @onclick="() => ListContact.Remove(list)">
                                 X
@@ -59,7 +57,7 @@
                 {
                     foreach (var list in contact)
                     {
-                        <option value="@list.id">@list.name</option>
+                        <option value="@list.id">@list.FirstNameTH</option>
                     }
                 }
             </InputSelect> &nbsp;&nbsp;
@@ -214,45 +212,19 @@
     public ProjectHd formmain { get; set; } = new ProjectHd();
     public ProjectSubProjectTl formsub { get; set; } = new ProjectSubProjectTl();
     public ProjectRatypeTl formRAType { get; set; } = new ProjectRatypeTl();
-    public List<ContactInfo> ListContact { get; set; } = new List<ContactInfo>();
+    public List<Contact> ListContact { get; set; } = new List<Contact>();
     public List<Category> ListCategory { get; set; } = new List<Category>();
-    public List<CustomerInfo> ListCustomer { get; set; } = new List<CustomerInfo>();
+    public List<Member> ListCustomer { get; set; } = new List<Member>();
     public List<ProjectHdhistory> HDhis { get; set; } = new List<ProjectHdhistory>();
     public List<ProjectSubProjectTlhistory> Subhis { get; set; } = new List<ProjectSubProjectTlhistory>();
 
-    private List<CustomerInfo> customer;
-    private List<ContactInfo> contact;
+    private List<Contact> contact;
     private List<Category> category;
     private List<RatypeMaster> ratype;
     private List<Member> member;
+    private List<Member> customer;
     private List<Category> showcate;
     string mem = @"
-[{
-    id:'5',
-    name:'กิติยศ สาคริก',
-    company_en:'Busarakham Hospital',
-    company_th:'โรงพยาบาลบุษราคัม',
-    address:'อาคารอิมแพคชาเลนเจอร์ 2 Popular 1 Rd, Tambon Ban Mai, Amphoe Pak Kret, Chang Wat Nonthaburi 11120',
-    tel:'02 029 1661'
-},
-{
-    id:'6',
-    name:'ทวี ภาวนากร',
-    company_en:'Forth Corporation Public Company Limited',
-    company_th:'บริษัท ฟอร์ท คอร์ปอเรชั่น จำกัด (มหาชน)',
-    address:'1053/1 Phahonyothin Road, Phayathai, Phayathai, Bangkok 10400',
-    tel:''
-},
-{
-    id:'7',
-    name:'วีรยา บรรลือทรัพย์',
-    company_en:'InGenium Group CO.,LTD.',
-    company_th:'บริษัท อินจีเนียม จำกัด (สำนักงานใหญ่)',
-    address:'25/38 Moo 4, Banhphai, Muang Nonthaburi, Nonthaburi 11000 Thailand.',
-    tel:'+66(0)2 117-4619'
-}]
-";
-    string cust = @"
 [{
     id:'1',
     CompanyNameEN:'Ministry of public health',
@@ -284,63 +256,18 @@
     string cont = @"
 [{
     id:'1',
-    name:'นิรุตต์ เฉลิมศรีเมือง',
-    address:'อาคารอิมแพคชาเลนเจอร์ 2 Popular 1 Rd, Tambon Ban Mai, Amphoe Pak Kret, Chang Wat Nonthaburi 11120',
-    tel:'02 029 1661'
+    FirstNameTH:'นิรุตต์ เฉลิมศรีเมือง',
+    MobileNo:'02 029 1661'
 },
 {
     id:'2',
-    name:'ธัญญารัตน์ วาวจันทึก',
-    address:'1053/1 Phahonyothin Road, Phayathai, Phayathai, Bangkok 10400',
-    tel:''
+    FirstNameTH:'ธัญญารัตน์ วาวจันทึก',
+    MobileNo:''
 },
 {
     id:'3',
-    name:'ปนัสยา  ทองดี',
-    address:'25/38 Moo 4, Banhphai, Muang Nonthaburi, Nonthaburi 11000 Thailand.',
-    tel:'+66(0)2 117-4619'
-}]
-";
-    string cate = @"
-[{
-    id:'1',
-    SystemName:'Non Operational Caring Activities',
-    SubSystemName:'Front and Lobby Service Support'
-},
-{
-    id:'2',
-    SystemName:'Non Operational Caring Activities',
-    SubSystemName:'Check-in/Departments Service Support'
-},
-{
-    id:'3',
-    SystemName:'Non Operational Caring Activities',
-    SubSystemName:'Pharmaceutical Service Support'
-},
-{
-    id:'4',
-    SystemName:'Non Operational Caring Activities',
-    SubSystemName:'Check-out/Payment Service Support'
-},
-{
-    id:'5',
-    SystemName:'Operational Caring Activities',
-    SubSystemName:'Patients and Staff Indoor Tracking'
-},
-{
-    id:'6',
-    SystemName:'Operational Caring Activities',
-    SubSystemName:'Hospital Logistic'
-},
-{
-    id:'7',
-    SystemName:'Operational Caring Activities',
-    SubSystemName:'Hospital Utilities Management'
-},
-{
-    id:'8',
-    SystemName:'Operational Caring Activities',
-    SubSystemName:'Hospital Process Information Managemet'
+    FirstNameTH:'ปนัสยา  ทองดี',
+    MobileNo:'+66(0)2 117-4619'
 }]
 ";
 
@@ -359,16 +286,16 @@
     {
         ratype = await pj.GetRAType();
         member = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Member>>(mem);
-        customer = Newtonsoft.Json.JsonConvert.DeserializeObject<List<CustomerInfo>>(cust);
-        contact = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ContactInfo>>(cont);
-        category = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Category>>(cate);
+        customer = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Member>>(mem);
+        contact = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Contact>>(cont);
+        //category = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Category>>(cate);
         StateHasChanged();
     }
 
     void SaveContact(int id) //Add contact to Project HD 
     {
         var result = contact.Where(w => w.id == id.ToString()).FirstOrDefault();
-        ListContact.Add(new ContactInfo() { id = result.id , name = result.name , address = result.address , tel = result.tel });
+        ListContact.Add(new Contact() { id = result.id , FirstNameTH = result.FirstNameTH , MobileNo = result.MobileNo });
     }
 
     void SaveCategory(int id) //Add category to Project Sub
@@ -380,9 +307,9 @@
     void SaveProjectMain() //Add data to Project HD List<>
     {
         HDSave();
-        ListCustomer = new List<CustomerInfo>();
+        ListCustomer = new List<Member>();
         var result = customer.Where(c => c.id == customerid.ToString()).FirstOrDefault();
-        ListCustomer.Add(new CustomerInfo() { id = result.id, CompanyNameEN = result.CompanyNameEN, CompanyNameTH = result.CompanyNameTH, Email = result.Email, Telephone = result.Telephone, WebSite = result.WebSite });
+        ListCustomer.Add(new Member() { id = result.id, CompanyNameEN = result.CompanyNameEN, CompanyNameTH = result.CompanyNameTH, Email = result.Email, Telephone = result.Telephone, WebSite = result.WebSite });
         formmain.CustomerInfo = Newtonsoft.Json.JsonConvert.SerializeObject(ListCustomer);
         formmain.ContactInfo = Newtonsoft.Json.JsonConvert.SerializeObject(ListContact);
         formmain.ProjectHdstatus = "Open";
