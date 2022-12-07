@@ -2,6 +2,7 @@
 
 @using Data;
 @using ModelM2s;
+@using ModelM4s;
 @using ModelM2s.Json;
 
 @inject ProjectData pj;
@@ -45,7 +46,7 @@ else
 <br />
 <br />
 <h4><b>Project Category</b></h4>
-@if (category is null)
+@if (subcategory is null)
 {
     <p><em>No Category</em></p>
 }
@@ -59,11 +60,12 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (var cat in category)
+            @foreach (var cat in subcategory)
             {
+                var cate = category.Where(w => w.Id == cat.CategoryCatId).FirstOrDefault();
                 <tr>
-                    <td>@cat.SystemName</td>
-                    <td>@cat.SubSystemName</td>
+                    <td>@cate.CategoryCat</td>
+                    <td>@cat.CategoryCatSub</td>
                 </tr>
             }
         </tbody>
@@ -146,7 +148,8 @@ else
     public int id { get; set; }
 
     public ProjectSubProjectTl projectsub { get; set; } = new ProjectSubProjectTl();
-    private List<Category> category;
+    private List<MasterCapabilityCatSub> subcategory;
+    private List<MasterCapabilityCat> category;
     private List<Member> member;
     private List<ProjectDocument> projectdoc;
     private List<ProjectDocument> showdoc;
@@ -184,12 +187,13 @@ else
         projectsub = await pj.GetProjectSubProjectTLbyID(id);
         projectdoc = await pj.GetAllProjectDocument();
         projectra = await pj.GetAllProjectRAType();
+        category = await pj.GetAllCapability();
         JsonCat = string.Empty;
         foreach (var projectsubcat in projectra.Where(w => w.ProjectSubProjectTlid == id).ToList())
         {
             JsonCat = projectsubcat.MemberCapability;
         }
-        category = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Category>>(JsonCat);
+        subcategory = Newtonsoft.Json.JsonConvert.DeserializeObject<List<MasterCapabilityCatSub>>(JsonCat);
         member = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Member>>(mem);
         showdoc = projectdoc.Where(w => w.ProjectSubProjectTlid == id).ToList();
         StateHasChanged();

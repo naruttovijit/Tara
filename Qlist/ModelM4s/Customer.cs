@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Taraweb.Middleware.ModelM4s
+namespace Qlist.ModelM4s
 {
     public partial class Customer
     {

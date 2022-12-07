@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Qlist.ModelM2s;
+using Qlist.ModelM4s;
 
 namespace Qlist.Data
 {
@@ -70,6 +71,15 @@ namespace Qlist.Data
             var response = await hc.GetAsync("https://taraapi.ddns.net/api/ProjectRatypeTl");
 
             var obj = await response.Content.ReadFromJsonAsync<List<ProjectRatypeTl>>();
+            return obj;
+        }
+
+        public async Task<List<MasterCapabilityCat>> GetAllCapability() //get all project RA type data
+        {
+            HttpClient hc = new HttpClient();
+            var response = await hc.GetAsync("https://taraapi.ddns.net/api/MasterCapabilityCat");
+
+            var obj = await response.Content.ReadFromJsonAsync<List<MasterCapabilityCat>>();
             return obj;
         }
 

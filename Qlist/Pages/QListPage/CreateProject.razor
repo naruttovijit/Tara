@@ -1,6 +1,7 @@
 ﻿@page "/Data/ProjectCreate"
 
 @using ModelM2s;
+@using ModelM4s;
 @using ModelM2s.Json;
 @using Data;
 @using System.IO
@@ -107,8 +108,9 @@
                             <table style="width:100%">
                                 @foreach (var categorylist in showcate)
                                 {
+                                    var cate = category.Where(w => w.Id == categorylist.CategoryCatId).FirstOrDefault();
                                     <tr>
-                                        <td>@categorylist.SystemName - @categorylist.SubSystemName</td>
+                                        <td>@cate.CategoryCat - @categorylist.CategoryCatSub</td>
                                     </tr>
                                 }
                             </table>
@@ -168,9 +170,10 @@
                     {
                         foreach (var list in ListCategory)
                         {
-                        <tr>
-                            <td>@list.SystemName</td>
-                            <td>@list.SubSystemName</td>
+                            var cate = category.Where(w => w.Id == list.CategoryCatId).FirstOrDefault();
+                            <tr>
+                            <td>@cate.CategoryCat</td>
+                            <td>@list.CategoryCatSub</td>
                             <td>
                                 <button @onclick="() => ListCategory.Remove(list)">X</button>
                             </td>
@@ -185,7 +188,10 @@
                         {
                             foreach (var list in category)
                             {
-                            <option value="@list.id">@list.SystemName - @list.SubSystemName</option>
+                                foreach (var sub in list.MasterCapabilityCatSubs)
+                                {
+                                    <option value="@sub.Id">@list.CategoryCat - @sub.CategoryCatSub</option>
+                                }
                             }
                         }
                 </InputSelect> &nbsp;&nbsp;
@@ -213,17 +219,18 @@
     public ProjectSubProjectTl formsub { get; set; } = new ProjectSubProjectTl();
     public ProjectRatypeTl formRAType { get; set; } = new ProjectRatypeTl();
     public List<Contact> ListContact { get; set; } = new List<Contact>();
-    public List<Category> ListCategory { get; set; } = new List<Category>();
+    public List<MasterCapabilityCatSub> ListCategory { get; set; } = new List<MasterCapabilityCatSub>();
     public List<Member> ListCustomer { get; set; } = new List<Member>();
     public List<ProjectHdhistory> HDhis { get; set; } = new List<ProjectHdhistory>();
     public List<ProjectSubProjectTlhistory> Subhis { get; set; } = new List<ProjectSubProjectTlhistory>();
 
     private List<Contact> contact;
-    private List<Category> category;
+    private List<MasterCapabilityCat> category;
+    private List<MasterCapabilityCat> sortedcategory;
     private List<RatypeMaster> ratype;
     private List<Member> member;
     private List<Member> customer;
-    private List<Category> showcate;
+    private List<MasterCapabilityCatSub> showcate;
     string mem = @"
 [{
     id:'1',
@@ -288,7 +295,7 @@
         member = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Member>>(mem);
         customer = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Member>>(mem);
         contact = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Contact>>(cont);
-        //category = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Category>>(cate);
+        category = await pj.GetAllCapability();
         StateHasChanged();
     }
 
@@ -300,8 +307,15 @@
 
     void SaveCategory(int id) //Add category to Project Sub
     {
-        var result = category.Where(c => c.id == id.ToString()).FirstOrDefault();
-        ListCategory.Add(new Category() { id = result.id, SystemName = result.SystemName, SubSystemName = result.SubSystemName });
+        foreach (var cate in category)
+        {
+            var sorted = cate.MasterCapabilityCatSubs.Where(w => w.Id == id).FirstOrDefault();
+            if (sorted is not null)
+            {
+                ListCategory.Add(new MasterCapabilityCatSub() { Id = sorted.Id, CategoryCatId = sorted.CategoryCatId, CategoryCatSub = sorted.CategoryCatSub });
+                return;
+            }
+        }
     }
 
     void SaveProjectMain() //Add data to Project HD List<>
@@ -339,7 +353,7 @@
 
         formsub = new ProjectSubProjectTl();
         formsub.ProjectHdid = formmain.Id;
-        ListCategory = new List<Category>();
+        ListCategory = new List<MasterCapabilityCatSub>();
 
         uploadfile = true;
         this.StateHasChanged();
@@ -352,8 +366,8 @@
 
     private void ShowCategory(string cate) //Get category from Project Sub List<> to json format and show in page
     {
-        showcate = new List<Category>();
-        showcate = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Category>>(cate);
+        showcate = new List<MasterCapabilityCatSub>();
+        showcate = Newtonsoft.Json.JsonConvert.DeserializeObject<List<MasterCapabilityCatSub>>(cate);
     }
 
     private void Showsub() //After click next in Project HD show  Project sub area

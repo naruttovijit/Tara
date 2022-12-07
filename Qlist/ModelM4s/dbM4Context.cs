@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace Taraweb.Middleware.ModelM4s
+namespace Qlist.ModelM4s
 {
     public partial class dbM4Context : DbContext
     {
