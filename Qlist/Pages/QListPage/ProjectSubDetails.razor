@@ -154,7 +154,7 @@ else
     private List<ProjectDocument> projectdoc;
     private List<ProjectDocument> showdoc;
     private List<ProjectRatypeTl> projectra;
-    string JsonCat;
+
     string mem = @"
 [{
     id:'5',
@@ -188,12 +188,9 @@ else
         projectdoc = await pj.GetAllProjectDocument();
         projectra = await pj.GetAllProjectRAType();
         category = await pj.GetAllCapability();
-        JsonCat = string.Empty;
-        foreach (var projectsubcat in projectra.Where(w => w.ProjectSubProjectTlid == id).ToList())
-        {
-            JsonCat = projectsubcat.MemberCapability;
-        }
-        subcategory = Newtonsoft.Json.JsonConvert.DeserializeObject<List<MasterCapabilityCatSub>>(JsonCat);
+
+        var projectsubcat = projectra.Where(w => w.ProjectSubProjectTlid == id).FirstOrDefault();
+        subcategory = Newtonsoft.Json.JsonConvert.DeserializeObject<List<MasterCapabilityCatSub>>(projectsubcat.MemberCapability);
         member = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Member>>(mem);
         showdoc = projectdoc.Where(w => w.ProjectSubProjectTlid == id).ToList();
         StateHasChanged();

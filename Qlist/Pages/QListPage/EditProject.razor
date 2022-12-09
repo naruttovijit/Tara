@@ -1,7 +1,7 @@
 ﻿@page "/Data/ProjectEdit/{id:int}"
 
 @using ModelM2s;
-@using ModelM2s.Json;
+@using ModelM4s;
 @using Data;
 @using System.IO
 
@@ -13,13 +13,26 @@
     &nbsp;<label>Main Project Name :</label> &nbsp; <InputText id="MainName" @bind-Value="projecthd.ProjectName"></InputText><br /><br />
     &nbsp;<label>Description :</label> &nbsp; <InputText id="MainDesc" @bind-Value="projecthd.Description"></InputText><br /><br />
     &nbsp;<label>Remarked :</label> &nbsp; <InputText id="MainRemark" @bind-Value="projecthd.Remark"></InputText><br /><br />
-    &nbsp;<label>Customer Infomation :</label> &nbsp; <InputSelect id="MainCustomer" @bind-Value="customerid">
-        <option value="0">------------Select Customer------------</option>
-        @if (customer is not null)
+    &nbsp;<label>Budget :</label> &nbsp; <InputNumber id="MainBudget" @bind-Value="projecthd.Budget"></InputNumber> THB <br /><br />
+    &nbsp;<label>Started Date :</label> &nbsp; <InputDate id="MainStartDate" @bind-Value="projecthd.PlanStartDate"></InputDate> &nbsp;&nbsp;&nbsp;
+    &nbsp;<label>Finished Date :</label> &nbsp; <InputDate id="MainFinishDate" @bind-Value="projecthd.PlanFinishDate"></InputDate><br /><br />
+    &nbsp;
+    @if (member is not null)
+    {
+        foreach (var list in member)
         {
-            foreach (var list in customer)
+            <label>Old Customer Information : @list.CompanyNameEn (@list.CompanyNameTh)</label>
+            <br />
+        }
+    }
+
+    &nbsp;<label>New Customer Infomation :</label> &nbsp; <InputSelect id="MainCustomer" @bind-Value="memberid">
+        <option value="0">------------Select New Customer------------</option>
+        @if (memberall is not null)
+        {
+            foreach (var list in memberall)
             {
-                <option value="@list.id">@list.CompanyNameEN (@list.CompanyNameTH)</option>
+                <option value="@list.Id">@list.CompanyNameEn (@list.CompanyNameTh)</option>
             }
         }
     </InputSelect><br /><br />
@@ -27,20 +40,21 @@
         &nbsp;<h4>Contact Infomation</h4>
         <table style="width:100%">
             <tr>
-                <th>Name</th>
-                <th>Address</th>
+                <th>Name English</th>
+                <th>Name Thailand</th>
                 <th>Tel.</th>
                 <th>Delete</th>
             </tr>
-            @if (ListContact is not null)
+            @if (contact is not null)
             {
-                foreach (var list in ListContact)
+                foreach (var list in contact)
                 {
                     <tr>
-                        <td>@list.FirstNameTH</td>
+                        <td>@list.FirstNameEn @list.LastNameEn</td>
+                        <td>@list.FirstNameTh @list.LastNameTh</td>
                         <td>@list.MobileNo</td>
                         <td>
-                            <button @onclick="() => ListContact.Remove(list)">
+                            <button @onclick="() => contact.Remove(list)">
                                 X
                             </button>
                         </td>
@@ -54,10 +68,21 @@
                 <option value="0">------------Select Contact------------</option>
                 @if (contact is not null)
                 {
-                    foreach (var list in contact)
+                    if (memberid == 0)
                     {
-                        <option value="@list.id">@list.FirstNameTH</option>
+                        foreach (var list in contactall)
+                        {
+                            <option value="@list.Id">@list.FirstNameEn @list.LastNameEn</option>
+                        }
                     }
+                    else
+                    {
+                        foreach (var list in contactall.Where(w => w.MemberNo == GetMemberNoFromID(memberid)).ToList())
+                        {
+                            <option value="@list.Id">@list.FirstNameEn @list.LastNameEn</option>
+                        }
+                    }
+                    
                 }
             </InputSelect> &nbsp;&nbsp;
             <button @onclick="()=>SaveContact(contactid)">Add Contact</button><br /><br />
@@ -67,7 +92,8 @@
     &nbsp;<label>Budget :</label> &nbsp; <InputNumber id="MainBudget" @bind-Value="projecthd.Budget"></InputNumber> THB <br /><br />
     &nbsp;<label>Started Date :</label> &nbsp; <InputDate id="MainStartDate" @bind-Value="projecthd.PlanStartDate"></InputDate> &nbsp;&nbsp;&nbsp;
     &nbsp;<label>Finished Date :</label> &nbsp; <InputDate id="MainFinishDate" @bind-Value="projecthd.PlanFinishDate"></InputDate><br /><br />
-    &nbsp;
+
+    &nbsp; <button @onclick="UpdateProjectHD">Update</button>
 
 
 </EditForm>
@@ -77,17 +103,14 @@
     public int id { get; set; }
 
     public ProjectHd projecthd { get; set; } = new ProjectHd();
-    public List<Contact> ListContact { get; set; } = new List<Contact>();
-    public List<Category> ListCategory { get; set; } = new List<Category>();
-    private List<Member> customerinfo;
-    private List<Contact> contactinfo;
-    private List<Member> customer;
-    private List<Contact> contact;
-    private List<Category> category;
+    private List<MemberMaster> membersave;
+    private List<MemberMaster> memberall;
+    private List<MemberContactPerson> contactall;
+    private List<MemberMaster> member;
+    private List<MemberContactPerson> contact;
 
-    int customerid;
+    int memberid;
     int contactid;
-    int categoryid;
 
     protected override async Task OnInitializedAsync()
     {
@@ -97,21 +120,81 @@
     private async Task Initial()
     {
         projecthd = await pj.GetProjectHDbyID(id);
-        customerinfo = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Member>>(projecthd.CustomerInfo);
-        contactinfo = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Contact>>(projecthd.ContactInfo);
+        memberall = await pj.GetAllMember();
+        contactall = await pj.GetAllContact();
+        member = Newtonsoft.Json.JsonConvert.DeserializeObject<List<MemberMaster>>(projecthd.CustomerInfo);
+        contact = Newtonsoft.Json.JsonConvert.DeserializeObject<List<MemberContactPerson>>(projecthd.ContactInfo);
         StateHasChanged();
+    }
+
+    private string GetMemberNoFromID(int id)
+    {
+        var list = memberall.Where(w => w.Id == id).FirstOrDefault();
+        return list.MemberNo;
     }
 
     void SaveContact(int id) //Add contact to Project HD
     {
-        var result = contact.Where(w => w.id == id.ToString()).FirstOrDefault();
-        ListContact.Add(new Contact() { id = result.id, FirstNameTH = result.FirstNameTH, MobileNo = result.MobileNo });
+        var result = contactall.Where(w => w.Id == id).FirstOrDefault();
+        contact.Add(new MemberContactPerson() { 
+            Id = result.Id,
+            MemberNo = result.MemberNo,
+            Title = result.Title,
+            FirstNameTh = result.FirstNameTh,
+            LastNameTh = result.LastNameTh,
+            FirstNameEn = result.FirstNameEn, 
+            LastNameEn = result.LastNameEn,
+            Nationality = result.Nationality,
+            Position = result.Position,
+            PhoneNo = result.PhoneNo,
+            MobileNo = result.MobileNo,
+            Email = result.Email,
+            LineId = result.LineId,
+            FaceBook = result.FaceBook,
+            Linkedin = result.Linkedin,
+            IsOwner = result.IsOwner,
+            ShareBaht = result.ShareBaht,
+            ShaerPercent = result.ShaerPercent
+        });
     }
 
-    void SaveCategory(int id) //Add category to Project Sub
+    async void UpdateProjectHD()
     {
-        var result = category.Where(c => c.id == id.ToString()).FirstOrDefault();
-        ListCategory.Add(new Category() { id = result.id, SystemName = result.SystemName, SubSystemName = result.SubSystemName });
+        if (memberid > 0)
+        {
+            membersave = new List<MemberMaster>();
+            var result = memberall.Where(c => c.Id == memberid).FirstOrDefault();
+            membersave.Add(new MemberMaster() { 
+                Id = result.Id,
+                CreateDate = result.CreateDate,
+                MemberNo = result.MemberNo,
+                MemberStartDate = result.MemberStartDate,
+                MemberType = result.MemberType,
+                CompanyNameTh = result.CompanyNameTh,
+                CompanyNameEn = result.CompanyNameEn,
+                CompanyRegistrationNo = result.CompanyRegistrationNo,
+                RegisterCapital = result.RegisterCapital,
+                ThaiCapitalPercentage = result.ThaiCapitalPercentage,
+                EstablishYear = result.EstablishYear,
+                FixedAsset = result.FixedAsset,
+                NumberofEmployee = result.NumberofEmployee,
+                Telephone = result.Telephone,
+                Email = result.Email,
+                WebSite = result.WebSite,
+                Facebook = result.Facebook,
+                IsBoi = result.IsBoi,
+                IsCoreMemeber = result.IsCoreMemeber,
+                IsEnable = result.IsEnable,
+                ExpiredDate = result.ExpiredDate
+            });
+            projecthd.CustomerInfo = Newtonsoft.Json.JsonConvert.SerializeObject(membersave);
+        }
+        
+        projecthd.ContactInfo = Newtonsoft.Json.JsonConvert.SerializeObject(contact);
+        projecthd.ProjectHdstatus = "Open";
+        projecthd.Active = "Y";
+        projecthd.ProjectHdhistories.Add(new ProjectHdhistory() { ProjectHdid = projecthd.Id, Remark = "Update", EditorId = 1 });
+        var update = await pj.SaveProjectHD(projecthd);
     }
 
 }

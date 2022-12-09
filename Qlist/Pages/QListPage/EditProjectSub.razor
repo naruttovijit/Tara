@@ -1,0 +1,75 @@
+﻿@page "/Data/ProjectSubEdit/{id:int}"
+
+@using Data;
+@using ModelM2s;
+@using ModelM4s;
+
+@inject ProjectData pj;
+
+
+
+<h3>Edit Project Sub</h3>
+
+<EditForm Model="projectsub">
+    &nbsp;<label>Project Sub Name :</label> &nbsp; <InputText id="SubName" @bind-Value="projectsub.ProjectSubName"></InputText><br /><br />
+    &nbsp;<label>Description :</label> &nbsp; <InputText id="MainDesc" @bind-Value="projectsub.Description"></InputText><br /><br />
+    &nbsp;<label>Remarked :</label> &nbsp; <InputText id="MainRemark" @bind-Value="projectsub.Remark"></InputText><br /><br />
+    &nbsp;<label>Budget :</label> &nbsp; <InputNumber id="MainBudget" @bind-Value="projectsub.Budget"></InputNumber> THB <br /><br />
+    &nbsp;<label>Started Date :</label> &nbsp; <InputDate id="MainStartDate" @bind-Value="projectsub.PlanStartDate"></InputDate> &nbsp;&nbsp;&nbsp;
+    &nbsp;<label>Finished Date :</label> &nbsp; <InputDate id="MainFinishDate" @bind-Value="projectsub.PlanFinishDate"></InputDate><br /><br />
+    @if (projectratype is not null)
+    {
+        var list = ratype.Where(w => w.Id == projectratype.RatypeMasterId).FirstOrDefault();
+        <label>Old RA Type : @list.Name</label>
+        <br />
+    }
+    &nbsp;<label>New RA Type :</label> &nbsp; <InputSelect id="SubRAType" @bind-Value="ratypeid">
+        <option value="0">------------Select RA Type------------</option>
+        @if (ratype is not null)
+        {
+            foreach (var list in ratype)
+            {
+                <option value="@list.Id">@list.Name</option>
+            }
+        }
+    </InputSelect><br /><br />
+</EditForm>
+
+@code {
+    [Parameter]
+    public int id { get; set; }
+
+    public ProjectSubProjectTl projectsub { get; set; } = new ProjectSubProjectTl();
+    public ProjectRatypeTl projectratype { get; set; } = new ProjectRatypeTl();
+
+    private List<ProjectDocument> projectdoc;
+    private List<ProjectRatypeTl> projectra;
+    private List<MasterCapabilityCat> category;
+    private List<MasterCapabilityCatSub> subcategory;
+    private List<ProjectDocument> showdoc;
+    private List<RatypeMaster> ratype;
+
+    int ratypeid;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Initial();
+    }
+
+    private async Task Initial()
+    {
+        projectsub = await pj.GetProjectSubProjectTLbyID(id);
+        projectdoc = await pj.GetAllProjectDocument();
+        projectra = await pj.GetAllProjectRAType();
+        category = await pj.GetAllCapability();
+        ratype = await pj.GetRAType();
+        
+        projectratype = projectra.Where(w => w.ProjectSubProjectTlid == id).FirstOrDefault();
+        subcategory = Newtonsoft.Json.JsonConvert.DeserializeObject<List<MasterCapabilityCatSub>>(projectratype.MemberCapability);
+        showdoc = projectdoc.Where(w => w.ProjectSubProjectTlid == id).ToList();
+        StateHasChanged();
+    }
+
+
+
+}
