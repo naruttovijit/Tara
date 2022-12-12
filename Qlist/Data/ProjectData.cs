@@ -11,6 +11,7 @@ namespace Qlist.Data
 {
     public class ProjectData
     {
+        #region Module 2
         public async Task<List<ProjectHd>> GetProjectHD() //get all project master data
         {
             HttpClient hc = new HttpClient();
@@ -74,6 +75,15 @@ namespace Qlist.Data
             return obj;
         }
 
+        public async Task<List<ProjectRatypeTl>> GetAllProjectRATypeBySubProjectID(int id) //get project RA type data by sub project id (not finish)
+        {
+            HttpClient hc = new HttpClient();
+            var response = await hc.GetAsync("");
+
+            var obj = await response.Content.ReadFromJsonAsync<List<ProjectRatypeTl>>();
+            return obj;
+        }
+
         public async Task<List<MasterCapabilityCat>> GetAllCapability() //get all project RA type data
         {
             HttpClient hc = new HttpClient();
@@ -89,24 +99,6 @@ namespace Qlist.Data
             var response = await hc.GetAsync("https://taraapi.ddns.net/api/ProjectSubMemberAsgmt/" + id.ToString());
 
             var obj = await response.Content.ReadFromJsonAsync<ProjectSubMemberAsgmt>();
-            return obj;
-        }
-
-        public async Task<List<MemberMaster>> GetAllMember() //get all member
-        {
-            HttpClient hc = new HttpClient();
-            var response = await hc.GetAsync("https://taraapi.ddns.net/api/ProjectSubMemberAsgmt/");
-
-            var obj = await response.Content.ReadFromJsonAsync<List<MemberMaster>>();
-            return obj;
-        }
-
-        public async Task<List<MemberContactPerson>> GetAllContact() //get all contact
-        {
-            HttpClient hc = new HttpClient();
-            var response = await hc.GetAsync("https://taraapi.ddns.net/api/ProjectSubMemberAsgmt/");
-
-            var obj = await response.Content.ReadFromJsonAsync<List<MemberContactPerson>>();
             return obj;
         }
 
@@ -142,5 +134,71 @@ namespace Qlist.Data
             var result = await response.Content.ReadFromJsonAsync<ProjectSubMemberAsgmt>();
             return result;
         }
+        #endregion
+
+        #region Module 4
+        public async Task<List<MemberMaster>> GetAllMember() //get all member
+        {
+            HttpClient hc = new HttpClient();
+            var response = await hc.GetAsync("https://taraapi.ddns.net/api/MemberMaster");
+
+            var obj = await response.Content.ReadFromJsonAsync<List<MemberMaster>>();
+            return obj;
+        }
+
+        public async Task<List<MemberMaster>> GetMemberByID(int id) //get member by id
+        {
+            HttpClient hc = new HttpClient();
+            var response = await hc.GetAsync("https://taraapi.ddns.net/api/MemberMaster/GetById/" + id.ToString());
+
+            var obj = await response.Content.ReadFromJsonAsync<List<MemberMaster>>();
+            return obj;
+        }
+
+        public async Task<List<MemberMaster>> GetMemberByMemberNo(string numberno) //get member by member no
+        {
+            HttpClient hc = new HttpClient();
+            var response = await hc.GetAsync("https://taraapi.ddns.net/api/MemberMaster/GetByNo/" + numberno);
+
+            var obj = await response.Content.ReadFromJsonAsync<List<MemberMaster>>();
+            return obj;
+        }
+
+        public async Task<List<MemberContactPerson>> GetContactByMemberNo(string numberno) //get contact by member no (not finish)
+        {
+            HttpClient hc = new HttpClient();
+            var response = await hc.GetAsync("" + numberno);
+
+            var obj = await response.Content.ReadFromJsonAsync<List<MemberContactPerson>>();
+            return obj;
+        }
+
+        public async Task<List<MemberAddress>> GetAddressByMemberNo(string numberno) //get address by member no (not finish)
+        {
+            HttpClient hc = new HttpClient();
+            var response = await hc.GetAsync("" + numberno);
+
+            var obj = await response.Content.ReadFromJsonAsync<List<MemberAddress>>();
+            return obj;
+        }
+
+        public async Task<List<MasterTambon>> GetTambonByID(int? id) //get tambon by id (not finish)
+        {
+            HttpClient hc = new HttpClient();
+            var response = await hc.GetAsync("" + id);
+
+            var obj = await response.Content.ReadFromJsonAsync<List<MasterTambon>>();
+            return obj;
+        }
+
+        public async Task<List<MemberContactPerson>> GetAllContact() //get all contact (Not finish)
+        {
+            HttpClient hc = new HttpClient();
+            var response = await hc.GetAsync("");
+
+            var obj = await response.Content.ReadFromJsonAsync<List<MemberContactPerson>>();
+            return obj;
+        }
+        #endregion
     }
 }

@@ -2,7 +2,7 @@
 
 @using Data;
 @using ModelM2s;
-@using ModelM2s.Json;
+@using ModelM4s;
 
 @inject ProjectData pj;
 
@@ -50,20 +50,25 @@ else
 else
 {
     <p style="background-color:white; border:solid">
-    <p><b>&nbsp; Customer Information</b></p>
-        @foreach (var record in customerinfo)
+        @foreach (var list in customerinfo)
         {
-        <p>
-            &nbsp; English Name :  @record.CompanyNameEN <br />
-            &nbsp; Thai Name :  @record.CompanyNameTH <br />
-            @*&nbsp; Address :  @record. <br />*@
-            &nbsp; Telephone :  @record.Telephone <br />
-            &nbsp; E-Mail :  @record.Email <br />
-            &nbsp; Website :  @record.WebSite <br />
-            &nbsp; Facebook :  @record.Facebook <br />
+            var districe = tambon[0].Amphure;
+            var province = districe.Province;
+            var country = province.Country;
+
+            <p>
+            &nbsp; English Name :  @list.CompanyNameEn <br />
+            &nbsp; Thai Name :  @list.CompanyNameTh<br />
+            &nbsp; Address :  @address[0].AddressNo @address[0].Moo @address[0].Soi @address[0].Road <br />
+            &nbsp; @tambon[0].NameTh @tambon[0].Amphure.NameTh @tambon[0].Amphure.Province.NameTh <br/>
+            &nbsp; @tambon[0].Amphure.Province.Country.Country @address[0].PostCode
+            &nbsp; Telephone :  @list.Telephone <br />
+            &nbsp; E-Mail :  @list.Email <br />
+            &nbsp; Website :  @list.WebSite <br />
+            &nbsp; Facebook :  @list.Facebook <br />
         </p>
         }
-        </p>
+    </p>
 }
 
 @if (contactinfo is null)
@@ -78,10 +83,14 @@ else
     @foreach (var record in contactinfo)
     {
         <p>
-            &nbsp; Name :  @record.FirstNameTH <br />
-            &nbsp; Telephone :  @record.MobileNo <br />
-            &nbsp; Line : @record.LineID <br />
+            &nbsp; Thai Name :  @record.Title @record.FirstNameTh @record.LastNameTh<br />
+            &nbsp; English Name :  @record.FirstNameEn @record.LastNameEn<br />
+            &nbsp; Phone Number :  @record.PhoneNo <br />
+            &nbsp; Mobile Number :  @record.MobileNo <br />
             &nbsp; E-Mail : @record.Email <br />
+            &nbsp; Line : @record.LineId <br />
+            &nbsp; Facebook : @record.FaceBook <br />
+            &nbsp; LinkedIn : @record.Linkedin <br />
         </p>
     }
     </p>
@@ -127,14 +136,19 @@ else
     public ProjectHd projecthd { get; set; } = new ProjectHd();
     public ProjectSubProjectTl formsub { get; set; } = new ProjectSubProjectTl();
 
-    private List<Member> customerinfo;
-    private List<Contact> contactinfo;
+    private List<MemberMaster> customerinfo;
+    private List<MemberContactPerson> contactinfo;
+    private List<MemberAddress> address;
+    private List<MasterTambon> tambon;
 
     protected override async Task OnInitializedAsync()
     {
         projecthd = await pj.GetProjectHDbyID(id);
-        customerinfo = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Member>>(projecthd.CustomerInfo);
-        contactinfo = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Contact>>(projecthd.ContactInfo);
+        customerinfo = Newtonsoft.Json.JsonConvert.DeserializeObject<List<MemberMaster>>(projecthd.CustomerInfo);
+        address = await pj.GetAddressByMemberNo(customerinfo[0].MemberNo);
+        tambon = await pj.GetTambonByID(address[0].TambonId);
+        
+        contactinfo = Newtonsoft.Json.JsonConvert.DeserializeObject<List<MemberContactPerson>>(projecthd.ContactInfo);
         StateHasChanged();
     }
 }

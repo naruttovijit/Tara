@@ -3,7 +3,6 @@
 @using Data;
 @using ModelM2s;
 @using ModelM4s;
-@using ModelM2s.Json;
 
 @inject ProjectData pj;
 
@@ -46,23 +45,23 @@ else
 <br />
 <br />
 <h4><b>Project Category</b></h4>
-@if (subcategory is null)
+@if (subcapability is null)
 {
-    <p><em>No Category</em></p>
+    <p><em>No Capability</em></p>
 }
 else
 {
     <table class="table table-striped" style="background-color:white; border:solid">
         <thead>
             <tr>
-                <th>Category Name</th>
-                <th>Category Sub Name</th>
+                <th>Capability Name</th>
+                <th>Capability Sub Name</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var cat in subcategory)
+            @foreach (var cat in subcapability)
             {
-                var cate = category.Where(w => w.Id == cat.CategoryCatId).FirstOrDefault();
+                var cate = capability.Where(w => w.Id == cat.CategoryCatId).FirstOrDefault();
                 <tr>
                     <td>@cate.CategoryCat</td>
                     <td>@cat.CategoryCatSub</td>
@@ -126,11 +125,11 @@ else
     foreach (var list in projectsub.ProjectSubMemberAsgmts)
     {
         no++;
-        var item = member.Where(w => w.id == list.MemberId.ToString()).FirstOrDefault();
+        var item = member.Where(w => w.Id == list.MemberId).FirstOrDefault();
         <p style="background-color:white; border:solid">
             &nbsp; No. @no <br />
-            &nbsp; Thai Name : @item.CompanyNameTH <br />
-            &nbsp; English Name : @item.CompanyNameEN <br />
+            &nbsp; Thai Name : @item.CompanyNameTh <br />
+            &nbsp; English Name : @item.CompanyNameEn <br />
             &nbsp; Telephone : @item.Telephone <br />
             &nbsp; Date Confirmed : @list.DateConfirm <br />
             &nbsp; Awarded : @list.Awarded
@@ -148,9 +147,9 @@ else
     public int id { get; set; }
 
     public ProjectSubProjectTl projectsub { get; set; } = new ProjectSubProjectTl();
-    private List<MasterCapabilityCatSub> subcategory;
-    private List<MasterCapabilityCat> category;
-    private List<Member> member;
+    private List<MasterCapabilityCatSub> subcapability;
+    private List<MasterCapabilityCat> capability;
+    private List<MemberMaster> member;
     private List<ProjectDocument> projectdoc;
     private List<ProjectDocument> showdoc;
     private List<ProjectRatypeTl> projectra;
@@ -186,12 +185,11 @@ else
     {
         projectsub = await pj.GetProjectSubProjectTLbyID(id);
         projectdoc = await pj.GetAllProjectDocument();
-        projectra = await pj.GetAllProjectRAType();
-        category = await pj.GetAllCapability();
+        projectra = await pj.GetAllProjectRATypeBySubProjectID(projectsub.Id);
+        capability = await pj.GetAllCapability();
 
-        var projectsubcat = projectra.Where(w => w.ProjectSubProjectTlid == id).FirstOrDefault();
-        subcategory = Newtonsoft.Json.JsonConvert.DeserializeObject<List<MasterCapabilityCatSub>>(projectsubcat.MemberCapability);
-        member = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Member>>(mem);
+        subcapability = Newtonsoft.Json.JsonConvert.DeserializeObject<List<MasterCapabilityCatSub>>(projectra[0].MemberCapability);
+        member = Newtonsoft.Json.JsonConvert.DeserializeObject<List<MemberMaster>>(mem);
         showdoc = projectdoc.Where(w => w.ProjectSubProjectTlid == id).ToList();
         StateHasChanged();
     }

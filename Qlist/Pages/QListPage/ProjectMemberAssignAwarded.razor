@@ -2,7 +2,7 @@
 
 @using Data;
 @using ModelM2s;
-@using ModelM2s.Json;
+@using ModelM4s;
 
 @inject ProjectData pj;
 
@@ -53,11 +53,14 @@
 
 @if(awarded.MemberId > 0)
 {
-    var item = member.Where(w => w.id == awarded.MemberId.ToString()).FirstOrDefault();
+    var item = member.Where(w => w.Id == awarded.MemberId).FirstOrDefault();
     <p>
-        &nbsp; Thai Name : @item.CompanyNameTH <br />
-        &nbsp; English Name : @item.CompanyNameEN <br />
+        &nbsp; Company Name TH: @item.CompanyNameTh <br />
+        &nbsp; Company Name EN : @item.CompanyNameEn <br />
         &nbsp; Telephone : @item.Telephone <br />
+        &nbsp; Email : @item.Email <br />
+        &nbsp; Website : @item.WebSite <br />
+        &nbsp; Facebook : @item.Facebook <br />
     </p>
 }
 @if (awarded.Awarded == "Y")
@@ -82,33 +85,7 @@ else
     public ProjectSubMemberAsgmt awarded { get; set; } = new ProjectSubMemberAsgmt();
     public ProjectSubProjectTl projectsub { get; set; } = new ProjectSubProjectTl();
     public ProjectHd projecthd { get; set; } = new ProjectHd();
-    private List<Member> member;
-    string mem = @"
-[{
-    id:'5',
-    name:'กิติยศ สาคริก',
-    CompanyNameEN:'Busarakham Hospital',
-    CompanyNameTH:'โรงพยาบาลบุษราคัม',
-    address:'อาคารอิมแพคชาเลนเจอร์ 2 Popular 1 Rd, Tambon Ban Mai, Amphoe Pak Kret, Chang Wat Nonthaburi 11120',
-    Telephone:'02 029 1661'
-},
-{
-    id:'6',
-    name:'ทวี ภาวนากร',
-    CompanyNameEN:'Forth Corporation Public Company Limited',
-    CompanyNameTH:'บริษัท ฟอร์ท คอร์ปอเรชั่น จำกัด (มหาชน)',
-    address:'1053/1 Phahonyothin Road, Phayathai, Phayathai, Bangkok 10400',
-    Telephone:''
-},
-{
-    id:'7',
-    name:'วีรยา บรรลือทรัพย์',
-    CompanyNameEN:'InGenium Group CO.,LTD.',
-    CompanyNameTH:'บริษัท อินจีเนียม จำกัด (สำนักงานใหญ่)',
-    address:'25/38 Moo 4, Banhphai, Muang Nonthaburi, Nonthaburi 11000 Thailand.',
-    Telephone:'+66(0)2 117-4619'
-}]
-";
+    private List<MemberMaster> member;
 
 
     protected override async Task OnInitializedAsync()
@@ -118,7 +95,7 @@ else
     private async Task Initial()
     {
         awarded = await pj.GetMemberAssign(id);
-        member = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Member>>(mem);
+        member = await pj.GetAllMember();
         StateHasChanged();
     }
 

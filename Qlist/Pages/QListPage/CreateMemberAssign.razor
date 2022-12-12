@@ -2,7 +2,7 @@
 
 @using Data;
 @using ModelM2s;
-@using ModelM2s.Json;
+@using ModelM4s;
 
 @inject ProjectData pj;
 
@@ -46,25 +46,26 @@ else
 <br />
 <br />
 <h4><b>Project Category</b></h4>
-@if (category is null)
+@if (subcapability is null)
 {
-    <p><em>No Category</em></p>
+    <p><em>No Capability</em></p>
 }
 else
 {
     <table class="table table-striped" style="background-color:white; border:solid">
         <thead>
             <tr>
-                <th>Category Name</th>
-                <th>Category Sub Name</th>
+                <th>Capability Name</th>
+                <th>Capability Sub Name</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var cat in category)
+            @foreach (var cat in subcapability)
             {
+                var cate = capability.Where(w => w.Id == cat.CategoryCatId).FirstOrDefault();
                 <tr>
-                    <td>@cat.SystemName</td>
-                    <td>@cat.SubSystemName</td>
+                    <td>@cate.CategoryCat</td>
+                    <td>@cat.CategoryCatSub</td>
                 </tr>
             }
         </tbody>
@@ -79,7 +80,6 @@ else
         <tr>
             <th>No.</th>
             <th>Company Name TH</th>
-            <th>Company Name EN</th>
             <th>Telephone</th>
             <th>Comfirm Date</th>
             <th>Comfirm</th>
@@ -92,11 +92,10 @@ else
             foreach (var list in projectsub.ProjectSubMemberAsgmts)
             {
                 no++;
-                var item = member.Where(w => w.id == list.MemberId.ToString()).FirstOrDefault();
+                var item = member.Where(w => w.Id == list.MemberId).FirstOrDefault();
                 <tr>
                     <td>@no</td>
-                    <td>@item.CompanyNameTH</td>
-                    <td>@item.CompanyNameEN</td>
+                    <td>@item.CompanyNameTh</td>
                     <td>@item.Telephone</td>
                     <td>@list.DateConfirm</td>
                     @if (list.DateConfirm is not null)
@@ -136,7 +135,7 @@ else
             {
                 foreach (var list in member)
                 {
-                    <option value="@list.id">@list.CompanyNameEN</option>
+                    <option value="@list.Id">@list.CompanyNameTh</option>
                 }
             }
         </InputSelect> &nbsp;&nbsp;
@@ -153,137 +152,21 @@ else
 @code {
     [Parameter]
     public int id { get; set; }
+
     public List<string> CheckBox { get; set; } = new List<string>();
     public ProjectSubProjectTl projectsub { get; set; } = new ProjectSubProjectTl();
     public ProjectSubMemberAsgmt memberassign { get; set; } = new ProjectSubMemberAsgmt();
-    private List<Category> category;
-    private List<Contact> contact;
-    private List<Member> member;
+
+    private List<MasterCapabilityCat> capability;
+    private List<MasterCapabilityCatSub> subcapability;
+    private List<MemberContactPerson> contact;
+    private List<MemberMaster> member;
     private List<ProjectRatypeTl> projectra;
     private List<ProjectSubMemberAsgmt> assign;
 
     string JsonCat;
     int memberid;
-
-    string mem = @"
-[{
-    id:'5',
-    name:'กิติยศ สาคริก',
-    CompanyNameEN:'Busarakham Hospital',
-    CompanyNameTH:'โรงพยาบาลบุษราคัม',
-    address:'อาคารอิมแพคชาเลนเจอร์ 2 Popular 1 Rd, Tambon Ban Mai, Amphoe Pak Kret, Chang Wat Nonthaburi 11120',
-    Telephone:'02 029 1661'
-},
-{
-    id:'6',
-    name:'ทวี ภาวนากร',
-    CompanyNameEN:'Forth Corporation Public Company Limited',
-    CompanyNameTH:'บริษัท ฟอร์ท คอร์ปอเรชั่น จำกัด (มหาชน)',
-    address:'1053/1 Phahonyothin Road, Phayathai, Phayathai, Bangkok 10400',
-    Telephone:''
-},
-{
-    id:'7',
-    name:'วีรยา บรรลือทรัพย์',
-    CompanyNameEN:'InGenium Group CO.,LTD.',
-    CompanyNameTH:'บริษัท อินจีเนียม จำกัด (สำนักงานใหญ่)',
-    address:'25/38 Moo 4, Banhphai, Muang Nonthaburi, Nonthaburi 11000 Thailand.',
-    Telephone:'+66(0)2 117-4619'
-}]
-";
-    string cust = @"
-[{
-    id:'1',
-    CompanyNameEN:'Ministry of public health',
-    CompanyNameTH:'กระทรวงสาธารณสุข',
-    //address:'ถนนติวานนท์ ต.ตลาดขวัญ อ.เมือง จ.นนทบุรี 11000',
-    WebSite:'https://www.moph.go.th/',
-    Email:'moph0200@saraban.mail.go.th',
-    Telephone:'02-590-1000'
-},
-{
-    id:'2',
-    CompanyNameEN:'Busarakham Hospital',
-    CompanyNameTH:'โรงพยาบาลบุษราคัม',
-    //address:'อาคารอิมแพคชาเลนเจอร์ 2 Popular 1 Rd, Tambon Ban Mai, Amphoe Pak Kret, Chang Wat Nonthaburi 11120',
-    WebSite:'',
-    Email:'',
-    Telephone:'02 029 1661'
-},
-{
-    id:'3',
-    CompanyNameEN:'Forth Corporation Public Company Limited',
-    CompanyNameTH:'บริษัท ฟอร์ท คอร์ปอเรชั่น จำกัด (มหาชน)',
-    //address:'1053/1 Phahonyothin Road, Phayathai, Phayathai, Bangkok 10400',
-    WebSite:'https://www.forth.co.th/',
-    Email:'',
-    Telephone:''
-}]
-";
-    string cont = @"
-[{
-    id:'1',
-    name:'นิรุตต์ เฉลิมศรีเมือง',
-    address:'อาคารอิมแพคชาเลนเจอร์ 2 Popular 1 Rd, Tambon Ban Mai, Amphoe Pak Kret, Chang Wat Nonthaburi 11120',
-    tel:'02 029 1661'
-},
-{
-    id:'2',
-    name:'ธัญญารัตน์ วาวจันทึก',
-    address:'1053/1 Phahonyothin Road, Phayathai, Phayathai, Bangkok 10400',
-    tel:''
-},
-{
-    id:'3',
-    name:'ปนัสยา  ทองดี',
-    address:'25/38 Moo 4, Banhphai, Muang Nonthaburi, Nonthaburi 11000 Thailand.',
-    tel:'+66(0)2 117-4619'
-}]
-";
-    string cate = @"
-[{
-    id:'1',
-    SystemName:'Non Operational Caring Activities',
-    SubSystemName:'Front and Lobby Service Support'
-},
-{
-    id:'2',
-    SystemName:'Non Operational Caring Activities',
-    SubSystemName:'Check-in/Departments Service Support'
-},
-{
-    id:'3',
-    SystemName:'Non Operational Caring Activities',
-    SubSystemName:'Pharmaceutical Service Support'
-},
-{
-    id:'4',
-    SystemName:'Non Operational Caring Activities',
-    SubSystemName:'Check-out/Payment Service Support'
-},
-{
-    id:'5',
-    SystemName:'Operational Caring Activities',
-    SubSystemName:'Patients and Staff Indoor Tracking'
-},
-{
-    id:'6',
-    SystemName:'Operational Caring Activities',
-    SubSystemName:'Hospital Logistic'
-},
-{
-    id:'7',
-    SystemName:'Operational Caring Activities',
-    SubSystemName:'Hospital Utilities Management'
-},
-{
-    id:'8',
-    SystemName:'Operational Caring Activities',
-    SubSystemName:'Hospital Process Information Managemet'
-}]
-";
     bool awarded = false;
-
 
     protected override async Task OnInitializedAsync()
     {
@@ -293,14 +176,11 @@ else
     private async Task Initial()
     {
         projectsub = await pj.GetProjectSubProjectTLbyID(id);
-        projectra = await pj.GetAllProjectRAType();
-        JsonCat = string.Empty;
-        foreach (var projectsubcat in projectra.Where(w => w.ProjectSubProjectTlid == id).ToList())
-        {
-            JsonCat = projectsubcat.MemberCapability;
-        }
-        category = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Category>>(JsonCat);
-        member = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Member>>(mem);
+        projectra = await pj.GetAllProjectRATypeBySubProjectID(projectsub.Id);
+        capability = await pj.GetAllCapability();
+        member = await pj.GetAllMember();
+
+        subcapability = Newtonsoft.Json.JsonConvert.DeserializeObject<List<MasterCapabilityCatSub>>(projectra[0].MemberCapability);
         foreach (var list in projectsub.ProjectSubMemberAsgmts)
         {
             if (list.MemberAsgmtawardedHistories.Count > 0)

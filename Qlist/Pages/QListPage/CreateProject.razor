@@ -2,7 +2,6 @@
 
 @using ModelM2s;
 @using ModelM4s;
-@using ModelM2s.Json;
 @using Data;
 @using System.IO
 
@@ -16,13 +15,13 @@
     &nbsp;<label>Main Project Name :</label> &nbsp; <InputText id="MainName" @bind-Value="formmain.ProjectName"></InputText><br /><br />
     &nbsp;<label>Description :</label> &nbsp; <InputText id="MainDesc" @bind-Value="formmain.Description"></InputText><br /><br />
     &nbsp;<label>Remarked :</label> &nbsp; <InputText id="MainRemark" @bind-Value="formmain.Remark"></InputText><br /><br />
-    &nbsp;<label>Customer Infomation :</label> &nbsp; <InputSelect id="MainCustomer" @bind-Value="customerid">
+    &nbsp;<label>Customer Infomation :</label> &nbsp; <InputSelect id="MainCustomer" @bind-Value="customerid" @onchange="GetContact">
         <option value="0">------------Select Customer------------</option>
-        @if (customer is not null)
+        @if (member is not null)
         {
-            foreach (var list in customer)
+            foreach (var list in member)
             {
-                <option value="@list.id">@list.CompanyNameEN (@list.CompanyNameTH)</option>
+                <option value="@list.Id">@list.CompanyNameEn (@list.CompanyNameTh)</option>
             }
         }
     </InputSelect><br /><br />
@@ -30,7 +29,8 @@
         &nbsp;<h4>Contact Infomation</h4>
         <table style="width:100%">
             <tr>
-                <th>Name</th>
+                <th>Thai Name</th>
+                <th>English Name</th>
                 <th>Tel.</th>
                 <th>Delete</th>
             </tr>
@@ -39,7 +39,8 @@
                 foreach (var list in ListContact)
                 {
                     <tr>
-                        <td>@list.FirstNameTH</td>
+                        <td>@list.Title @list.FirstNameTh @list.LastNameTh</td>
+                        <td>@list.FirstNameEn @list.LastNameEn</td>
                         <td>@list.MobileNo</td>
                         <td>
                             <button @onclick="() => ListContact.Remove(list)">
@@ -58,7 +59,7 @@
                 {
                     foreach (var list in contact)
                     {
-                        <option value="@list.id">@list.FirstNameTH</option>
+                        <option value="@list.Id">@list.FirstNameTh @list.LastNameTh</option>
                     }
                 }
             </InputSelect> &nbsp;&nbsp;
@@ -159,11 +160,11 @@
 
 
         <p style="background-color:white; border:solid">
-            &nbsp;<h4>Category</h4>
+            &nbsp;<h4>Capability</h4>
             <table style="width:100%">
                 <tr>
-                    <th>Category</th>
-                    <th>Category Sub</th>
+                    <th>Capability</th>
+                    <th>Capability Sub</th>
                     <th>Delete</th>
                 </tr>
                     @if (ListCategory is not null)
@@ -218,65 +219,18 @@
     public ProjectHd formmain { get; set; } = new ProjectHd();
     public ProjectSubProjectTl formsub { get; set; } = new ProjectSubProjectTl();
     public ProjectRatypeTl formRAType { get; set; } = new ProjectRatypeTl();
-    public List<Contact> ListContact { get; set; } = new List<Contact>();
+    public List<MemberContactPerson> ListContact { get; set; } = new List<MemberContactPerson>();
     public List<MasterCapabilityCatSub> ListCategory { get; set; } = new List<MasterCapabilityCatSub>();
-    public List<Member> ListCustomer { get; set; } = new List<Member>();
+    public List<MemberMaster> Memberdata { get; set; } = new List<MemberMaster>();
     public List<ProjectHdhistory> HDhis { get; set; } = new List<ProjectHdhistory>();
     public List<ProjectSubProjectTlhistory> Subhis { get; set; } = new List<ProjectSubProjectTlhistory>();
 
-    private List<Contact> contact;
+    private List<MemberContactPerson> contact;
     private List<MasterCapabilityCat> category;
     private List<MasterCapabilityCat> sortedcategory;
     private List<RatypeMaster> ratype;
-    private List<Member> member;
-    private List<Member> customer;
+    private List<MemberMaster> member;
     private List<MasterCapabilityCatSub> showcate;
-    string mem = @"
-[{
-    id:'1',
-    CompanyNameEN:'Ministry of public health',
-    CompanyNameTH:'กระทรวงสาธารณสุข',
-    //address:'ถนนติวานนท์ ต.ตลาดขวัญ อ.เมือง จ.นนทบุรี 11000',
-    WebSite:'https://www.moph.go.th/',
-    Email:'moph0200@saraban.mail.go.th',
-    Telephone:'02-590-1000'
-},
-{
-    id:'2',
-    CompanyNameEN:'Busarakham Hospital',
-    CompanyNameTH:'โรงพยาบาลบุษราคัม',
-    //address:'อาคารอิมแพคชาเลนเจอร์ 2 Popular 1 Rd, Tambon Ban Mai, Amphoe Pak Kret, Chang Wat Nonthaburi 11120',
-    WebSite:'',
-    Email:'',
-    Telephone:'02 029 1661'
-},
-{
-    id:'3',
-    CompanyNameEN:'Forth Corporation Public Company Limited',
-    CompanyNameTH:'บริษัท ฟอร์ท คอร์ปอเรชั่น จำกัด (มหาชน)',
-    //address:'1053/1 Phahonyothin Road, Phayathai, Phayathai, Bangkok 10400',
-    WebSite:'https://www.forth.co.th/',
-    Email:'',
-    Telephone:''
-}]
-";
-    string cont = @"
-[{
-    id:'1',
-    FirstNameTH:'นิรุตต์ เฉลิมศรีเมือง',
-    MobileNo:'02 029 1661'
-},
-{
-    id:'2',
-    FirstNameTH:'ธัญญารัตน์ วาวจันทึก',
-    MobileNo:''
-},
-{
-    id:'3',
-    FirstNameTH:'ปนัสยา  ทองดี',
-    MobileNo:'+66(0)2 117-4619'
-}]
-";
 
     int customerid;
     int contactid;
@@ -292,17 +246,41 @@
     protected override async Task OnInitializedAsync()
     {
         ratype = await pj.GetRAType();
-        member = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Member>>(mem);
-        customer = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Member>>(mem);
-        contact = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Contact>>(cont);
+        member = await pj.GetAllMember();
         category = await pj.GetAllCapability();
         StateHasChanged();
     }
 
+    async void GetContact(ChangeEventArgs e)
+    {
+        int id = int.Parse(e.Value.ToString());
+        var membercontact = member.Where(w => w.Id == id).FirstOrDefault();
+        contact = await pj.GetContactByMemberNo(membercontact.MemberNo);
+    }
+
     void SaveContact(int id) //Add contact to Project HD 
     {
-        var result = contact.Where(w => w.id == id.ToString()).FirstOrDefault();
-        ListContact.Add(new Contact() { id = result.id , FirstNameTH = result.FirstNameTH , MobileNo = result.MobileNo });
+        var result = contact.Where(w => w.Id == id).FirstOrDefault();
+        ListContact.Add(new MemberContactPerson() { 
+            Id = result.Id,
+            MemberNo = result.MemberNo,
+            Title = result.Title,
+            FirstNameTh = result.FirstNameTh,
+            LastNameTh = result.LastNameTh,
+            FirstNameEn = result.FirstNameEn,
+            LastNameEn = result.LastNameEn,
+            Nationality = result.Nationality,
+            Position = result.Position,
+            PhoneNo = result.PhoneNo,
+            MobileNo = result.MobileNo,
+            Email = result.Email,
+            LineId = result.LineId,
+            FaceBook = result.FaceBook,
+            Linkedin = result.Linkedin,
+            IsOwner = result.IsOwner,
+            ShareBaht = result.ShareBaht,
+            ShaerPercent = result.ShaerPercent
+        });
     }
 
     void SaveCategory(int id) //Add category to Project Sub
@@ -321,14 +299,35 @@
     void SaveProjectMain() //Add data to Project HD List<>
     {
         HDSave();
-        ListCustomer = new List<Member>();
-        var result = customer.Where(c => c.id == customerid.ToString()).FirstOrDefault();
-        ListCustomer.Add(new Member() { id = result.id, CompanyNameEN = result.CompanyNameEN, CompanyNameTH = result.CompanyNameTH, Email = result.Email, Telephone = result.Telephone, WebSite = result.WebSite });
-        formmain.CustomerInfo = Newtonsoft.Json.JsonConvert.SerializeObject(ListCustomer);
+        Memberdata = new List<MemberMaster>();
+        var result = member.Where(c => c.Id == customerid).FirstOrDefault();
+        Memberdata.Add(new MemberMaster()
+            {
+            Id = result.Id,
+            CreateDate = result.CreateDate,
+            MemberNo = result.MemberNo,
+            MemberType = result.MemberType,
+            CompanyNameTh = result.CompanyNameTh,
+            CompanyNameEn = result.CompanyNameEn,
+            CompanyRegistrationNo = result.CompanyRegistrationNo,
+            RegisterCapital = result.RegisterCapital,
+            ThaiCapitalPercentage = result.ThaiCapitalPercentage,
+            EstablishYear = result.EstablishYear,
+            FixedAsset = result.FixedAsset,
+            NumberofEmployee = result.NumberofEmployee,
+            Telephone = result.Telephone,
+            Email = result.Email,
+            WebSite = result.WebSite,
+            Facebook = result.Facebook,
+            IsBoi = result.IsBoi,
+            IsCoreMemeber = result.IsCoreMemeber,
+            IsEnable = result.IsEnable,
+            ExpiredDate = result.ExpiredDate
+        });
+        formmain.CustomerInfo = Newtonsoft.Json.JsonConvert.SerializeObject(Memberdata);
         formmain.ContactInfo = Newtonsoft.Json.JsonConvert.SerializeObject(ListContact);
         formmain.ProjectHdstatus = "Open";
         formmain.Active = "Y";
-        //formmain.CreateDated = DateTime.Now;
         formmain.ProjectHdhistories.Add(new ProjectHdhistory() { ProjectHdid = formmain.Id, Remark = "Create", EditorId = 1});
         formsub.ProjectHdid = formmain.Id;
         
@@ -347,7 +346,6 @@
         formsub.ProjectRatypeTls.Add(formRAType);
         formsub.ProjectSubStatus = "Open";
         formsub.Active = "Y";
-        //formsub.CreateDated = DateTime.Now;
         formsub.ProjectSubProjectTlhistories.Add(new ProjectSubProjectTlhistory() { ProjectSubProjectTlid = formsub.Id, Remark = "Create", EditorId = 1});
         formmain.ProjectSubProjectTls.Add(formsub);
 

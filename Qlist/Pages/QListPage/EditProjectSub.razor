@@ -5,8 +5,7 @@
 @using ModelM4s;
 
 @inject ProjectData pj;
-
-
+@inject IWebHostEnvironment env
 
 <h3>Edit Project Sub</h3>
 
@@ -33,6 +32,86 @@
             }
         }
     </InputSelect><br /><br />
+
+        <h4><b>Project Category</b></h4>
+        <table class="table table-striped" style="background-color:white; border:solid">
+            <thead>
+                <tr>
+                    <th>Category Name</th>
+                    <th>Category Sub Name</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var cat in subcategory)
+                {
+                    var cate = category.Where(w => w.Id == cat.CategoryCatId).FirstOrDefault();
+                    <tr>
+                        <td>@cate.CategoryCat</td>
+                        <td>@cat.CategoryCatSub</td>
+                        <td>
+                            <button @onclick="() => subcategory.Remove(cat)">X</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div>
+            <InputSelect id="SubCategory" @bind-Value="categoryid">
+                <option value="0">------------Select Category------------</option>
+                @if (category is not null)
+                {
+                    foreach (var list in category)
+                    {
+                        foreach (var sub in list.MasterCapabilityCatSubs)
+                        {
+                            <option value="@sub.Id">@list.CategoryCat - @sub.CategoryCatSub</option>
+                        }
+                    }
+                }
+            </InputSelect> &nbsp;&nbsp;
+            <button @onclick="()=>SaveCategory(categoryid)">Add Category</button><br /><br />
+        </div>
+
+        <h4><b>Project Document</b></h4>
+        <table class="table table-striped" style="background-color:white; border:solid">
+            <thead>
+                <tr>
+                    <th>Document Name</th>
+                    <th>Description</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var doc in showdoc)
+                {
+                    <tr>
+                        @if (doc.DocumentPath.ToUpper().Contains("PDFFILES"))
+                        {
+                            <td>
+                                <a href="@doc.DocumentPath">Link</a>
+                            </td>
+                        }
+                        else
+                        {
+                            <td>
+                                <img src="@doc.DocumentPath" width="300px" />
+                            </td>
+                        }
+                        <td>@doc.Description</td>
+                        <td>
+                            <button @onclick="() => showdoc.Remove(doc)">X</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    &nbsp;<InputFile OnChange="OnInputFileChange" />
+    <br /><br />
+    <button type="submit" @onclick="OnSubmit">Upload Selected File</button>
+    <br /><br />
+    &nbsp;<button @onclick="UpdateProjectSub">Update</button>
 </EditForm>
 
 @code {
@@ -50,6 +129,10 @@
     private List<RatypeMaster> ratype;
 
     int ratypeid;
+    int categoryid;
+
+    string Message = "No file(s) selected";
+    IReadOnlyList<IBrowserFile> selectedFiles;
 
     protected override async Task OnInitializedAsync()
     {
@@ -70,6 +153,57 @@
         StateHasChanged();
     }
 
+    void SaveCategory(int id) //Add category to Project Sub
+    {
+        foreach (var cate in category)
+        {
+            var sorted = cate.MasterCapabilityCatSubs.Where(w => w.Id == id).FirstOrDefault();
+            if (sorted is not null)
+            {
+                subcategory.Add(new MasterCapabilityCatSub() { Id = sorted.Id, CategoryCatId = sorted.CategoryCatId, CategoryCatSub = sorted.CategoryCatSub });
+                return;
+            }
+        }
+    }
 
+    private void OnInputFileChange(InputFileChangeEventArgs e)
+    {
+        selectedFiles = e.GetMultipleFiles();
+        Message = $"{selectedFiles.Count} file selected";
+        this.StateHasChanged();
+    }
 
+    private async void OnSubmit() //Upload file (image,pdf) to local folders
+    {
+        foreach (var file in selectedFiles)
+        {
+            Stream stream = file.OpenReadStream();
+            string filename = projectsub.ProjectSubRunNo + "_" + file.Name;
+            string filetype = string.Empty;
+            string filepath = string.Empty;
+            if (file.Name.ToUpper().Contains("PDF"))
+            {
+                filetype = "\\PDFFiles\\" + filename;
+                filepath = "/PDFFiles/" + filename;
+            }
+            else
+            {
+                filetype = "\\PicFiles\\" + filename;
+                filepath = "/PicFiles/" + filename;
+            }
+            var path = $"{env.WebRootPath}{filetype}";
+            FileStream fs = File.Create(path);
+            await stream.CopyToAsync(fs);
+            stream.Close();
+            fs.Close();
+
+            projectsub.ProjectDocuments.Add(new ProjectDocument() { ProjectSubProjectTlid = projectsub.Id, DocumentPath = filepath, Active = "Y", EditorId = 1 });
+        }
+        this.StateHasChanged();
+    }
+
+    async void UpdateProjectSub()
+    {
+        var result = await pj.SaveSubProject(projectsub);
+    }
 }
