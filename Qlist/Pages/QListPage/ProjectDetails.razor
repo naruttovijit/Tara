@@ -52,16 +52,16 @@ else
     <p style="background-color:white; border:solid">
         @foreach (var list in customerinfo)
         {
-            var districe = tambon[0].Amphure;
+            @*var districe = tambon[0].Amphure;
             var province = districe.Province;
-            var country = province.Country;
+            var country = province.Country;*@
 
             <p>
             &nbsp; English Name :  @list.CompanyNameEn <br />
             &nbsp; Thai Name :  @list.CompanyNameTh<br />
             &nbsp; Address :  @address[0].AddressNo @address[0].Moo @address[0].Soi @address[0].Road <br />
-            &nbsp; @tambon[0].NameTh @tambon[0].Amphure.NameTh @tambon[0].Amphure.Province.NameTh <br/>
-            &nbsp; @tambon[0].Amphure.Province.Country.Country @address[0].PostCode
+            @*&nbsp; @tambon[0].NameTh @tambon[0].Amphure.NameTh @tambon[0].Amphure.Province.NameTh <br/>
+            &nbsp; @tambon[0].Amphure.Province.Country.Country @address[0].PostCode*@
             &nbsp; Telephone :  @list.Telephone <br />
             &nbsp; E-Mail :  @list.Email <br />
             &nbsp; Website :  @list.WebSite <br />
@@ -146,7 +146,7 @@ else
         projecthd = await pj.GetProjectHDbyID(id);
         customerinfo = Newtonsoft.Json.JsonConvert.DeserializeObject<List<MemberMaster>>(projecthd.CustomerInfo);
         address = await pj.GetAddressByMemberNo(customerinfo[0].MemberNo);
-        tambon = await pj.GetTambonByID(address[0].TambonId);
+        //tambon = await pj.GetTambonByID(address[0].TambonId);
         
         contactinfo = Newtonsoft.Json.JsonConvert.DeserializeObject<List<MemberContactPerson>>(projecthd.ContactInfo);
         StateHasChanged();

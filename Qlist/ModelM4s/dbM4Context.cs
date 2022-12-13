@@ -36,6 +36,7 @@ namespace Qlist.ModelM4s
         public virtual DbSet<MemberContactPerson> MemberContactPeople { get; set; }
         public virtual DbSet<MemberMaster> MemberMasters { get; set; }
         public virtual DbSet<MemberPaymentTrn> MemberPaymentTrns { get; set; }
+        public virtual DbSet<MemberProduct> MemberProducts { get; set; }
         public virtual DbSet<MemberProductService> MemberProductServices { get; set; }
         public virtual DbSet<ProductImage> ProductImages { get; set; }
         public virtual DbSet<TbPosition> TbPositions { get; set; }
@@ -47,7 +48,7 @@ namespace Qlist.ModelM4s
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Server=119.59.114.151,10433;Initial Catalog=Tara_member;Persist Security Info=False;User ID=sa;Password=P@ssw0rd");
+                optionsBuilder.UseSqlServer("Server=119.59.114.151,10433;Initial Catalog=Tara_member;Persist Security Info=False;User ID=sa;Password=@@11BB22cc");
             }
         }
 
@@ -552,6 +553,30 @@ namespace Qlist.ModelM4s
                     .HasConstraintName("FK_Tara_Payment_trans_Tara_Member");
             });
 
+            modelBuilder.Entity<MemberProduct>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToTable("MemberProduct");
+
+                entity.Property(e => e.CreateDate)
+                    .HasColumnType("datetime")
+                    .HasColumnName("Create_Date")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.Id)
+                    .ValueGeneratedOnAdd()
+                    .HasColumnName("id");
+
+                entity.Property(e => e.MemberNo).HasMaxLength(10);
+
+                entity.Property(e => e.Price).HasColumnType("decimal(8, 2)");
+
+                entity.Property(e => e.ProductDescription).HasMaxLength(200);
+
+                entity.Property(e => e.ProductName).HasMaxLength(50);
+            });
+
             modelBuilder.Entity<MemberProductService>(entity =>
             {
                 entity.ToTable("MemberProductService");
@@ -585,14 +610,25 @@ namespace Qlist.ModelM4s
 
                 entity.Property(e => e.Description).HasMaxLength(50);
 
-                entity.Property(e => e.Image).HasColumnType("image");
+                entity.Property(e => e.FileName)
+                    .HasMaxLength(50)
+                    .HasColumnName("fileName");
+
+                entity.Property(e => e.FileType).HasMaxLength(50);
+
+                entity.Property(e => e.FullImage).HasColumnName("Full_Image");
+
+                entity.Property(e => e.Image1).HasColumnType("image");
 
                 entity.Property(e => e.ProductServiceId).HasColumnName("ProductServiceID");
+
+                entity.Property(e => e.UpdDate)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
 
                 entity.HasOne(d => d.ProductService)
                     .WithMany(p => p.ProductImages)
                     .HasForeignKey(d => d.ProductServiceId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Tara_Product_Image_Tara_Memeber_Product1");
             });
 

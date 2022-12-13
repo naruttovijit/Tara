@@ -15,7 +15,7 @@
     &nbsp;<label>Main Project Name :</label> &nbsp; <InputText id="MainName" @bind-Value="formmain.ProjectName"></InputText><br /><br />
     &nbsp;<label>Description :</label> &nbsp; <InputText id="MainDesc" @bind-Value="formmain.Description"></InputText><br /><br />
     &nbsp;<label>Remarked :</label> &nbsp; <InputText id="MainRemark" @bind-Value="formmain.Remark"></InputText><br /><br />
-    &nbsp;<label>Customer Infomation :</label> &nbsp; <InputSelect id="MainCustomer" @bind-Value="customerid" @onchange="GetContact">
+    &nbsp;<label>Customer Infomation :</label> &nbsp; <InputSelect id="MainCustomer" @bind-Value="customerid" @onclick="GetContact">
         <option value="0">------------Select Customer------------</option>
         @if (member is not null)
         {
@@ -226,6 +226,7 @@
     public List<ProjectSubProjectTlhistory> Subhis { get; set; } = new List<ProjectSubProjectTlhistory>();
 
     private List<MemberContactPerson> contact;
+    private List<MemberContactPerson> allcontact;
     private List<MasterCapabilityCat> category;
     private List<MasterCapabilityCat> sortedcategory;
     private List<RatypeMaster> ratype;
@@ -240,22 +241,27 @@
     private bool MainSaveshow = true;
     private bool uploadfile = true;
 
-    string Message = "No file(s) selected";
-    IReadOnlyList<IBrowserFile> selectedFiles;
+    string Message = "No file selected";
+    IBrowserFile selectedFile;
 
     protected override async Task OnInitializedAsync()
     {
         ratype = await pj.GetRAType();
         member = await pj.GetAllMember();
         category = await pj.GetAllCapability();
+        allcontact = await pj.GetAllContact();
         StateHasChanged();
     }
 
-    async void GetContact(ChangeEventArgs e)
+    async void GetContact()
     {
-        int id = int.Parse(e.Value.ToString());
-        var membercontact = member.Where(w => w.Id == id).FirstOrDefault();
-        contact = await pj.GetContactByMemberNo(membercontact.MemberNo);
+        if (customerid > 0)
+        {
+            //var membercontact = member.Where(w => w.Id == customerid).FirstOrDefault();
+            //contact = await pj.GetContactByMemberNo(membercontact.MemberNo);
+            contact = allcontact.Where(w => w.Id == customerid).ToList();
+            StateHasChanged();
+        }
     }
 
     void SaveContact(int id) //Add contact to Project HD 
@@ -380,20 +386,20 @@
 
     private void OnInputFileChange(InputFileChangeEventArgs e)
     {
-        selectedFiles = e.GetMultipleFiles();
-        Message = $"{selectedFiles.Count} file selected";
+        selectedFile = e.GetMultipleFiles()[0];
+        Message = $"{selectedFile.Name} ({selectedFile.Size} bytes) file selected";
         this.StateHasChanged();
     }
 
     private async void OnSubmit() //Upload file (image,pdf) to local folders
     {
-        foreach (var file in selectedFiles)
+        if (selectedFile != null)
         {
-            Stream stream = file.OpenReadStream();
-            string filename = formsub.ProjectSubRunNo + "_" + file.Name;
+            Stream stream = selectedFile.OpenReadStream(maxAllowedSize: 1024 * 1024 * 100);
+            string filename = formsub.ProjectSubRunNo + "_" + selectedFile.Name;
             string filetype = string.Empty;
             string filepath = string.Empty;
-            if (file.Name.ToUpper().Contains("PDF"))
+            if (selectedFile.Name.ToUpper().Contains("PDF"))
             {
                 filetype = "\\PDFFiles\\" + filename;
                 filepath = "/PDFFiles/" + filename;
@@ -411,6 +417,7 @@
 
             formsub.ProjectDocuments.Add(new ProjectDocument() { ProjectSubProjectTlid = formsub.Id, DocumentPath = filepath, Active = "Y", EditorId = 1 });
         }
+
         uploadfile = false;
         this.StateHasChanged();
     } 

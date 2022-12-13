@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "EEJF+cQ4nq+TS3qVpbd1zHWUBSaCEs76UZSUTjRuxNo=",
+  "Hash": "DY75aUzOZyuD+Y6RACHh2Ff5pu10SwgfjSvEhFRLklw=",
   "Source": "Qlist",
   "BasePath": "_content/Qlist",
   "Mode": "Default",
@@ -338,6 +338,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\PDFFiles\\_TR.02_CartonBarcodeScanned.pdf"
+    },
+    {
+      "Identity": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\PicFiles\\_FANUC_6-axis_welding_robots.jpg",
+      "SourceId": "Qlist",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\",
+      "BasePath": "_content/Qlist",
+      "RelativePath": "PicFiles/_FANUC_6-axis_welding_robots.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\PicFiles\\_FANUC_6-axis_welding_robots.jpg"
     },
     {
       "Identity": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\PicFiles\\_Screenshot 2022-03-22 152836.png",

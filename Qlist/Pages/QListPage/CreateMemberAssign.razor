@@ -44,7 +44,6 @@ else
 }
 
 <br />
-<br />
 <h4><b>Project Category</b></h4>
 @if (subcapability is null)
 {
@@ -72,7 +71,6 @@ else
     </table>
 }
 
-<br />
 <br />
 <h4>Member Assignment</h4>
 <p style="background-color:white; border:solid">
@@ -156,12 +154,12 @@ else
     public List<string> CheckBox { get; set; } = new List<string>();
     public ProjectSubProjectTl projectsub { get; set; } = new ProjectSubProjectTl();
     public ProjectSubMemberAsgmt memberassign { get; set; } = new ProjectSubMemberAsgmt();
+    public ProjectRatypeTl projectra { get; set; } = new ProjectRatypeTl();
 
     private List<MasterCapabilityCat> capability;
     private List<MasterCapabilityCatSub> subcapability;
     private List<MemberContactPerson> contact;
     private List<MemberMaster> member;
-    private List<ProjectRatypeTl> projectra;
     private List<ProjectSubMemberAsgmt> assign;
 
     string JsonCat;
@@ -176,11 +174,11 @@ else
     private async Task Initial()
     {
         projectsub = await pj.GetProjectSubProjectTLbyID(id);
-        projectra = await pj.GetAllProjectRATypeBySubProjectID(projectsub.Id);
+        projectra = await pj.GetProjectRATypeBySubProjectID(projectsub.Id);
         capability = await pj.GetAllCapability();
         member = await pj.GetAllMember();
 
-        subcapability = Newtonsoft.Json.JsonConvert.DeserializeObject<List<MasterCapabilityCatSub>>(projectra[0].MemberCapability);
+        subcapability = Newtonsoft.Json.JsonConvert.DeserializeObject<List<MasterCapabilityCatSub>>(projectra.MemberCapability);
         foreach (var list in projectsub.ProjectSubMemberAsgmts)
         {
             if (list.MemberAsgmtawardedHistories.Count > 0)

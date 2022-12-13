@@ -75,12 +75,12 @@ namespace Qlist.Data
             return obj;
         }
 
-        public async Task<List<ProjectRatypeTl>> GetAllProjectRATypeBySubProjectID(int id) //get project RA type data by sub project id (not finish)
+        public async Task<ProjectRatypeTl> GetProjectRATypeBySubProjectID(int id) //get project RA type data by sub project id
         {
             HttpClient hc = new HttpClient();
-            var response = await hc.GetAsync("");
+            var response = await hc.GetAsync("https://taraapi.ddns.net/api/ProjectRatypeTl/GetByProjectSubProjectTLID/" + id.ToString());
 
-            var obj = await response.Content.ReadFromJsonAsync<List<ProjectRatypeTl>>();
+            var obj = await response.Content.ReadFromJsonAsync<ProjectRatypeTl>();
             return obj;
         }
 
@@ -164,19 +164,28 @@ namespace Qlist.Data
             return obj;
         }
 
-        public async Task<List<MemberContactPerson>> GetContactByMemberNo(string numberno) //get contact by member no (not finish)
+        public async Task<List<MemberContactPerson>> GetAllContact() //get all contact
         {
             HttpClient hc = new HttpClient();
-            var response = await hc.GetAsync("" + numberno);
+            var response = await hc.GetAsync("https://taraapi.ddns.net/api/MemberContactPerson");
 
             var obj = await response.Content.ReadFromJsonAsync<List<MemberContactPerson>>();
             return obj;
         }
 
-        public async Task<List<MemberAddress>> GetAddressByMemberNo(string numberno) //get address by member no (not finish)
+        public async Task<List<MemberContactPerson>> GetContactByMemberNo(string numberno) //get contact by member no
         {
             HttpClient hc = new HttpClient();
-            var response = await hc.GetAsync("" + numberno);
+            var response = await hc.GetAsync("https://taraapi.ddns.net/api/MemberContactPerson/GetByMemberNo/" + numberno);
+
+            var obj = await response.Content.ReadFromJsonAsync<List<MemberContactPerson>>();
+            return obj;
+        }
+
+        public async Task<List<MemberAddress>> GetAddressByMemberNo(string numberno) //get address by member no
+        {
+            HttpClient hc = new HttpClient();
+            var response = await hc.GetAsync("https://taraapi.ddns.net/api/MemberAddress/GetByMemberNo/" + numberno);
 
             var obj = await response.Content.ReadFromJsonAsync<List<MemberAddress>>();
             return obj;
@@ -191,14 +200,7 @@ namespace Qlist.Data
             return obj;
         }
 
-        public async Task<List<MemberContactPerson>> GetAllContact() //get all contact (Not finish)
-        {
-            HttpClient hc = new HttpClient();
-            var response = await hc.GetAsync("");
-
-            var obj = await response.Content.ReadFromJsonAsync<List<MemberContactPerson>>();
-            return obj;
-        }
+        
         #endregion
     }
 }

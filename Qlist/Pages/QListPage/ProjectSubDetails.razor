@@ -43,7 +43,6 @@ else
 }
 
 <br />
-<br />
 <h4><b>Project Category</b></h4>
 @if (subcapability is null)
 {
@@ -72,8 +71,6 @@ else
 }
 
 <br />
-<br />
-
 <h4><b>Project Document</b></h4>
 @if (showdoc is null)
 {
@@ -112,28 +109,29 @@ else
 }
 
 <br />
-<br />
-
 <h4><b>Membership Assignments</b></h4>
-@if (projectsub.ProjectSubMemberAsgmts is null)
+@if (projectsub.ProjectSubMemberAsgmts is not null)
 {
-    <p><em>No Membership Assignments</em></p>
-}
-else
-{
-    int no = 0;
-    foreach (var list in projectsub.ProjectSubMemberAsgmts)
+    if (projectsub.ProjectSubMemberAsgmts.Count > 0)
     {
-        no++;
-        var item = member.Where(w => w.Id == list.MemberId).FirstOrDefault();
-        <p style="background-color:white; border:solid">
-            &nbsp; No. @no <br />
-            &nbsp; Thai Name : @item.CompanyNameTh <br />
-            &nbsp; English Name : @item.CompanyNameEn <br />
-            &nbsp; Telephone : @item.Telephone <br />
-            &nbsp; Date Confirmed : @list.DateConfirm <br />
-            &nbsp; Awarded : @list.Awarded
-        </p>
+        int no = 0;
+        foreach (var list in projectsub.ProjectSubMemberAsgmts)
+        {
+            no++;
+            var item = member.Where(w => w.Id == list.MemberId).FirstOrDefault();
+            <p style="background-color:white; border:solid">
+                &nbsp; No. @no <br />
+                &nbsp; Thai Name : @item.CompanyNameTh <br />
+                &nbsp; English Name : @item.CompanyNameEn <br />
+                &nbsp; Telephone : @item.Telephone <br />
+                &nbsp; Date Confirmed : @list.DateConfirm <br />
+                &nbsp; Awarded : @list.Awarded
+            </p>
+        }
+    }
+    else
+    {
+        <p><em>No Membership Assignments</em></p>
     }
 }
 
@@ -147,49 +145,23 @@ else
     public int id { get; set; }
 
     public ProjectSubProjectTl projectsub { get; set; } = new ProjectSubProjectTl();
+    public ProjectRatypeTl projectra { get; set; } = new ProjectRatypeTl();
+
     private List<MasterCapabilityCatSub> subcapability;
     private List<MasterCapabilityCat> capability;
     private List<MemberMaster> member;
     private List<ProjectDocument> projectdoc;
     private List<ProjectDocument> showdoc;
-    private List<ProjectRatypeTl> projectra;
-
-    string mem = @"
-[{
-    id:'5',
-    name:'กิติยศ สาคริก',
-    CompanyNameEN:'Busarakham Hospital',
-    CompanyNameTH:'โรงพยาบาลบุษราคัม',
-    address:'อาคารอิมแพคชาเลนเจอร์ 2 Popular 1 Rd, Tambon Ban Mai, Amphoe Pak Kret, Chang Wat Nonthaburi 11120',
-    Telephone:'02 029 1661'
-},
-{
-    id:'6',
-    name:'ทวี ภาวนากร',
-    CompanyNameEN:'Forth Corporation Public Company Limited',
-    CompanyNameTH:'บริษัท ฟอร์ท คอร์ปอเรชั่น จำกัด (มหาชน)',
-    address:'1053/1 Phahonyothin Road, Phayathai, Phayathai, Bangkok 10400',
-    Telephone:''
-},
-{
-    id:'7',
-    name:'วีรยา บรรลือทรัพย์',
-    CompanyNameEN:'InGenium Group CO.,LTD.',
-    CompanyNameTH:'บริษัท อินจีเนียม จำกัด (สำนักงานใหญ่)',
-    address:'25/38 Moo 4, Banhphai, Muang Nonthaburi, Nonthaburi 11000 Thailand.',
-    Telephone:'+66(0)2 117-4619'
-}]
-";
 
     protected override async Task OnInitializedAsync()
     {
         projectsub = await pj.GetProjectSubProjectTLbyID(id);
         projectdoc = await pj.GetAllProjectDocument();
-        projectra = await pj.GetAllProjectRATypeBySubProjectID(projectsub.Id);
+        projectra = await pj.GetProjectRATypeBySubProjectID(projectsub.Id);
         capability = await pj.GetAllCapability();
+        member = await pj.GetAllMember();
 
-        subcapability = Newtonsoft.Json.JsonConvert.DeserializeObject<List<MasterCapabilityCatSub>>(projectra[0].MemberCapability);
-        member = Newtonsoft.Json.JsonConvert.DeserializeObject<List<MemberMaster>>(mem);
+        subcapability = Newtonsoft.Json.JsonConvert.DeserializeObject<List<MasterCapabilityCatSub>>(projectra.MemberCapability);
         showdoc = projectdoc.Where(w => w.ProjectSubProjectTlid == id).ToList();
         StateHasChanged();
     }
