@@ -1,0 +1,183 @@
+﻿@page "/Data/ProjectSubProgress/{id:int}"
+
+@using Data;
+@using ModelM2s;
+@using ModelM4s;
+
+@inject ProjectData pj;
+@inject NavigationManager NavManager
+
+<h3>Project Sub Update Progress</h3>
+<br />
+<br />
+<EditForm Model="projectsub">
+
+    <p font-size:25px> <b>Project Sub Running Number :</b> @projectsub.ProjectSubRunNo  </p>
+    <p font-size:25px> <b>Project Sub Name :</b> @projectsub.ProjectSubName  </p>
+    <p font-size:25px> <b>Description :</b> @projectsub.Description  </p>
+    <p font-size:25px> <b>Remarked :</b> @projectsub.Remark </p>
+
+    @if (string.IsNullOrEmpty(projectsub.Budget.ToString()))
+    {
+        <p font-size:25px> <b>Budget :</b> 0 THB</p>
+    }
+    else
+    {
+        <p font-size:25px> <b>Budget :</b> @projectsub.Budget THB</p>
+    }
+
+    <p font-size:25px> <b>Status :</b> @projectsub.ProjectSubStatus</p>
+
+    @if (string.IsNullOrEmpty(projectsub.PlanStartDate.ToString()))
+    {
+        <p font-size:25px> <b>Started Date :</b> Not Planed</p>
+    }
+    else
+    {
+        <p font-size:25px> <b>Started Date :</b> @projectsub.PlanStartDate</p>
+    }
+
+    @if (string.IsNullOrEmpty(projectsub.PlanFinishDate.ToString()))
+    {
+        <p font-size:25px> <b>Finished Date :</b> Not Planed</p>
+    }
+    else
+    {
+        <p font-size:25px> <b>Finished Date :</b> @projectsub.PlanFinishDate</p>
+    }
+
+    <br />
+    <h4><b>Project Category</b></h4>
+    @if (subcapability is null)
+    {
+        <p><em>No Capability</em></p>
+    }
+    else
+    {
+        <table class="table table-striped" style="background-color:white; border:solid">
+            <thead>
+                <tr>
+                    <th>Capability Name</th>
+                    <th>Capability Sub Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var cat in subcapability)
+                {
+                    var cate = capability.Where(w => w.Id == cat.CategoryCatId).FirstOrDefault();
+                    <tr>
+                        <td>@cate.CategoryCat</td>
+                        <td>@cat.CategoryCatSub</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+    @if (!show)
+    {
+        <p font-size:25px> <b>Update Progress :</b></p>
+        <InputSelect @bind-Value="progress">
+            <option>Issued PO</option>
+            <option>Working</option>
+            <option>Finalizing</option>
+            <option>Wait-Payment</option>
+            <option>In-Warranty</option>
+            <option>On-Hold</option>
+            <option>Job Complete</option>
+            <option>Cancelled</option>
+        </InputSelect>
+        <button @onclick="UpdateProjectSub">Update Progress</button>
+    }
+
+    <br />
+    <br />
+    <button type="submit" class="btn btn-primary" style="float:left;" @onclick="()=>GoBack()">Project Sub</button>
+    
+</EditForm>
+
+
+@code {
+    [Parameter]
+    public int id { get; set; }
+
+    public ProjectSubProjectTl projectsub { get; set; } = new ProjectSubProjectTl();
+    public ProjectRatypeTl projectra { get; set; } = new ProjectRatypeTl();
+    public ProjectHd projecthd { get; set; } = new ProjectHd();
+
+    private List<MasterCapabilityCatSub> subcapability;
+    private List<MasterCapabilityCat> capability;
+
+    string progress = string.Empty;
+    bool show = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Initial();
+    }
+
+    private async Task Initial()
+    {
+        projectsub = await pj.GetProjectSubProjectTLbyID(id);
+        projectra = await pj.GetProjectRATypeBySubProjectID(projectsub.Id);
+        capability = await pj.GetAllCapability();
+
+        subcapability = Newtonsoft.Json.JsonConvert.DeserializeObject<List<MasterCapabilityCatSub>>(projectra.MemberCapability);
+
+        if (projectsub.ProjectSubStatus == "Job Complete" || projectsub.ProjectSubStatus == "Cancelled")
+        {
+            show = true;
+        }
+        StateHasChanged();
+    }
+
+    async void UpdateProjectSub()
+    {
+        if (projectsub.ProjectSubStatus != string.Empty)
+        {
+            projectsub.ProjectSubStatus = progress;
+            projectsub.ProjectSubProjectTlhistories.Add(new ProjectSubProjectTlhistory() { ProjectSubProjectTlid = projectsub.Id, Remark = projectsub.ProjectSubStatus, EditorId = 1 });
+            var result = await pj.SaveSubProject(projectsub);
+
+            UpdateProjectHD();
+            await Initial();
+        }
+    }
+
+    async void UpdateProjectHD()
+    {
+        projectsub = await pj.GetProjectSubProjectTLbyID(id);
+        projecthd = await pj.GetProjectHDbyID(projectsub.ProjectHdid);
+        int subcount = projecthd.ProjectSubProjectTls.Count;
+        int complete = 0;
+        int cancel = 0;
+        foreach (var list in projecthd.ProjectSubProjectTls)
+        {
+            if (list.ProjectSubStatus == "Job Complete") complete++;
+            if (list.ProjectSubStatus == "Cancelled") cancel++;
+        }
+
+        if (subcount == complete + cancel)
+        {
+            string message = string.Empty;
+            if (cancel > 0)
+            {
+                message = "Closed with Cancelled";
+            }
+            else
+            {
+                message = "Closed";
+            }
+            projecthd.ProjectHdhistories.Add(new ProjectHdhistory() { ProjectHdid = projecthd.Id, Remark = message, TimeStamp = DateTime.Now, EditorId = 1 });
+            projecthd.ProjectHdstatus = message;
+            var result = await pj.SaveProjectHD(projecthd);
+        }
+    }
+
+    private void GoBack()
+    {
+        NavManager.NavigateTo("/Data/ProjectSubDetail/" + projectsub.Id.ToString());
+    }
+
+
+}

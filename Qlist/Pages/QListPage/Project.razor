@@ -20,8 +20,7 @@ else
                 <th>Remarked</th>
                 <th>Status</th>
                 <th>Project Sub Count</th>
-                <th>Project Sub Detail</th>
-                <th>Edit</th>
+                <th>Detail</th>
             </tr>
         </thead>
         <tbody>
@@ -34,7 +33,6 @@ else
                     <td>@project.ProjectHdstatus</td>
                     <td>@project.ProjectSubProjectTls.Count()</td>
                     <td><a href="/Data/ProjectDetail/@project.Id">Link</a></td>
-                    <td><a href="/Data/ProjectEdit/@project.Id">Edit</a></td>
                 </tr>
             }
         </tbody>

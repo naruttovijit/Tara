@@ -5,8 +5,13 @@
 @using ModelM4s;
 
 @inject ProjectData pj;
+@inject NavigationManager NavManager
 
 <h3>ProjectSubDetails</h3>
+@if (projectsub.ProjectSubMemberAsgmts.Count == 0)
+{
+    <button type="submit" class="btn btn-primary" style="float:right" @onclick="()=>GoEdit()">Edit</button>
+}
 <br /><br />
 <p font-size:25px> <b>Project Sub Running Number :</b> @projectsub.ProjectSubRunNo  </p>
 <p font-size:25px> <b>Project Sub Name :</b> @projectsub.ProjectSubName  </p>
@@ -22,7 +27,7 @@ else
     <p font-size:25px> <b>Budget :</b> @projectsub.Budget THB</p>
 }
 
-<p font-size:25px> <b>Status :</b> @projectsub.ProjectSubStatus</p>
+<p font-size:25px> <b>Status :</b> @projectsub.ProjectSubStatus </p>
 
 @if (string.IsNullOrEmpty(projectsub.PlanStartDate.ToString()))
 {
@@ -119,7 +124,20 @@ else
         {
             no++;
             var item = member.Where(w => w.Id == list.MemberId).FirstOrDefault();
-            <p style="background-color:white; border:solid">
+            if (list.Awarded == "Y")
+            {
+                <p style="background-color:lightgreen; border:solid">
+                    &nbsp; No. @no <br />
+                    &nbsp; Thai Name : @item.CompanyNameTh <br />
+                    &nbsp; English Name : @item.CompanyNameEn <br />
+                    &nbsp; Telephone : @item.Telephone <br />
+                    &nbsp; Date Confirmed : @list.DateConfirm <br />
+                    &nbsp; Awarded : @list.Awarded
+                </p>
+            }
+            else
+            {
+                <p style="background-color:white; border:solid">
                 &nbsp; No. @no <br />
                 &nbsp; Thai Name : @item.CompanyNameTh <br />
                 &nbsp; English Name : @item.CompanyNameEn <br />
@@ -127,6 +145,7 @@ else
                 &nbsp; Date Confirmed : @list.DateConfirm <br />
                 &nbsp; Awarded : @list.Awarded
             </p>
+            }
         }
     }
     else
@@ -135,8 +154,20 @@ else
     }
 }
 
-<button type="submit" class="btn btn-primary" style="float:right;" <a href="/Data/Project"></a>Project Main</button>
-<button type="submit" class="btn btn-primary" style="float:right;" <a href="/Data/ProjectDetail/@id"></a>Go Back</button>
+@if (show)
+{
+    <button type="submit" class="btn btn-primary" style="left" @onclick="()=>UpdateProgress()">Update Progress</button>
+}
+else
+{
+    <button type="submit" class="btn btn-primary" style="left" @onclick="()=>UpdateAssignment()">Update Member Assignments</button>
+}
+
+<br />
+<br />
+<button type="submit" class="btn btn-primary" style="left" @onclick="()=>Gomain()">Project Main</button>
+&nbsp;&nbsp;
+<button type="submit" class="btn btn-primary" style="left" @onclick="()=>Goback()">Project Sub</button>
 <br />
 <br />
 
@@ -153,6 +184,8 @@ else
     private List<ProjectDocument> projectdoc;
     private List<ProjectDocument> showdoc;
 
+    bool show = false;
+
     protected override async Task OnInitializedAsync()
     {
         projectsub = await pj.GetProjectSubProjectTLbyID(id);
@@ -163,6 +196,46 @@ else
 
         subcapability = Newtonsoft.Json.JsonConvert.DeserializeObject<List<MasterCapabilityCatSub>>(projectra.MemberCapability);
         showdoc = projectdoc.Where(w => w.ProjectSubProjectTlid == id).ToList();
+
+        checkProgress();
         StateHasChanged();
     }
+
+    private void checkProgress()
+    {
+        foreach (var list in projectsub.ProjectSubMemberAsgmts)
+        {
+            if (list.Awarded == "Y")
+            {
+                show = true;
+                return;
+            }
+        }
+    }
+
+    private void UpdateAssignment()
+    {
+        NavManager.NavigateTo("/Data/MemberAssign/" + id.ToString());
+    }
+
+    private void UpdateProgress()
+    {
+        NavManager.NavigateTo("/Data/ProjectSubProgress/" + id.ToString());
+    }
+
+    private void GoEdit()
+    {
+        NavManager.NavigateTo("/Data/ProjectSubEdit/" + id.ToString());
+    }
+
+    private void Goback()
+    {
+        NavManager.NavigateTo("/Data/ProjectDetail/" + projectsub.ProjectHdid.ToString());
+    }
+
+    private void Gomain()
+    {
+        NavManager.NavigateTo("/Data/Project");
+    }
 }
+

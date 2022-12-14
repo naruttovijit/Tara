@@ -6,6 +6,7 @@
 
 @inject ProjectData pj;
 @inject IWebHostEnvironment env
+@inject NavigationManager NavManager
 
 <h3>Edit Project Sub</h3>
 
@@ -16,7 +17,7 @@
     &nbsp;<label>Budget :</label> &nbsp; <InputNumber id="MainBudget" @bind-Value="projectsub.Budget"></InputNumber> THB <br /><br />
     &nbsp;<label>Started Date :</label> &nbsp; <InputDate id="MainStartDate" @bind-Value="projectsub.PlanStartDate"></InputDate> &nbsp;&nbsp;&nbsp;
     &nbsp;<label>Finished Date :</label> &nbsp; <InputDate id="MainFinishDate" @bind-Value="projectsub.PlanFinishDate"></InputDate><br /><br />
-    @if (projectratype is not null)
+    @if (projectratype.Id > 0)
     {
         var list = ratype.Where(w => w.Id == projectratype.RatypeMasterId).FirstOrDefault();
         <label>Old RA Type : @list.Name</label>
@@ -43,7 +44,9 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var cat in subcategory)
+            @if (subcategory is not null)
+            {
+                foreach (var cat in subcategory)
                 {
                     var cate = category.Where(w => w.Id == cat.CategoryCatId).FirstOrDefault();
                     <tr>
@@ -54,6 +57,7 @@
                         </td>
                     </tr>
                 }
+            }
             </tbody>
         </table>
         <div>
@@ -83,33 +87,35 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var doc in showdoc)
+                @if (showdoc is not null)
                 {
-                    <tr>
-                        @if (doc.DocumentPath.ToUpper().Contains("PDFFILES"))
-                        {
+                    foreach (var doc in showdoc)
+                    {
+                        <tr>
+                            @if (doc.DocumentPath.ToUpper().Contains("PDFFILES"))
+                            {
+                                <td>
+                                    <a href="@doc.DocumentPath">Link</a>
+                                </td>
+                            }
+                            else
+                            {
+                                <td>
+                                    <img src="@doc.DocumentPath" width="300px" />
+                                </td>
+                            }
+                            <td>@doc.Description</td>
                             <td>
-                                <a href="@doc.DocumentPath">Link</a>
+                                <button @onclick="() => showdoc.Remove(doc)">X</button>
                             </td>
-                        }
-                        else
-                        {
-                            <td>
-                                <img src="@doc.DocumentPath" width="300px" />
-                            </td>
-                        }
-                        <td>@doc.Description</td>
-                        <td>
-                            <button @onclick="() => showdoc.Remove(doc)">X</button>
-                        </td>
-                    </tr>
+                        </tr>
+                    }
                 }
             </tbody>
         </table>
 
     &nbsp;<InputFile OnChange="OnInputFileChange" />
-    <br /><br />
-    <button type="submit" @onclick="OnSubmit">Upload Selected File</button>
+    &nbsp;<button type="submit" @onclick="OnSubmit">Upload Selected File</button>
     <br /><br />
     &nbsp;<button @onclick="UpdateProjectSub">Update</button>
 </EditForm>
@@ -146,7 +152,7 @@
         projectra = await pj.GetAllProjectRAType();
         category = await pj.GetAllCapability();
         ratype = await pj.GetRAType();
-        
+
         projectratype = projectra.Where(w => w.ProjectSubProjectTlid == id).FirstOrDefault();
         subcategory = Newtonsoft.Json.JsonConvert.DeserializeObject<List<MasterCapabilityCatSub>>(projectratype.MemberCapability);
         showdoc = projectdoc.Where(w => w.ProjectSubProjectTlid == id).ToList();
@@ -204,6 +210,8 @@
 
     async void UpdateProjectSub()
     {
+        projectsub.ProjectSubProjectTlhistories.Add(new ProjectSubProjectTlhistory() { ProjectSubProjectTlid = projectsub.Id, Remark = "Update data", EditorId = 1 });
         var result = await pj.SaveSubProject(projectsub);
+        NavManager.NavigateTo("/Data/ProjectSubDetail/{id:int}" + id);
     }
 }

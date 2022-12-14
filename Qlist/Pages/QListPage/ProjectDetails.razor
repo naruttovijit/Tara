@@ -5,8 +5,13 @@
 @using ModelM4s;
 
 @inject ProjectData pj;
+@inject NavigationManager NavManager
 
 <h3>Project Details</h3>
+@if (!hideEdit)
+{
+    <button type="submit" class="btn btn-primary" style="float:right" @onclick="()=>GoEdit()">Edit</button>
+}
 <br />
 <br />
 <p font-size:25px> <b>Running Number :</b> @projecthd.ProjectHdrunNo  </p>
@@ -103,11 +108,9 @@ else
         <tr>
             <th>Running Number</th>
             <th>Project Sub Name</th>
-            <th>Remarked</th>
             <th>Description</th>
             <th>Status</th>
-            <th>Project Sub</th>
-            <th>Assignment</th>
+            <th>Detail</th>
         </tr>
     </thead>
     <tbody>
@@ -118,16 +121,16 @@ else
                 <tr>
                     <td>@sub.ProjectSubRunNo</td>
                     <td>@sub.ProjectSubName</td>
-                    <td>@sub.Remark</td>
                     <td>@sub.Description</td>
                     <td>@sub.ProjectSubStatus</td>
                     <td><a href="/Data/ProjectSubDetail/@sub.Id">Link</a></td>
-                    <td><a href="/Data/MemberAssign/@sub.Id">Link</a></td>
                 </tr>
             }
         }
     </tbody>
 </table>
+
+<button type="submit" class="btn btn-primary" style="left" @onclick="()=>Goback()">Project Main</button>
 
 @code {
     [Parameter]
@@ -141,14 +144,39 @@ else
     private List<MemberAddress> address;
     private List<MasterTambon> tambon;
 
+    bool hideEdit = false;
+
     protected override async Task OnInitializedAsync()
     {
         projecthd = await pj.GetProjectHDbyID(id);
         customerinfo = Newtonsoft.Json.JsonConvert.DeserializeObject<List<MemberMaster>>(projecthd.CustomerInfo);
         address = await pj.GetAddressByMemberNo(customerinfo[0].MemberNo);
         //tambon = await pj.GetTambonByID(address[0].TambonId);
-        
+
         contactinfo = Newtonsoft.Json.JsonConvert.DeserializeObject<List<MemberContactPerson>>(projecthd.ContactInfo);
+        checkEdit();
         StateHasChanged();
+    }
+
+    private void checkEdit()
+    {
+        foreach (var list in projecthd.ProjectSubProjectTls)
+        {
+            if (list.ProjectSubMemberAsgmts.Count > 0)
+            {
+                hideEdit = true;
+                return;
+            }
+        }
+    }
+
+    private void GoEdit()
+    {
+        NavManager.NavigateTo("/Data/ProjectEdit/" + projecthd.Id);
+    }
+
+    private void Goback()
+    {
+        NavManager.NavigateTo("/Data/Project");
     }
 }

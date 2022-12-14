@@ -5,6 +5,7 @@
 @using ModelM4s;
 
 @inject ProjectData pj;
+@inject NavigationManager NavManager
 
 <h3>Member Assignment</h3>
 <br />
@@ -144,7 +145,7 @@ else
 }
 <br />
 <br />
-
+<button type="submit" class="btn btn-primary" style="float:left;" @onclick="()=>GoBack()">Go Back</button>
 
 
 @code {
@@ -214,6 +215,11 @@ else
         {
             assignmember.DateConfirm = DateTime.Now;
         }
+    }
+
+    private void GoBack()
+    {
+        NavManager.NavigateTo("/Data/ProjectSubDetail/" + id.ToString());
     }
 
 

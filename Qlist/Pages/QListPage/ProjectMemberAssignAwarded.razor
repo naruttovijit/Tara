@@ -5,6 +5,7 @@
 @using ModelM4s;
 
 @inject ProjectData pj;
+@inject NavigationManager NavManager
 
 <h3>Project Sub Detail</h3>
 <br />
@@ -73,8 +74,11 @@ else
     <p>Is Awarded ?</p>
     <br />
     <button @onclick="()=>UpdateAwarded()">Yes</button>
-    <button>No</button>
+    <button @onclick="()=>GoBack()">No</button>
 }
+
+<br />
+<br />
 
 
 
@@ -105,9 +109,9 @@ else
         if (hiscount < 1)
         {
             awarded.Awarded = "Y";
-            awarded.ProjectSubProjectTl.ProjectSubStatus = "Closed";
+            awarded.ProjectSubProjectTl.ProjectSubStatus = "Member Assignments Awarded";
             awarded.MemberAsgmtawardedHistories.Add(new MemberAsgmtawardedHistory() { MemberAssignmentId = awarded.MemberId, DateAwarded = DateTime.Now, Active = "Y", LastUpdated = DateTime.Now, EditorId = 1 });
-            awarded.ProjectSubProjectTl.ProjectSubProjectTlhistories.Add(new ProjectSubProjectTlhistory() { ProjectSubProjectTlid = awarded.ProjectSubProjectTlid, Remark = "Closed with Member Assignments Awarded", EditorId = 1 });
+            awarded.ProjectSubProjectTl.ProjectSubProjectTlhistories.Add(new ProjectSubProjectTlhistory() { ProjectSubProjectTlid = awarded.ProjectSubProjectTlid, Remark = "Member Assignments Awarded", EditorId = 1 });
             var result = await pj.SaveMemberAssign(awarded);
 
             UpdateProjectHD();
@@ -120,18 +124,24 @@ else
         projectsub = await pj.GetProjectSubProjectTLbyID(awarded.ProjectSubProjectTlid);
         projecthd = await pj.GetProjectHDbyID(projectsub.ProjectHdid);
         int subcount = projecthd.ProjectSubProjectTls.Count;
-        int closed = 0;
+        int award = 0;
         foreach (var list in projecthd.ProjectSubProjectTls)
         {
-            if (list.ProjectSubStatus == "Closed") closed++;
+            if (list.ProjectSubStatus == "Member Assignments Awarded") award++;
         }
 
-        if (subcount == closed)
+        if (subcount == award)
         {
-            projecthd.ProjectHdhistories.Add(new ProjectHdhistory() { ProjectHdid = projecthd.Id, Remark = "Project Closed", TimeStamp = DateTime.Now, EditorId = 1});
-            projecthd.ProjectHdstatus = "Closed";
+            projecthd.ProjectHdhistories.Add(new ProjectHdhistory() { ProjectHdid = projecthd.Id, Remark = "Member Assignments Awarded", TimeStamp = DateTime.Now, EditorId = 1 });
+            projecthd.ProjectHdstatus = "Member Assignments Awarded";
             var result = await pj.SaveProjectHD(projecthd);
+            NavManager.NavigateTo("/Data/MemberAssign/" + awarded.ProjectSubProjectTlid.ToString());
         }
+    }
+
+    private void GoBack()
+    {
+        NavManager.NavigateTo("/Data/MemberAssign/" + awarded.ProjectSubProjectTlid.ToString());
     }
 
 }
