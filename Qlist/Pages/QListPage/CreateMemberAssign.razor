@@ -3,6 +3,7 @@
 @using Data;
 @using ModelM2s;
 @using ModelM4s;
+@using System.Linq;
 
 @inject ProjectData pj;
 @inject NavigationManager NavManager
@@ -162,6 +163,9 @@ else
     private List<MemberContactPerson> contact;
     private List<MemberMaster> member;
     private List<ProjectSubMemberAsgmt> assign;
+    private List<MemberAddress> membercap;
+    private List<ProjectSubMemberAsgmt> allassign;
+    private List<MemberAsgmtawardedHistory> allawarded;
 
     string JsonCat;
     int memberid;
@@ -179,6 +183,7 @@ else
         capability = await pj.GetAllCapability();
         member = await pj.GetAllMember();
 
+
         subcapability = Newtonsoft.Json.JsonConvert.DeserializeObject<List<MasterCapabilityCatSub>>(projectra.MemberCapability);
         foreach (var list in projectsub.ProjectSubMemberAsgmts)
         {
@@ -188,7 +193,25 @@ else
                 break;
             }
         }
+
+        allassign = await pj.GetAllMemberAssignment();
+        allawarded = await pj.GetAllMemberAwarded();
+        AutoAssignment();
+
         StateHasChanged();
+    }
+
+    private void AutoAssignment()
+    {
+        List<int> test = new List<int>();
+        foreach (var list in subcapability)
+        {
+            test.Add(list.Id);
+        }
+        var result = member.Where(o => o.MemberCategories.Any(m => test.Contains(m.CategorySubId)));
+        var result2 = result.Where(w => (w.RegisterCapital / projectsub.Budget) <= 10);
+
+        var assign = allassign.Where(w => w.Awarded == "Y");
     }
 
     void AddMember(int id) //Add contact to Project HD

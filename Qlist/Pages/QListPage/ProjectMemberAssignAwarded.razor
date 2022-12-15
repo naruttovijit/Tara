@@ -114,8 +114,7 @@ else
             awarded.ProjectSubProjectTl.ProjectSubProjectTlhistories.Add(new ProjectSubProjectTlhistory() { ProjectSubProjectTlid = awarded.ProjectSubProjectTlid, Remark = "Member Assignments Awarded", EditorId = 1 });
             var result = await pj.SaveMemberAssign(awarded);
 
-            UpdateProjectHD();
-            await Initial();
+            NavManager.NavigateTo("/Data/MemberAssign/" + awarded.ProjectSubProjectTlid.ToString());
         }
     }
 

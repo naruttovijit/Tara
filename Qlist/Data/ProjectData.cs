@@ -102,6 +102,24 @@ namespace Qlist.Data
             return obj;
         }
 
+        public async Task<List<ProjectSubMemberAsgmt>> GetAllMemberAssignment() //get all member assignment
+        {
+            HttpClient hc = new HttpClient();
+            var response = await hc.GetAsync("https://taraapi.ddns.net/api/ProjectSubMemberAsgmt");
+
+            var obj = await response.Content.ReadFromJsonAsync<List<ProjectSubMemberAsgmt>>();
+            return obj;
+        }
+
+        public async Task<List<MemberAsgmtawardedHistory>> GetAllMemberAwarded() //get all awarded member assignment
+        {
+            HttpClient hc = new HttpClient();
+            var response = await hc.GetAsync("https://taraapi.ddns.net/api/MemberAssignmentAwaredHistory");
+
+            var obj = await response.Content.ReadFromJsonAsync<List<MemberAsgmtawardedHistory>>();
+            return obj;
+        }
+
         public async Task<ProjectHd> SaveProjectHD(ProjectHd projecthd) //save all data
         {
             HttpClient hc = new HttpClient();
