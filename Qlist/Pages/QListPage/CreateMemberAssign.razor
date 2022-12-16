@@ -123,13 +123,20 @@ else
                 </tr>
             }
         }
+        else
+        {
+            if (count is not null)
+            {
+
+            }
+        }
     </table>
 </p>
 
 @if (!awarded)
 {
     <EditForm Model="memberassign">
-        <InputSelect id="AssignMember" @bind-Value="memberassign.MemberId">
+        <InputSelect id="AssignMember" @bind-Value="idMember">
             <option value="0">------------Select Member------------</option>
             @if (member is not null)
             {
@@ -139,7 +146,7 @@ else
                 }
             }
         </InputSelect> &nbsp;&nbsp;
-        <button @onclick="()=>AddMember(memberassign.MemberId)">Add Member</button>
+        <button @onclick="()=>AddMember(idMember)">Add Member</button>
     </EditForm>
     <br />
     <button @onclick="()=>UpdateMemberAssign()">Update</button>
@@ -166,9 +173,10 @@ else
     private List<MemberAddress> membercap;
     private List<ProjectSubMemberAsgmt> allassign;
     private List<MemberAsgmtawardedHistory> allawarded;
+    private List<CountAwarded> count;
 
     string JsonCat;
-    int memberid;
+    int idMember;
     bool awarded = false;
 
     protected override async Task OnInitializedAsync()
@@ -182,41 +190,77 @@ else
         projectra = await pj.GetProjectRATypeBySubProjectID(projectsub.Id);
         capability = await pj.GetAllCapability();
         member = await pj.GetAllMember();
-
-
-        subcapability = Newtonsoft.Json.JsonConvert.DeserializeObject<List<MasterCapabilityCatSub>>(projectra.MemberCapability);
-        foreach (var list in projectsub.ProjectSubMemberAsgmts)
-        {
-            if (list.MemberAsgmtawardedHistories.Count > 0)
-            {
-                awarded = true;
-                break;
-            }
-        }
-
         allassign = await pj.GetAllMemberAssignment();
         allawarded = await pj.GetAllMemberAwarded();
-        AutoAssignment();
+
+        subcapability = Newtonsoft.Json.JsonConvert.DeserializeObject<List<MasterCapabilityCatSub>>(projectra.MemberCapability);
+        if (projectsub.ProjectSubMemberAsgmts.Count > 0)
+        {
+            foreach (var list in projectsub.ProjectSubMemberAsgmts)
+            {
+                if (list.MemberAsgmtawardedHistories.Count > 0)
+                {
+                    awarded = true;
+                    break;
+                }
+            }
+        }
+        else
+        {
+            AutoAssignment();
+        }
 
         StateHasChanged();
     }
 
     private void AutoAssignment()
     {
-        List<int> test = new List<int>();
+        List<int> sub = new List<int>();
+        List<int> awardid = new List<int>();
         foreach (var list in subcapability)
         {
-            test.Add(list.Id);
+            sub.Add(list.Id);
         }
-        var result = member.Where(o => o.MemberCategories.Any(m => test.Contains(m.CategorySubId)));
-        var result2 = result.Where(w => (w.RegisterCapital / projectsub.Budget) <= 10);
+        var result = member.Where(o => o.MemberCategories.Any(m => sub.Contains(m.CategorySubId)));
+        List<MemberMaster> result2 = result.Where(w => (w.RegisterCapital / projectsub.Budget) <= 10).ToList();
+        count = new List<CountAwarded>();
+        foreach (var list in result2)
+        {
+            count.Add(new CountAwarded() {MemberId = list.Id, Count = 0});
+        }
 
-        var assign = allassign.Where(w => w.Awarded == "Y");
+        var assign = allassign.Where(w => w.Awarded == "Y").ToList();
+        foreach(var list in assign)
+        {
+            awardid.Add(list.MemberId);
+        }
+        var grouped = awardid.GroupBy(x => x).Select(y => new { item = y.Key, count = y.Count() });
+        foreach (var list in grouped)
+        {
+            var c = count.Where(w => w.MemberId == list.item).FirstOrDefault();
+            if (c is not null)
+            {
+                if (c.MemberId > 0)
+                {
+                    c.Count = list.count;
+                }
+            }
+        }
+        var min = count.Select(w => w.Count).Where(c => c != null).Min();
+        var max = count.Select(w => w.Count).Where(c => c != null).Max();
+
+        count = count.OrderBy(n => n.Count).ToList();
+
+        foreach (var list in count)
+        {
+            AddMember(list.MemberId);
+        }
     }
 
-    void AddMember(int id) //Add contact to Project HD
+    void AddMember(int member) //Add contact to Project HD
     {
         memberassign.ProjectSubProjectTlid = id;
+        memberassign.MemberId = member;
         memberassign.Active = "Y";
         memberassign.EditorId = 1;
         projectsub.ProjectSubMemberAsgmts.Add(memberassign);
