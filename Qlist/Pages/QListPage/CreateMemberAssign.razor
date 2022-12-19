@@ -9,74 +9,103 @@
 @inject NavigationManager NavManager
 
 <h3>Member Assignment</h3>
-<br />
-<br />
-<p font-size:25px> <b>Project Sub Running Number :</b> @projectsub.ProjectSubRunNo  </p>
-<p font-size:25px> <b>Project Sub Name :</b> @projectsub.ProjectSubName  </p>
-<p font-size:25px> <b>Description :</b> @projectsub.Description  </p>
-<p font-size:25px> <b>Remarked :</b> @projectsub.Remark </p>
+<div class="container">
+    <div class="row">
+        <div class="col-2"><p>Project Sub Running Number :</p></div>
+        <div class="col"><p>@projectsub.ProjectSubRunNo </p></div>
+    </div>
 
-@if (string.IsNullOrEmpty(projectsub.Budget.ToString()))
-{
-    <p font-size:25px> <b>Budget :</b> 0 THB</p>
-}
-else
-{
-    <p font-size:25px> <b>Budget :</b> @projectsub.Budget THB</p>
-}
+    <div class="row">
+        <div class="col-2"><p>Project Sub Name :</p></div>
+        <div class="col"><p>@projectsub.ProjectSubName </p></div>
+    </div>
 
-<p font-size:25px> <b>Status :</b> @projectsub.ProjectSubStatus</p>
+    <div class="row">
+        <div class="col-2"><p>Description :</p></div>
+        <div class="col"><p>@projectsub.Description </p></div>
+    </div>
 
-@if (string.IsNullOrEmpty(projectsub.PlanStartDate.ToString()))
-{
-    <p font-size:25px> <b>Started Date :</b> Not Planed</p>
-}
-else
-{
-    <p font-size:25px> <b>Started Date :</b> @projectsub.PlanStartDate</p>
-}
+    <div class="row">
+        <div class="col-2"><p>Remarked :</p></div>
+        <div class="col"><p>@projectsub.Remark </p></div>
+    </div>
 
-@if (string.IsNullOrEmpty(projectsub.PlanFinishDate.ToString()))
-{
-    <p font-size:25px> <b>Finished Date :</b> Not Planed</p>
-}
-else
-{
-    <p font-size:25px> <b>Finished Date :</b> @projectsub.PlanFinishDate</p>
-}
+    <div class="row">
+        <div class="col-2"><p>Budget :</p></div>
+        @if (string.IsNullOrEmpty(projectsub.Budget.ToString()))
+        {
+            <div class="col"><p>0</p></div>
+        }
+        else
+        {
+            <div class="col"><p>@projectsub.Budget </p></div>
+        }
+        <div class="col-1"><p>THB</p></div>
+    </div>
 
-<br />
-<h4><b>Project Category</b></h4>
-@if (subcapability is null)
-{
-    <p><em>No Capability</em></p>
-}
-else
-{
-    <table class="table table-striped" style="background-color:white; border:solid">
-        <thead>
-            <tr>
-                <th>Capability Name</th>
-                <th>Capability Sub Name</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var cat in subcapability)
-            {
-                var cate = capability.Where(w => w.Id == cat.CategoryCatId).FirstOrDefault();
+    <div class="row">
+        <div class="col-2"><p>Status :</p></div>
+        <div class="col"><p>@projectsub.ProjectSubStatus </p></div>
+    </div>
+
+    <div class="row">
+        <div class="col-2"><p>Started Date :</p></div>
+        @if (string.IsNullOrEmpty(projectsub.PlanStartDate.ToString()))
+        {
+            <div class="col"><p>Not Planed</p></div>
+        }
+        else
+        {
+            <div class="col"><p>@projectsub.PlanStartDate</p></div>
+        }
+    </div>
+
+    <div class="row">
+        <div class="col-2"><p>Finished Date :</p></div>
+        @if (string.IsNullOrEmpty(projectsub.PlanFinishDate.ToString()))
+        {
+            <div class="col"><p>Not Planed</p></div>
+        }
+        else
+        {
+            <div class="col"><p>@projectsub.PlanFinishDate</p></div>
+        }
+    </div>
+</div>
+
+<div class="container">
+    <h4><b>Project Category</b></h4>
+    @if (subcapability is null)
+    {
+        <p><em>No Capability</em></p>
+    }
+    else
+    {
+        <table class="table table-striped" style="background-color:white; border:solid">
+            <thead>
                 <tr>
-                    <td>@cate.CategoryCat</td>
-                    <td>@cat.CategoryCatSub</td>
+                    <th>Capability Name</th>
+                    <th>Capability Sub Name</th>
                 </tr>
-            }
-        </tbody>
-    </table>
-}
+            </thead>
+            <tbody>
+                @foreach (var cat in subcapability)
+                {
+                    var cate = capability.Where(w => w.Id == cat.CategoryCatId).FirstOrDefault();
+                    <tr>
+                        <td>@cate.CategoryCat</td>
+                        <td>@cat.CategoryCatSub</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
 
-<br />
-<h4>Member Assignment</h4>
-<p style="background-color:white; border:solid">
-    <table style="width:100%">
+<div class="container">
+    <h4>Member Assignment</h4>
+    <div class="row" style="background-color:white; border:solid">
+        <table style="width:100%">
         <tr>
             <th>No.</th>
             <th>Company Name TH</th>
@@ -131,25 +160,35 @@ else
             }
         }
     </table>
-</p>
+    </div>
+</div>
 
 @if (!awarded)
 {
-    <EditForm Model="memberassign">
-        <InputSelect id="AssignMember" @bind-Value="idMember">
-            <option value="0">------------Select Member------------</option>
-            @if (member is not null)
-            {
-                foreach (var list in member)
-                {
-                    <option value="@list.Id">@list.CompanyNameTh</option>
-                }
-            }
-        </InputSelect> &nbsp;&nbsp;
-        <button @onclick="()=>AddMember(idMember)">Add Member</button>
-    </EditForm>
-    <br />
-    <button @onclick="()=>UpdateMemberAssign()">Update</button>
+    <div class="container">
+        <div class="row">
+            <EditForm Model="memberassign">
+                <div class="col-4">
+                    <InputSelect style="width:100%" id="AssignMember" @bind-Value="idMember">
+                        <option value="0">------------Select Member------------</option>
+                        @if (member is not null)
+                        {
+                            foreach (var list in member)
+                            {
+                                <option value="@list.Id">@list.CompanyNameTh</option>
+                            }
+                        }
+                    </InputSelect>
+                </div>
+                <div class="col">
+                    <button @onclick="()=>AddMember(idMember)">Add Member</button>
+                </div>
+            </EditForm>
+        </div>
+        <div class="row">
+            <button @onclick="()=>UpdateMemberAssign()">Update</button>
+        </div>
+    </div>
 }
 <br />
 <br />

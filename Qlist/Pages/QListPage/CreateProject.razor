@@ -13,65 +13,130 @@
 
 @*Create Project HD*@
 <EditForm Model="formmain">
-    &nbsp;<label>Main Project Name :</label> &nbsp; <InputText id="MainName" @bind-Value="formmain.ProjectName"></InputText><br /><br />
-    &nbsp;<label>Description :</label> &nbsp; <InputText id="MainDesc" @bind-Value="formmain.Description"></InputText><br /><br />
-    &nbsp;<label>Remarked :</label> &nbsp; <InputText id="MainRemark" @bind-Value="formmain.Remark"></InputText><br /><br />
-    &nbsp;<label>Customer Infomation :</label> &nbsp; <InputSelect id="MainCustomer" @bind-Value="customerid" @onclick="GetContact">
-        <option value="0">------------Select Customer------------</option>
-        @if (member is not null)
-        {
-            foreach (var list in member)
-            {
-                <option value="@list.Id">@list.CompanyNameEn (@list.CompanyNameTh)</option>
-            }
-        }
-    </InputSelect><br /><br />
-    <p style="background-color:white; border:solid">
-        &nbsp;<h4>Contact Infomation</h4>
-        <table style="width:100%">
-            <tr>
-                <th>Thai Name</th>
-                <th>English Name</th>
-                <th>Tel.</th>
-                <th>Delete</th>
-            </tr>
-            @if (ListContact is not null)
-            {
-                foreach (var list in ListContact)
-                {
-                    <tr>
-                        <td>@list.Title @list.FirstNameTh @list.LastNameTh</td>
-                        <td>@list.FirstNameEn @list.LastNameEn</td>
-                        <td>@list.MobileNo</td>
-                        <td>
-                            <button @onclick="() => ListContact.Remove(list)">
-                                X
-                            </button>
-                        </td>
-                    </tr>
-                }
-            }
+    <div class="container">
+        <div class="row">
+            <div class="col-2">
+                <p>Main Project Name :</p>
+            </div>
+            <div class="col">
+                <InputText style="width: 100%" id="MainName" @bind-Value="formmain.ProjectName"></InputText>
+            </div>
+        </div>
 
-        </table>
-        <div>
-            <InputSelect id="MainContact" @bind-Value="contactid">
-                <option value="0">------------Select Contact------------</option>
-                @if (contact is not null)
-                {
-                    foreach (var list in contact)
+        <div class="row">
+            <div class="col-2">
+                <p>Description :</p>
+            </div>
+            <div class="col">
+                <InputText style="width: 100%" id="MainDesc" @bind-Value="formmain.Description"></InputText>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-2">
+                <p>Remarked :</p>
+            </div>
+            <div class="col">
+                <InputText style="width: 100%" id="MainRemark" @bind-Value="formmain.Remark"></InputText>
+            </div>
+        </div>
+
+         <div class="row">
+            <div class="col-2">
+                <p>Customer Infomation :</p>
+            </div>
+            <div class="col">
+                <InputSelect style="width: 100%" id="MainCustomer" @bind-Value="customerid" @onclick="GetContact">
+                    <option value="0">------------Select Customer------------</option>
+                    @if (member is not null)
                     {
-                        <option value="@list.Id">@list.FirstNameTh @list.LastNameTh</option>
+                        foreach (var list in member)
+                        {
+                            <option value="@list.Id">@list.CompanyNameEn (@list.CompanyNameTh)</option>
+                        }
+                    }
+                </InputSelect>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-2">
+                <p>Budget :</p>
+            </div>
+            <div class="col">
+                <InputNumber style="width: 100%" id="MainBudget" @bind-Value="formmain.Budget"></InputNumber>
+            </div>
+            <div class="col-1">
+                <p>THB</p>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-2">
+                <p>Started Date :</p>
+            </div>
+            <div class="col">
+                <InputDate style="width: 100%" id="MainStartDate" @bind-Value="formmain.PlanStartDate"></InputDate>
+            </div>
+            <div class="col-2">
+                <p>Finished Date :</p>
+            </div>
+            <div class="col">
+                <InputDate style="width: 100%" id="MainFinishDate" @bind-Value="formmain.PlanFinishDate"></InputDate>
+            </div>
+
+        </div>
+
+
+    </div>
+
+    <div class="container" style="background-color:white; border:solid">
+        <h4>Contact Infomation</h4>
+        <p>
+            <table style="width:100%">
+                <tr>
+                    <th>Thai Name</th>
+                    <th>English Name</th>
+                    <th>Tel.</th>
+                    <th>Delete</th>
+                </tr>
+                @if (ListContact is not null)
+                {
+                    foreach (var list in ListContact)
+                    {
+                        <tr>
+                            <td>@list.Title @list.FirstNameTh @list.LastNameTh</td>
+                            <td>@list.FirstNameEn @list.LastNameEn</td>
+                            <td>@list.MobileNo</td>
+                            <td>
+                                <button @onclick="() => ListContact.Remove(list)">
+                                    X
+                                </button>
+                            </td>
+                        </tr>
                     }
                 }
-            </InputSelect> &nbsp;&nbsp;
-            <button @onclick="()=>SaveContact(contactid)">Add Contact</button><br /><br />
+            </table>
+        </p>
+        <div class="container">
+            <p>
+                <InputSelect id="MainContact" @bind-Value="contactid">
+                    <option value="0">------------Select Contact------------</option>
+                    @if (contact is not null)
+                    {
+                        foreach (var list in contact)
+                        {
+                            <option value="@list.Id">@list.FirstNameTh @list.LastNameTh</option>
+                        }
+                    }
+                </InputSelect> &nbsp;&nbsp;
+                <button @onclick="()=>SaveContact(contactid)">Add Contact</button>
+            </p>
         </div>
-    </p>
-
-    &nbsp;<label>Budget :</label> &nbsp; <InputNumber id="MainBudget" @bind-Value="formmain.Budget"></InputNumber> THB <br /><br />
-    &nbsp;<label>Started Date :</label> &nbsp; <InputDate id="MainStartDate" @bind-Value="formmain.PlanStartDate"></InputDate> &nbsp;&nbsp;&nbsp;
-    &nbsp;<label>Finished Date :</label> &nbsp; <InputDate id="MainFinishDate" @bind-Value="formmain.PlanFinishDate"></InputDate><br /><br />
-    &nbsp;
+    </div>
+    
+    <br />
+    
     @if(MainSaveshow)
     {
         <button @onclick="SaveProjectMain">Next</button>
@@ -86,40 +151,79 @@
     {
         foreach (var sub in formmain.ProjectSubProjectTls)
         {
-            <p style="background-color:white; border:solid">
-                <button style="align-items:end" @onclick="() => formmain.ProjectSubProjectTls.Remove(sub)">Delete</button><br />
-                &nbsp;<label>Project Sub Running No. : @sub.ProjectSubRunNo</label><br /><br />
-                &nbsp;<label>Project Sub Name : @sub.ProjectSubName</label><br /><br />
-                &nbsp;<label>Description : @sub.Description</label> <br /><br />
-                &nbsp;<label>Remarked : @sub.Remark</label> <br /><br />
-                &nbsp;<label>Budget : @sub.Budget</label> <br /><br />
-                &nbsp;<label>Started Date : @sub.PlanStartDate</label> &nbsp;&nbsp;&nbsp;
-                &nbsp;<label>Finished Date : @sub.PlanFinishDate</label> <br /><br />
-                &nbsp;
+            <div class="container" style="background-color:white; border:solid">
+                <div class="row">
+                    <div class="col-1"><button style="align-items:end" @onclick="() => formmain.ProjectSubProjectTls.Remove(sub)">Delete</button></div>
+                </div>
+
+                <div class="row">
+                    <div class="col-2"><p>Sub Running No. :</p></div>
+                    <div class="col"><p>@sub.ProjectSubRunNo</p></div>
+                </div>
+
+                 <div class="row">
+                    <div class="col-2"><p>Project Sub Name :</p></div>
+                    <div class="col"><p>@sub.ProjectSubName</p></div>
+                </div>
+
+                <div class="row">
+                    <div class="col-2"><p>Description :</p></div>
+                    <div class="col"><p>@sub.Description</p></div>
+                </div>
+
+                <div class="row">
+                    <div class="col-2"><p>Remarked :</p></div>
+                    <div class="col"><p>@sub.Remark</p></div>
+                </div>
+
+                <div class="row">
+                    <div class="col-2"><p>Budget :</p></div>
+                    <div class="col"><p>@sub.Budget</p></div>
+                </div>
+
+                <div class="row">
+                    <div class="col-2"><p>Started Date :</p></div>
+                    <div class="col"><p>@sub.PlanStartDate</p></div>
+                    <div class="col-2"><p>Finished Date :</p></div>
+                    <div class="col"><p>@sub.PlanFinishDate</p></div>
+                </div>
+
                 @foreach (var list in @sub.ProjectRatypeTls)
                 {
                     var ra = ratype.Where(w => w.Id == list.RatypeMasterId).FirstOrDefault();
-                    <label>RA Type : @ra.Name</label> <br />
-                    <label>Category</label>
-                    <br />
-                    @if (list.MemberCapability is not null)
-                    {
-                        ShowCategory(list.MemberCapability);
-                        if(showcate is not null)
-                        {
-                            <table style="width:100%">
-                                @foreach (var categorylist in showcate)
+                    <div class="row">
+                        <div class="col-2"><p>RA Type :</p></div>
+                        <div class="col"><p>@ra.Name</p></div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-2"><p>Category :</p></div>
+                        <div class="col">
+                            <p>
+                                @if (list.MemberCapability is not null)
                                 {
-                                    var cate = category.Where(w => w.Id == categorylist.CategoryCatId).FirstOrDefault();
-                                    <tr>
-                                        <td>@cate.CategoryCat - @categorylist.CategoryCatSub</td>
-                                    </tr>
+                                    ShowCategory(list.MemberCapability);
+                                    if(showcate is not null)
+                                    {
+                                        <p>
+                                            <table style="width:100%">
+                                                @foreach (var categorylist in showcate)
+                                                {
+                                                    var cate = category.Where(w => w.Id == categorylist.CategoryCatId).FirstOrDefault();
+                                                    <tr>
+                                                        <td>@cate.CategoryCat - @categorylist.CategoryCatSub</td>
+                                                    </tr>
+                                                }
+                                            </table>
+                                        </p>
+                            
+                                    }
                                 }
-                            </table>
-                        }
-                    }
+                            </p>
+                        </div>
+                    </div>
                 }
-                &nbsp;
+
                 @foreach (var file in sub.ProjectDocuments)
                 {
                     if (file.DocumentPath.ToUpper().Contains("PDFFILES"))
@@ -132,87 +236,128 @@
                     }
                     <br />
                 }
-            </p>
-
+            </div>
         }
+        <br />
+        <div class="container">
+            <div class="row-cols-4">
+                <button @onclick="SaveAll">Submit</button>
+            </div>
+        </div>
+        
     }
 
-    <EditForm Model="formsub">
+    <br />
+    <br />
+    <div class="container" style="background-color:papayawhip; border:solid">
         <h4>Create Project Sub</h4>
-        <p style="background-color:white; border:solid">
-            <br />
-            &nbsp;<label>Project Sub Name :</label> &nbsp; <InputText id="SubName" @bind-Value="formsub.ProjectSubName"></InputText><br /><br />
-            &nbsp;<label>Description :</label> &nbsp; <InputText id="SubDesc" @bind-Value="formsub.Description"></InputText><br /><br />
-            &nbsp;<label>Remarked :</label> &nbsp; <InputText id="SubRemark" @bind-Value="formsub.Remark"></InputText><br /><br />
-            &nbsp;<label>Budget :</label> &nbsp; <InputNumber id="SubBudget" @bind-Value="formsub.Budget"></InputNumber> THB <br /><br />
-            &nbsp;<label>Started Date :</label> &nbsp; <InputDate id="SubStartDate" @bind-Value="formsub.PlanStartDate"></InputDate> &nbsp;&nbsp;&nbsp;
-            &nbsp;<label>Finished Date :</label> &nbsp; <InputDate id="SubFinishDate" @bind-Value="formsub.PlanFinishDate"></InputDate>&nbsp;&nbsp;<br /><br />
+        <EditForm Model="formsub">
+            <div class="container">
+                <div class="row">
+                    <div class="col-2"><p>Project Sub Name :</p></div>
+                    <div class="col"><InputText style="width: 100%" id="SubName" @bind-Value="formsub.ProjectSubName"></InputText></div>
+                </div>
 
-            &nbsp;<label>RA Type :</label> &nbsp; <InputSelect id="SubRAType" @bind-Value="formRAType.RatypeMasterId">
-                <option value="0">------------Select RA Type------------</option>
-                @if (ratype is not null)
-                {
-                    foreach (var list in ratype)
-                    {
-                        <option value="@list.Id">@list.Name</option>
-                    }
-                }
-            </InputSelect><br /><br />
+                <div class="row">
+                    <div class="col-2"><p>Description :</p></div>
+                    <div class="col"><InputText style="width: 100%" id="SubName" @bind-Value="formsub.Description"></InputText></div>
+                </div>
 
+                <div class="row">
+                    <div class="col-2"><p>Remarked :</p></div>
+                    <div class="col"><InputText style="width: 100%" id="SubName" @bind-Value="formsub.Remark"></InputText></div>
+                </div>
 
-        <p style="background-color:white; border:solid">
-            &nbsp;<h4>Capability</h4>
-            <table style="width:100%">
-                <tr>
-                    <th>Capability</th>
-                    <th>Capability Sub</th>
-                    <th>Delete</th>
-                </tr>
-                    @if (ListCategory is not null)
-                    {
-                        foreach (var list in ListCategory)
-                        {
-                            var cate = category.Where(w => w.Id == list.CategoryCatId).FirstOrDefault();
-                            <tr>
-                            <td>@cate.CategoryCat</td>
-                            <td>@list.CategoryCatSub</td>
-                            <td>
-                                <button @onclick="() => ListCategory.Remove(list)">X</button>
-                            </td>
-                        </tr>
-                        }
-                    }
-            </table>
-            <div>
-                <InputSelect id="SubCategory" @bind-Value="categoryid">
-                    <option value="0">------------Select Category------------</option>
-                        @if (category is not null)
-                        {
-                            foreach (var list in category)
+                <div class="row">
+                    <div class="col-2"><p>Budget :</p></div>
+                    <div class="col"><InputNumber style="width: 100%" id="SubName" @bind-Value="formsub.Budget"></InputNumber></div>
+                    <div class="col-1"><p>THB</p></div>
+                </div>
+
+                <div class="row">
+                    <div class="col-2"><p>Started Date :</p></div>
+                    <div class="col"><InputDate style="width: 100%" id="SubStartDate" @bind-Value="formsub.PlanStartDate"></InputDate></div>
+                    <div class="col-2"><p>Finished Date :</p></div>
+                    <div class="col"><InputDate style="width: 100%" id="SubStartDate" @bind-Value="formsub.PlanFinishDate"></InputDate></div>
+                </div>
+
+                <div class="row">
+                    <div class="col-2"><p>RA Type :</p></div>
+                    <div class="col">
+                        <InputSelect style="width: 100%" id="SubRAType" @bind-Value="formRAType.RatypeMasterId">
+                            <option value="0">------------Select RA Type------------</option>
+                            @if (ratype is not null)
                             {
-                                foreach (var sub in list.MasterCapabilityCatSubs)
+                                foreach (var list in ratype)
                                 {
-                                    <option value="@sub.Id">@list.CategoryCat - @sub.CategoryCatSub</option>
+                                    <option value="@list.Id">@list.Name</option>
                                 }
                             }
-                        }
-                </InputSelect> &nbsp;&nbsp;
-                <button @onclick="()=>SaveCategory(categoryid)">Add Category</button><br /><br />
+                        </InputSelect>
+                    </div>
+                </div>
+
+                <div class="container" style="background-color:white; border:solid">
+                    <h4>Capability</h4>
+                    <p>
+                        <table style="width:100%">
+                            <tr>
+                                <th>Capability</th>
+                                <th>Capability Sub</th>
+                                <th>Delete</th>
+                            </tr>
+                            @if (ListCategory is not null)
+                            {
+                                foreach (var list in ListCategory)
+                                {
+                                    var cate = category.Where(w => w.Id == list.CategoryCatId).FirstOrDefault();
+                                    <tr>
+                                        <td>@cate.CategoryCat</td>
+                                        <td>@list.CategoryCatSub</td>
+                                        <td>
+                                            <button @onclick="() => ListCategory.Remove(list)">X</button>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </table>
+                    </p>
+
+                    <div class="container">
+                        <p>
+                            <InputSelect id="SubCategory" @bind-Value="categoryid">
+                                <option value="0">------------Select Category------------</option>
+                                @if (category is not null)
+                                {
+                                    foreach (var list in category)
+                                    {
+                                        foreach (var sub in list.MasterCapabilityCatSubs)
+                                        {
+                                            <option value="@sub.Id">@list.CategoryCat - @sub.CategoryCatSub</option>
+                                        }
+                                    }
+                                }
+                            </InputSelect>
+                            <button @onclick="()=>SaveCategory(categoryid)">Add Category</button>
+                        </p>
+                    </div>
+                </div>
+                <br>
+                <div class="container">
+                    <InputFile OnChange="OnInputFileChange" />
+                    @if (uploadfile)
+                    {
+                        <button type="submit" @onclick="OnSubmit">Upload Selected File</button>
+                    }
+                </div>
+                <br>
+                <div class="container">
+                    <button @onclick="SaveProjectSub">Add Project Sub</button>
+                </div>
+                <br>
             </div>
-        </p>
-        &nbsp;<InputFile OnChange="OnInputFileChange" />
-        <br /><br />
-        @if (uploadfile)
-        {
-            <button type="submit" @onclick="OnSubmit">Upload Selected File</button>
-        }        
-        <br /><br />
-        &nbsp;<button @onclick="SaveProjectSub">Add</button>
-        </p>
-    </EditForm>
-    <p>
-        &nbsp;<button @onclick="SaveAll">Save All</button>
-    </p>
+        </EditForm>
+    </div>
     
 }
 
@@ -351,9 +496,9 @@
     {
         formRAType.MemberCapability = Newtonsoft.Json.JsonConvert.SerializeObject(ListCategory);
         formsub.ProjectRatypeTls.Add(formRAType);
-        formsub.ProjectSubStatus = "Open";
+        formsub.ProjectSubStatus = "Inquiry";
         formsub.Active = "Y";
-        formsub.ProjectSubProjectTlhistories.Add(new ProjectSubProjectTlhistory() { ProjectSubProjectTlid = formsub.Id, Remark = "Create", EditorId = 1});
+        formsub.ProjectSubProjectTlhistories.Add(new ProjectSubProjectTlhistory() { ProjectSubProjectTlid = formsub.Id, Remark = "Create and Inquiry", EditorId = 1 });
         formmain.ProjectSubProjectTls.Add(formsub);
 
         formsub = new ProjectSubProjectTl();
