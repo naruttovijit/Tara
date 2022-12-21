@@ -1,5 +1,7 @@
 ﻿@page "/Data/ProjectCreate"
 
+@implements IDisposable;
+
 @using ModelM2s;
 @using ModelM4s;
 @using Data;
@@ -95,10 +97,10 @@
         <p>
             <table style="width:100%">
                 <tr>
-                    <th>Thai Name</th>
-                    <th>English Name</th>
-                    <th>Tel.</th>
-                    <th>Delete</th>
+                    <th style="width: 37.5%">Thai Name</th>
+                    <th style="width: 37.5%">English Name</th>
+                    <th style="width: 15%">Tel.</th>
+                    <th class="text-center" style="width: 10%">Delete</th>
                 </tr>
                 @if (ListContact is not null)
                 {
@@ -108,10 +110,7 @@
                             <td>@list.Title @list.FirstNameTh @list.LastNameTh</td>
                             <td>@list.FirstNameEn @list.LastNameEn</td>
                             <td>@list.MobileNo</td>
-                            <td>
-                                <button @onclick="() => ListContact.Remove(list)">
-                                    X
-                                </button>
+                            <td class="text-center"><button @onclick="() => ListContact.Remove(list)">X</button>
                             </td>
                         </tr>
                     }
@@ -302,9 +301,9 @@
                     <p>
                         <table style="width:100%">
                             <tr>
-                                <th>Capability</th>
-                                <th>Capability Sub</th>
-                                <th>Delete</th>
+                                <th style="width: 45%">Capability</th>
+                                <th style="width: 45%">Capability Sub</th>
+                                <th class="text-center" style="width: 10%">Delete</th>
                             </tr>
                             @if (ListCategory is not null)
                             {
@@ -314,9 +313,7 @@
                                     <tr>
                                         <td>@cate.CategoryCat</td>
                                         <td>@list.CategoryCatSub</td>
-                                        <td>
-                                            <button @onclick="() => ListCategory.Remove(list)">X</button>
-                                        </td>
+                                        <td class="text-center"><button @onclick="() => ListCategory.Remove(list)">X</button></td>
                                     </tr>
                                 }
                             }
@@ -568,4 +565,9 @@
         uploadfile = false;
         this.StateHasChanged();
     } 
+
+    public void Dispose()
+    {
+        Console.WriteLine("Disconnected");
+    }
 }

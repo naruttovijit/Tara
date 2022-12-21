@@ -1,5 +1,7 @@
 ﻿@page "/Data/ProjectMemberAssignAwarded/{id:int}"
 
+@implements IDisposable;
+
 @using Data;
 @using ModelM2s;
 @using ModelM4s;
@@ -8,78 +10,117 @@
 @inject NavigationManager NavManager
 
 <h3>Project Sub Detail</h3>
-<br />
+
 @if (awarded.Id > 0)
 {
-    <p font-size:25px> <b>Project Sub Running Number :</b> @awarded.ProjectSubProjectTl.ProjectSubRunNo  </p>
-    <p font-size:25px> <b>Project Sub Name :</b> @awarded.ProjectSubProjectTl.ProjectSubName  </p>
-    <p font-size:25px> <b>Description :</b> @awarded.ProjectSubProjectTl.Description  </p>
-    <p font-size:25px> <b>Remarked :</b> @awarded.ProjectSubProjectTl.Remark </p>
-
-    @if (string.IsNullOrEmpty(awarded.ProjectSubProjectTl.Budget.ToString()))
-    {
-        <p font-size:25px> <b>Budget :</b> 0 THB</p>
-    }
-    else
-    {
-        <p font-size:25px> <b>Budget :</b> @awarded.ProjectSubProjectTl.Budget THB</p>
-    }
-
-    <p font-size:25px> <b>Status :</b> @awarded.ProjectSubProjectTl.ProjectSubStatus</p>
-
-    @if (string.IsNullOrEmpty(awarded.ProjectSubProjectTl.PlanStartDate.ToString()))
-    {
-        <p font-size:25px> <b>Started Date :</b> Not Planed</p>
-    }
-    else
-    {
-        <p font-size:25px> <b>Started Date :</b> @awarded.ProjectSubProjectTl.PlanStartDate</p>
-    }
-
-    @if (string.IsNullOrEmpty(awarded.ProjectSubProjectTl.PlanFinishDate.ToString()))
-    {
-        <p font-size:25px> <b>Finished Date :</b> Not Planed</p>
-    }
-    else
-    {
-        <p font-size:25px> <b>Finished Date :</b> @awarded.ProjectSubProjectTl.PlanFinishDate</p>
-    }
+    <div class="container">
+        <div class="row">
+            <div class="col-2"><p><b>Running Number :</b></p></div>
+            <div class="col">@awarded.ProjectSubProjectTl.ProjectSubRunNo</div>
+        </div>
+        <div class="row">
+            <div class="col-2"><p><b>Project Sub Name :</b></p></div>
+            <div class="col">@awarded.ProjectSubProjectTl.ProjectSubName</div>
+        </div>
+        <div class="row">
+            <div class="col-2"><p><b>Description :</b></p></div>
+            <div class="col">@awarded.ProjectSubProjectTl.Description</div>
+        </div>
+        <div class="row">
+            <div class="col-2"><p><b>Remarked :</b></p></div>
+            <div class="col">@awarded.ProjectSubProjectTl.Remark</div>
+        </div>
+        <div class="row">
+            <div class="col-2"><p><b>Budget :</b></p></div>
+            @if (string.IsNullOrEmpty(awarded.ProjectSubProjectTl.Budget.ToString()))
+            {
+                <div class="col">0 THB</div>
+            }
+            else
+            {
+                <div class="col">@awarded.ProjectSubProjectTl.Budget THB</div>
+            }
+        </div>
+        <div class="row">
+            <div class="col-2"><p><b>Status :</b></p></div>
+            <div class="col">@awarded.ProjectSubProjectTl.ProjectSubStatus</div>
+        </div>
+        <div class="row">
+            <div class="col-2"><p><b>Started Date :</b></p></div>
+            @if (string.IsNullOrEmpty(awarded.ProjectSubProjectTl.PlanStartDate.ToString()))
+            {
+                <div class="col">Not Planed</div>
+            }
+            else
+            {
+                <div class="col">@awarded.ProjectSubProjectTl.PlanStartDate</div>
+            }
+        </div>
+        <div class="row">
+            <div class="col-2"><p><b>Finished Date :</b></p></div>
+            @if (string.IsNullOrEmpty(awarded.ProjectSubProjectTl.PlanFinishDate.ToString()))
+            {
+                <div class="col">Not Planed</div>
+            }
+            else
+            {
+                <div class="col">@awarded.ProjectSubProjectTl.PlanFinishDate</div>
+            }
+        </div>
+    </div>
 }
+<br />
 
-<br />
-<br />
-<br />
 <h3>Member Assignment</h3>
-<br />
 
 @if(awarded.MemberId > 0)
 {
     var item = member.Where(w => w.Id == awarded.MemberId).FirstOrDefault();
-    <p>
-        &nbsp; Company Name TH: @item.CompanyNameTh <br />
-        &nbsp; Company Name EN : @item.CompanyNameEn <br />
-        &nbsp; Telephone : @item.Telephone <br />
-        &nbsp; Email : @item.Email <br />
-        &nbsp; Website : @item.WebSite <br />
-        &nbsp; Facebook : @item.Facebook <br />
-    </p>
+    <div class="container">
+        <div class="row">
+            <div class="col-2"><p><b>Company Name TH :</b></p></div>
+            <div class="col">@item.CompanyNameTh</div>
+        </div>
+        <div class="row">
+            <div class="col-2"><p><b>Company Name EN :</b></p></div>
+            <div class="col">@item.CompanyNameEn</div>
+        </div>
+        <div class="row">
+            <div class="col-2"><p><b>Telephone :</b></p></div>
+            <div class="col">@item.Telephone</div>
+        </div>
+        <div class="row">
+            <div class="col-2"><p><b>Email :</b></p></div>
+            <div class="col">@item.Email</div>
+        </div>
+        <div class="row">
+            <div class="col-2"><p><b>Website :</b></p></div>
+            <div class="col">@item.WebSite</div>
+        </div>
+        <div class="row">
+            <div class="col-2"><p><b>Facebook :</b></p></div>
+            <div class="col">@item.Facebook</div>
+        </div>
+    </div>
 }
+
 @if (awarded.Awarded == "Y")
 {
 
 }
 else
 {
-    <br />
-    <p>Is Awarded ?</p>
-    <br />
-    <button @onclick="()=>UpdateAwarded()">Yes</button>
-    <button @onclick="()=>GoBack()">No</button>
+    <div class="container">
+        <div class="row">
+            <p>Is Awarded ?</p>
+        </div>
+        <div class="row">
+            <button @onclick="()=>UpdateAwarded()">Yes</button>
+            <button @onclick="()=>GoBack()">No</button>
+        </div>
+    </div>
 }
-
 <br />
-<br />
-
 
 
 @code {
@@ -143,4 +184,8 @@ else
         NavManager.NavigateTo("/Data/MemberAssign/" + awarded.ProjectSubProjectTlid.ToString());
     }
 
+    public void Dispose()
+    {
+        Console.WriteLine("Disconnected");
+    }
 }

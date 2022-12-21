@@ -8,7 +8,6 @@ namespace Qlist.ModelM4s
         public MemberProductService()
         {
             BizBatchingTrns = new HashSet<BizBatchingTrn>();
-            ProductImages = new HashSet<ProductImage>();
         }
 
         public int Id { get; set; }
@@ -22,6 +21,5 @@ namespace Qlist.ModelM4s
 
         public virtual MemberMaster MemberNoNavigation { get; set; }
         public virtual ICollection<BizBatchingTrn> BizBatchingTrns { get; set; }
-        public virtual ICollection<ProductImage> ProductImages { get; set; }
     }
 }

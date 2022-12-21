@@ -48,7 +48,7 @@ namespace Qlist.ModelM4s
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Server=119.59.114.151,10433;Initial Catalog=Tara_member;Persist Security Info=False;User ID=sa;Password=@@11BB22cc");
+                optionsBuilder.UseSqlServer("Server=119.59.114.151,10433;Initial Catalog=Tara_member;Persist Security Info=False;User ID=tara;Password=P@ssw0rd");
             }
         }
 
@@ -412,17 +412,13 @@ namespace Qlist.ModelM4s
 
                 entity.Property(e => e.Id).HasColumnName("id");
 
+                entity.Property(e => e.CategoryId).HasColumnName("CategoryID");
+
                 entity.Property(e => e.CategorySubId).HasColumnName("CategorySubID");
 
                 entity.Property(e => e.MemberNo)
                     .IsRequired()
                     .HasMaxLength(10);
-
-                entity.HasOne(d => d.CategorySub)
-                    .WithMany(p => p.MemberCategories)
-                    .HasForeignKey(d => d.CategorySubId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_MemberCategory_MasterCapabilityCatSub");
 
                 entity.HasOne(d => d.MemberNoNavigation)
                     .WithMany(p => p.MemberCategories)
@@ -620,16 +616,11 @@ namespace Qlist.ModelM4s
 
                 entity.Property(e => e.Image1).HasColumnType("image");
 
-                entity.Property(e => e.ProductServiceId).HasColumnName("ProductServiceID");
+                entity.Property(e => e.ProductId).HasColumnName("ProductID");
 
                 entity.Property(e => e.UpdDate)
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("(getdate())");
-
-                entity.HasOne(d => d.ProductService)
-                    .WithMany(p => p.ProductImages)
-                    .HasForeignKey(d => d.ProductServiceId)
-                    .HasConstraintName("FK_Tara_Product_Image_Tara_Memeber_Product1");
             });
 
             modelBuilder.Entity<TbPosition>(entity =>

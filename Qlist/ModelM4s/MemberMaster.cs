@@ -22,6 +22,7 @@ namespace Qlist.ModelM4s
         public string MemberNo { get; set; }
         public DateTime? MemberStartDate { get; set; }
         public int? MemberType { get; set; }
+        public int? MemberBusinessType { get; set; }
         public string CompanyNameTh { get; set; }
         public string CompanyNameEn { get; set; }
         public string CompanyRegistrationNo { get; set; }
@@ -34,9 +35,9 @@ namespace Qlist.ModelM4s
         public string Email { get; set; }
         public string WebSite { get; set; }
         public string Facebook { get; set; }
-        public bool? IsBoi { get; set; }
-        public bool? IsCoreMemeber { get; set; }
-        public bool? IsEnable { get; set; }
+        public int? IsBoi { get; set; }
+        public int? IsCoreMemeber { get; set; }
+        public int? IsEnable { get; set; }
         public DateTime? ExpiredDate { get; set; }
 
         public virtual ICollection<BizBatchingTrn> BizBatchingTrns { get; set; }

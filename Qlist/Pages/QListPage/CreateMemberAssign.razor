@@ -1,5 +1,7 @@
 ﻿@page "/Data/MemberAssign/{id:int}"
 
+@implements IDisposable;
+
 @using Data;
 @using ModelM2s;
 @using ModelM4s;
@@ -11,7 +13,7 @@
 <h3>Member Assignment</h3>
 <div class="container">
     <div class="row">
-        <div class="col-2"><p>Project Sub Running Number :</p></div>
+        <div class="col-2"><p>Running Number :</p></div>
         <div class="col"><p>@projectsub.ProjectSubRunNo </p></div>
     </div>
 
@@ -34,13 +36,12 @@
         <div class="col-2"><p>Budget :</p></div>
         @if (string.IsNullOrEmpty(projectsub.Budget.ToString()))
         {
-            <div class="col"><p>0</p></div>
+            <div class="col"><p>0 THB</p></div>
         }
         else
         {
-            <div class="col"><p>@projectsub.Budget </p></div>
+            <div class="col"><p>@projectsub.Budget THB</p></div>
         }
-        <div class="col-1"><p>THB</p></div>
     </div>
 
     <div class="row">
@@ -72,9 +73,10 @@
         }
     </div>
 </div>
+<br />
 
 <div class="container">
-    <h4><b>Project Category</b></h4>
+    <h4>Project Category</h4>
     @if (subcapability is null)
     {
         <p><em>No Capability</em></p>
@@ -101,19 +103,20 @@
         </table>
     }
 </div>
+<br />
 
 <div class="container">
     <h4>Member Assignment</h4>
     <div class="row" style="background-color:white; border:solid">
         <table style="width:100%">
         <tr>
-            <th>No.</th>
-            <th>Company Name TH</th>
-            <th>Telephone</th>
-            <th>Comfirm Date</th>
-            <th>Comfirm</th>
-            <th>Awarded</th>
-            <th>Delete</th>
+            <th style="width:10%">No.</th>
+            <th style="width:30%">Company Name TH</th>
+            <th style="width:20%">Telephone</th>
+            <th style="width:10%">Comfirm Date</th>
+            <th class="text-center" style="width:10%">Comfirm</th>
+            <th class="text-center" style="width:10%">Awarded</th>
+            <th class="text-center" style="width:10%">Delete</th>
         </tr>
         @if (projectsub.ProjectSubMemberAsgmts is not null)
         {
@@ -132,22 +135,22 @@
                         <td></td>
                         @if (awarded)
                         {
-                            <td>@list.Awarded</td>
+                            <td class="text-center">@list.Awarded</td>
                         }
                         else
                         {
                             if (list.Id > 0)
                             {
-                                <td><a href="/Data/ProjectMemberAssignAwarded/@list.Id">Link</a></td>
+                                <td class="text-center"><a href="/Data/ProjectMemberAssignAwarded/@list.Id">Link</a></td>
                             }
                         }
                         <td></td>
                     }
                     else
                     {
-                        <td><input type="checkbox" @onchange="EventArgs => { CheckboxClicked(list,EventArgs.Value);}" /></td>
+                        <td class="text-center"><input type="checkbox" @onchange="EventArgs => { CheckboxClicked(list,EventArgs.Value);}" /></td>
                         <td></td>
-                        <td><button @onclick="() => projectsub.ProjectSubMemberAsgmts.Remove(list)">X</button></td>
+                        <td class="text-center"><button @onclick="() => projectsub.ProjectSubMemberAsgmts.Remove(list)">X</button></td>
                     }
                 </tr>
             }
@@ -162,36 +165,41 @@
     </table>
     </div>
 </div>
+<br />
 
 @if (!awarded)
 {
     <div class="container">
-        <div class="row">
-            <EditForm Model="memberassign">
+        <EditForm Model="memberassign">
+            <div class="row">
                 <div class="col-4">
-                    <InputSelect style="width:100%" id="AssignMember" @bind-Value="idMember">
-                        <option value="0">------------Select Member------------</option>
-                        @if (member is not null)
-                        {
-                            foreach (var list in member)
+                    <p>
+                        <InputSelect id="AssignMember" @bind-Value="idMember">
+                            <option value="0">------------Select Member------------</option>
+                            @if (member is not null)
                             {
-                                <option value="@list.Id">@list.CompanyNameTh</option>
+                                foreach (var list in member)
+                                {
+                                    <option value="@list.Id">@list.CompanyNameTh</option>
+                                }
                             }
-                        }
-                    </InputSelect>
+                        </InputSelect>
+                    </p>
                 </div>
                 <div class="col">
                     <button @onclick="()=>AddMember(idMember)">Add Member</button>
                 </div>
-            </EditForm>
-        </div>
-        <div class="row">
-            <button @onclick="()=>UpdateMemberAssign()">Update</button>
-        </div>
+            </div>
+            <div class="row">
+                <p>
+                    <button style="width:10%" @onclick="()=>UpdateMemberAssign()">Update</button>
+                </p>
+            </div>
+        </EditForm>
     </div>
 }
 <br />
-<br />
+
 <button type="submit" class="btn btn-primary" style="float:left;" @onclick="()=>GoBack()">Go Back</button>
 
 
@@ -260,7 +268,8 @@
         {
             sub.Add(list.Id);
         }
-        var result = member.Where(o => o.MemberCategories.Any(m => sub.Contains(m.CategorySubId)));
+
+        var result = member.Where(o => o.MemberCategories.Any(m => sub.Contains(m.CategorySubId.GetValueOrDefault())));
         List<MemberMaster> result2 = result.Where(w => (w.RegisterCapital / projectsub.Budget) <= 10).ToList();
         count = new List<CountAwarded>();
         foreach (var list in result2)
@@ -285,8 +294,8 @@
                 }
             }
         }
-        var min = count.Select(w => w.Count).Where(c => c != null).Min();
-        var max = count.Select(w => w.Count).Where(c => c != null).Max();
+        //var min = count.Select(w => w.Count).Where(c => c != null).Min();
+        //var max = count.Select(w => w.Count).Where(c => c != null).Max();
 
         count = count.OrderBy(n => n.Count).ToList();
 
@@ -328,5 +337,8 @@
         NavManager.NavigateTo("/Data/ProjectSubDetail/" + id.ToString());
     }
 
-
+    public void Dispose()
+    {
+        Console.WriteLine("Disconnected");
+    }
 }

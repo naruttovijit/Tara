@@ -1,5 +1,7 @@
 ﻿@page "/Data/Project"
 
+@implements IDisposable;
+
 @using ModelM2s;
 @using Data;
 
@@ -15,12 +17,12 @@ else
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>Running Number</th>
-                <th>Project Name</th>
-                <th>Remarked</th>
-                <th>Status</th>
-                <th>Project Sub Count</th>
-                <th>Detail</th>
+                <th style="width: 15%">Running Number</th>
+                <th style="width: 25%">Project Name</th>
+                <th style="width: 25%">Remarked</th>
+                <th style="width: 10%">Status</th>
+                <th style="width: 15%" class="text-center">Project Sub Total</th>
+                <th style="width: 10%" class="text-center">Detail</th>
             </tr>
         </thead>
         <tbody>
@@ -31,8 +33,8 @@ else
                     <td>@project.ProjectName</td>
                     <td>@project.Remark</td>
                     <td>@project.ProjectHdstatus</td>
-                    <td>@project.ProjectSubProjectTls.Count()</td>
-                    <td><a href="/Data/ProjectDetail/@project.Id">Link</a></td>
+                    <td class="text-center">@project.ProjectSubProjectTls.Count()</td>
+                    <td class="text-center"><a href="/Data/ProjectDetail/@project.Id">Link</a></td>
                 </tr>
             }
         </tbody>
@@ -46,5 +48,10 @@ else
     {
         project = await pj.GetProjectHD();
         StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        Console.WriteLine("Disconnected");
     }
 }
