@@ -47,11 +47,13 @@ else
     protected override async Task OnInitializedAsync()
     {
         project = await pj.GetProjectHD();
+        project = project.OrderByDescending(n => n.ProjectHdrunNo).ToList();
         StateHasChanged();
     }
 
     public void Dispose()
     {
+        project.Clear();
         Console.WriteLine("Disconnected");
     }
 }

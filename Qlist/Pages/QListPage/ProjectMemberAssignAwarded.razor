@@ -115,8 +115,9 @@ else
             <p>Is Awarded ?</p>
         </div>
         <div class="row">
-            <button @onclick="()=>UpdateAwarded()">Yes</button>
-            <button @onclick="()=>GoBack()">No</button>
+            <div class="col-1"><p><button style="width:100%" @onclick="()=>UpdateAwarded()">Yes</button></p></div>
+            &nbsp;
+            <div class="col-1"><p><button style="width:100%" @onclick="()=>GoBack()">No</button></p></div>
         </div>
     </div>
 }

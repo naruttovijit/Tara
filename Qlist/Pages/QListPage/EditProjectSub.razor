@@ -112,43 +112,52 @@
        </div>
     </div>
     <br />
+    <br />
 
     <h4>Project Document</h4>
     <div class="container">
         <div class="row">
-            <table class="table table-striped" style="background-color:white; border:solid">
-                <thead>
-                    <tr>
-                        <th style ="width: 50%">Document Name</th>
-                        <th style="width: 40%">Description</th>
-                        <th style="width: 10%">Delete</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @if (showdoc is not null)
-                    {
-                        foreach (var doc in showdoc)
+            <p>
+                <table class="table table-striped" style="background-color:white; border:solid">
+                    <thead>
+                        <tr>
+                            <th style="width: 50%">Document Name</th>
+                            <th style="width: 40%">Description</th>
+                            <th class="text-center" style="width: 10%">Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (showdoc is not null)
                         {
-                            <tr>
-                                @if (doc.DocumentPath.ToUpper().Contains("PDFFILES"))
-                                {
-                                    <td><a href="@doc.DocumentPath">Link</a></td>
-                                }
-                                else
-                                {
-                                    <td><img src="@doc.DocumentPath" width="300px" /></td>
-                                }
-                                <td>@doc.Description</td>
-                                <td class="text-center"><button @onclick="() => showdoc.Remove(doc)">X</button></td>
-                            </tr>
+                            foreach (var doc in showdoc)
+                            {
+                                <tr>
+                                    @if (doc.DocumentPath.ToUpper().Contains("PDFFILES"))
+                                    {
+                                        <td><a href="@doc.DocumentPath">Link</a></td>
+                                    }
+                                    else
+                                    {
+                                        <td><img src="@doc.DocumentPath" width="300px" /></td>
+                                    }
+                                    <td>@doc.Description</td>
+                                    <td class="text-center"><button @onclick="() => showdoc.Remove(doc)">X</button></td>
+                                </tr>
+                            }
                         }
-                    }
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </p>
         </div>
         <div class="row">
             <div class="col-5"><p><InputFile OnChange="OnInputFileChange"/></p></div>
-            <div class="col"><button type="submit" @onclick="OnSubmit">Upload Selected File</button></div>
+        </div>
+        <div class="row">
+            <div class="col-2"><p>Document Description :</p></div>
+            <div class="col"><InputText style="width: 100%" id="docdesc" @bind-Value="DocDesc"></InputText></div>
+        </div>
+        <div class="row">
+            <p><button type="submit" @onclick="OnSubmit">Upload Selected File</button></p>
         </div>
     </div>
     <br />
@@ -176,7 +185,8 @@
     int categoryid;
 
     string Message = "No file(s) selected";
-    IReadOnlyList<IBrowserFile> selectedFiles;
+    string DocDesc;
+    IBrowserFile selectedFile;
 
     protected override async Task OnInitializedAsync()
     {
@@ -212,20 +222,20 @@
 
     private void OnInputFileChange(InputFileChangeEventArgs e)
     {
-        selectedFiles = e.GetMultipleFiles();
-        Message = $"{selectedFiles.Count} file selected";
+        selectedFile = e.GetMultipleFiles()[0];
+        Message = $"{selectedFile.Name} ({selectedFile.Size} bytes) file selected";
         this.StateHasChanged();
     }
 
     private async void OnSubmit() //Upload file (image,pdf) to local folders
     {
-        foreach (var file in selectedFiles)
+        if (selectedFile != null)
         {
-            Stream stream = file.OpenReadStream();
-            string filename = projectsub.ProjectSubRunNo + "_" + file.Name;
+            Stream stream = selectedFile.OpenReadStream(maxAllowedSize: 1024 * 1024 * 100);
+            string filename = projectsub.ProjectSubRunNo + "_" + selectedFile.Name;
             string filetype = string.Empty;
             string filepath = string.Empty;
-            if (file.Name.ToUpper().Contains("PDF"))
+            if (selectedFile.Name.ToUpper().Contains("PDF"))
             {
                 filetype = "\\PDFFiles\\" + filename;
                 filepath = "/PDFFiles/" + filename;
@@ -241,8 +251,10 @@
             stream.Close();
             fs.Close();
 
-            projectsub.ProjectDocuments.Add(new ProjectDocument() { ProjectSubProjectTlid = projectsub.Id, DocumentPath = filepath, Active = "Y", EditorId = 1 });
+            projectsub.ProjectDocuments.Add(new ProjectDocument() { ProjectSubProjectTlid = projectsub.Id, DocumentPath = filepath, Description = DocDesc, Active = "Y", EditorId = 1 });
+            showdoc.Add(new ProjectDocument() { ProjectSubProjectTlid = projectsub.Id, DocumentPath = filepath, Description = DocDesc, Active = "Y", EditorId = 1 });
         }
+        
         this.StateHasChanged();
     }
 

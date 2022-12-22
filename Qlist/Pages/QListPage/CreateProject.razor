@@ -151,18 +151,10 @@
         foreach (var sub in formmain.ProjectSubProjectTls)
         {
             <div class="container" style="background-color:white; border:solid">
-                <div class="row">
-                    <div class="col-1"><button style="align-items:end" @onclick="() => formmain.ProjectSubProjectTls.Remove(sub)">Delete</button></div>
-                </div>
-
-                <div class="row">
-                    <div class="col-2"><p>Sub Running No. :</p></div>
-                    <div class="col"><p>@sub.ProjectSubRunNo</p></div>
-                </div>
-
                  <div class="row">
                     <div class="col-2"><p>Project Sub Name :</p></div>
                     <div class="col"><p>@sub.ProjectSubName</p></div>
+                    <div class="col-1"> <div class="col-1"><button style="align-items:end" @onclick="() => formmain.ProjectSubProjectTls.Remove(sub)">Delete</button></div></div>
                 </div>
 
                 <div class="row">
@@ -236,14 +228,13 @@
                     <br />
                 }
             </div>
-        }
-        <br />
-        <div class="container">
-            <div class="row-cols-4">
-                <button @onclick="SaveAll">Submit</button>
+            <br />
+            <div class="container">
+                <div class="row-cols-4">
+                    <button @onclick="SaveAll">Submit</button>
+                </div>
             </div>
-        </div>
-        
+        }
     }
 
     <br />
@@ -341,15 +332,20 @@
                 </div>
                 <br>
                 <div class="container">
-                    <InputFile OnChange="OnInputFileChange" />
-                    @if (uploadfile)
-                    {
-                        <button type="submit" @onclick="OnSubmit">Upload Selected File</button>
-                    }
+                    <div class="row">
+                        <p><InputFile OnChange="OnInputFileChange" /></p>
+                    </div>
+                    <div class="row">
+                        <div class="col-2"><p>Document Description :</p></div>
+                        <div class="col"><InputText style="width: 100%" id="docdesc" @bind-Value="DocDesc"></InputText></div>
+                    </div>
+                    <div class="row">
+                        <p><button type="submit" @onclick="OnSubmit">Upload Selected File</button></p>
+                    </div>
                 </div>
                 <br>
                 <div class="container">
-                    <button @onclick="SaveProjectSub">Add Project Sub</button>
+                    <p><button @onclick="SaveProjectSub">Add Project Sub</button></p>
                 </div>
                 <br>
             </div>
@@ -385,6 +381,7 @@
     private bool uploadfile = true;
 
     string Message = "No file selected";
+    string DocDesc;
     IBrowserFile selectedFile;
 
     protected override async Task OnInitializedAsync()
@@ -559,7 +556,7 @@
             stream.Close();
             fs.Close();
 
-            formsub.ProjectDocuments.Add(new ProjectDocument() { ProjectSubProjectTlid = formsub.Id, DocumentPath = filepath, Active = "Y", EditorId = 1 });
+            formsub.ProjectDocuments.Add(new ProjectDocument() { ProjectSubProjectTlid = formsub.Id, DocumentPath = filepath, Description = DocDesc, Active = "Y", EditorId = 1 });
         }
 
         uploadfile = false;
