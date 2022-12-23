@@ -11,8 +11,8 @@
 @inject ProjectData pj;
 @inject NavigationManager NavManager
 
-<h3>Edit Project</h3>
 <br />
+<h3>Edit Project</h3>
 <EditForm Model="projecthd">
     <div class="container">
         <div class="row">
@@ -221,7 +221,7 @@
             });
             projecthd.CustomerInfo = Newtonsoft.Json.JsonConvert.SerializeObject(membersave);
         }
-        
+
         projecthd.ContactInfo = Newtonsoft.Json.JsonConvert.SerializeObject(contact);
         projecthd.ProjectHdstatus = "Open";
         projecthd.Active = "Y";
@@ -233,6 +233,11 @@
 
     public void Dispose()
     {
+        if (membersave is not null) membersave.Clear();
+        if (memberall is not null) memberall.Clear();
+        if (contactall is not null) contactall.Clear();
+        if (member is not null) member.Clear();
+        if (contact is not null) contact.Clear();
         Console.WriteLine("Disconnected");
     }
 }

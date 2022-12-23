@@ -10,7 +10,8 @@
 @inject ProjectData pj;
 @inject NavigationManager NavManager
 
-<h3>Member Assignment</h3>
+<br />
+<h3>Project Sub Member Assignment</h3>
 <div class="container">
     <div class="row">
         <div class="col-2"><p>Running Number :</p></div>
@@ -320,7 +321,7 @@
         projectsub.ProjectSubProjectTlhistories.Add(new ProjectSubProjectTlhistory() { ProjectSubProjectTlid = projectsub.Id, Remark = "Update Member Assignments", EditorId = 1 });
         projectsub.ProjectSubStatus = "Member Assignment";
         var result = await pj.SaveSubProject(projectsub);
-        
+
         await Initial();
     }
 
@@ -339,6 +340,17 @@
 
     public void Dispose()
     {
+        if (CheckBox is not null) CheckBox.Clear();
+        if (capability is not null) capability.Clear();
+        if (subcapability is not null) subcapability.Clear();
+        if (member is not null) member.Clear();
+        if (allassign is not null) allassign.Clear();
+        if (allawarded is not null) allawarded.Clear();
+        if (count is not null) count.Clear();
+        if (contact is not null) contact.Clear();
+        if (assign is not null) assign.Clear();
+        if (membercap is not null) membercap.Clear();
+        
         Console.WriteLine("Disconnected");
     }
 }

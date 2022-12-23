@@ -10,6 +10,7 @@
 @inject IWebHostEnvironment env
 @inject NavigationManager NavManager
 
+<br />
 <h3>Edit Project Sub</h3>
 
 <EditForm Model="projectsub">
@@ -254,7 +255,7 @@
             projectsub.ProjectDocuments.Add(new ProjectDocument() { ProjectSubProjectTlid = projectsub.Id, DocumentPath = filepath, Description = DocDesc, Active = "Y", EditorId = 1 });
             showdoc.Add(new ProjectDocument() { ProjectSubProjectTlid = projectsub.Id, DocumentPath = filepath, Description = DocDesc, Active = "Y", EditorId = 1 });
         }
-        
+
         this.StateHasChanged();
     }
 
@@ -267,6 +268,12 @@
 
     public void Dispose()
     {
+        if (projectdoc is not null) projectdoc.Clear();
+        if (projectra is not null) projectra.Clear();
+        if (category is not null) category.Clear();
+        if (subcategory is not null) subcategory.Clear();
+        if (showdoc is not null) showdoc.Clear();
+        if (ratype is not null) ratype.Clear();
         Console.WriteLine("Disconnected");
     }
 }

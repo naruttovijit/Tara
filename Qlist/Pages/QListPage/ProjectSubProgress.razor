@@ -9,6 +9,7 @@
 @inject ProjectData pj;
 @inject NavigationManager NavManager
 
+<br />
 <h3>Project Sub Update Progress</h3>
 <EditForm Model="projectsub">
     <div class="container">
@@ -224,6 +225,8 @@
 
     public void Dispose()
     {
+        if (subcapability is not null) subcapability.Clear();
+        if (capability is not null) capability.Clear();
         Console.WriteLine("Disconnected");
     }
 }

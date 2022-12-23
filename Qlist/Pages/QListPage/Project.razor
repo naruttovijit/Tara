@@ -7,7 +7,8 @@
 
 @inject ProjectData pj;
 
-<h3>Project</h3>
+<br />
+<h3>Queue List</h3>
 @if (project is null)
 {
     <p><em>Loading...</em></p>
@@ -53,7 +54,7 @@ else
 
     public void Dispose()
     {
-        project.Clear();
+        if (project is not null) project.Clear();
         Console.WriteLine("Disconnected");
     }
 }

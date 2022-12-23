@@ -11,6 +11,7 @@
 @inject ProjectData pj;
 @inject NavigationManager NavManager
 
+<br />
 <h3>Create New Project</h3>
 
 @*Create Project HD*@
@@ -150,7 +151,7 @@
     {
         foreach (var sub in formmain.ProjectSubProjectTls)
         {
-            <div class="container" style="background-color:white; border:solid">
+            <div class="container" style="background-color:lightgray; border:solid">
                  <div class="row">
                     <div class="col-2"><p>Project Sub Name :</p></div>
                     <div class="col"><p>@sub.ProjectSubName</p></div>
@@ -239,7 +240,7 @@
 
     <br />
     <br />
-    <div class="container" style="background-color:papayawhip; border:solid">
+    <div class="container" style="background-color:white; border:solid">
         <h4>Create Project Sub</h4>
         <EditForm Model="formsub">
             <div class="container">
@@ -290,7 +291,7 @@
                 <div class="container" style="background-color:white; border:solid">
                     <h4>Capability</h4>
                     <p>
-                        <table style="width:100%">
+                        <table style="width:100%; background-color:white">
                             <tr>
                                 <th style="width: 45%">Capability</th>
                                 <th style="width: 45%">Capability Sub</th>
@@ -367,7 +368,6 @@
     private List<MemberContactPerson> contact;
     private List<MemberContactPerson> allcontact;
     private List<MasterCapabilityCat> category;
-    private List<MasterCapabilityCat> sortedcategory;
     private List<RatypeMaster> ratype;
     private List<MemberMaster> member;
     private List<MasterCapabilityCatSub> showcate;
@@ -447,36 +447,40 @@
         HDSave();
         Memberdata = new List<MemberMaster>();
         var result = member.Where(c => c.Id == customerid).FirstOrDefault();
-        Memberdata.Add(new MemberMaster()
-            {
-            Id = result.Id,
-            CreateDate = result.CreateDate,
-            MemberNo = result.MemberNo,
-            MemberType = result.MemberType,
-            CompanyNameTh = result.CompanyNameTh,
-            CompanyNameEn = result.CompanyNameEn,
-            CompanyRegistrationNo = result.CompanyRegistrationNo,
-            RegisterCapital = result.RegisterCapital,
-            ThaiCapitalPercentage = result.ThaiCapitalPercentage,
-            EstablishYear = result.EstablishYear,
-            FixedAsset = result.FixedAsset,
-            NumberofEmployee = result.NumberofEmployee,
-            Telephone = result.Telephone,
-            Email = result.Email,
-            WebSite = result.WebSite,
-            Facebook = result.Facebook,
-            IsBoi = result.IsBoi,
-            IsCoreMemeber = result.IsCoreMemeber,
-            IsEnable = result.IsEnable,
-            ExpiredDate = result.ExpiredDate
-        });
+        if (result is not null)
+        {
+            Memberdata.Add(new MemberMaster()
+                {
+                    Id = result.Id,
+                    CreateDate = result.CreateDate,
+                    MemberNo = result.MemberNo,
+                    MemberType = result.MemberType,
+                    CompanyNameTh = result.CompanyNameTh,
+                    CompanyNameEn = result.CompanyNameEn,
+                    CompanyRegistrationNo = result.CompanyRegistrationNo,
+                    RegisterCapital = result.RegisterCapital,
+                    ThaiCapitalPercentage = result.ThaiCapitalPercentage,
+                    EstablishYear = result.EstablishYear,
+                    FixedAsset = result.FixedAsset,
+                    NumberofEmployee = result.NumberofEmployee,
+                    Telephone = result.Telephone,
+                    Email = result.Email,
+                    WebSite = result.WebSite,
+                    Facebook = result.Facebook,
+                    IsBoi = result.IsBoi,
+                    IsCoreMemeber = result.IsCoreMemeber,
+                    IsEnable = result.IsEnable,
+                    ExpiredDate = result.ExpiredDate
+                });
+        }
+        
         formmain.CustomerInfo = Newtonsoft.Json.JsonConvert.SerializeObject(Memberdata);
         formmain.ContactInfo = Newtonsoft.Json.JsonConvert.SerializeObject(ListContact);
         formmain.ProjectHdstatus = "Open";
         formmain.Active = "Y";
         formmain.ProjectHdhistories.Add(new ProjectHdhistory() { ProjectHdid = formmain.Id, Remark = "Create", EditorId = 1});
         formsub.ProjectHdid = formmain.Id;
-        
+
         Showsub();
         formsub.ProjectSubName = formmain.ProjectName;
         formsub.Description = formmain.Description;
@@ -565,6 +569,17 @@
 
     public void Dispose()
     {
+        if (ListContact is not null) ListContact.Clear();
+        if (ListCategory is not null) ListCategory.Clear();
+        if (Memberdata is not null) Memberdata.Clear();
+        if (HDhis is not null) HDhis.Clear();
+        if (Subhis is not null) Subhis.Clear();
+        if (contact is not null) contact.Clear();
+        if (allcontact is not null) allcontact.Clear();
+        if (category is not null) category.Clear();
+        if (ratype is not null) ratype.Clear();
+        if (member is not null) member.Clear();
+        if (showcate is not null) showcate.Clear();
         Console.WriteLine("Disconnected");
     }
 }

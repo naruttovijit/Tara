@@ -9,7 +9,8 @@
 @inject ProjectData pj;
 @inject NavigationManager NavManager
 
-<h3>Project Sub Detail</h3>
+<br />
+<h3>Project Sub Member Assignment Awarded</h3>
 
 @if (awarded.Id > 0)
 {
@@ -138,6 +139,7 @@ else
     {
         await Initial();
     }
+
     private async Task Initial()
     {
         awarded = await pj.GetMemberAssign(id);
@@ -187,6 +189,7 @@ else
 
     public void Dispose()
     {
+        if (member is not null) member.Clear();
         Console.WriteLine("Disconnected");
     }
 }
