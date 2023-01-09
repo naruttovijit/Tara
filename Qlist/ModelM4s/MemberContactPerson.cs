@@ -20,10 +20,10 @@ namespace Qlist.ModelM4s
         public string LineId { get; set; }
         public string FaceBook { get; set; }
         public string Linkedin { get; set; }
-        public bool? IsOwner { get; set; }
+        public int? IsOwner { get; set; }
         public double? ShareBaht { get; set; }
         public int? ShaerPercent { get; set; }
 
-        public virtual MemberMaster MemberNoNavigation { get; set; }
+        public virtual MemberMasterJan12023 MemberNoNavigation { get; set; }
     }
 }

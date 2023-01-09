@@ -7,9 +7,10 @@ namespace Qlist.ModelM4s
     {
         public int Id { get; set; }
         public string MemberNo { get; set; }
-        public int CategoryId { get; set; }
+        public int? CategoryId { get; set; }
         public int? CategorySubId { get; set; }
 
+        public virtual MasterCapabilityCatSub CategorySub { get; set; }
         public virtual MemberMaster MemberNoNavigation { get; set; }
     }
 }

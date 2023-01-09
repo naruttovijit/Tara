@@ -1,0 +1,12 @@
+﻿@inherits LayoutComponentBase
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<div class="page">
+    <Radzen.Blazor.RadzenDialog />
+    <div class="container">
+        <main role="main">
+            @Body
+        </main>
+    </div>
+</div>
+

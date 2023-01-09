@@ -17,10 +17,15 @@ namespace Qlist.ModelM4s
         }
 
         public virtual DbSet<Application> Applications { get; set; }
-        public virtual DbSet<BizBatchingTrn> BizBatchingTrns { get; set; }
+        public virtual DbSet<BizMatching> BizMatchings { get; set; }
+        public virtual DbSet<BizMatchingTrn> BizMatchingTrns { get; set; }
         public virtual DbSet<Certification> Certifications { get; set; }
+        public virtual DbSet<Company> Companies { get; set; }
         public virtual DbSet<CompanyImage> CompanyImages { get; set; }
+        public virtual DbSet<CompanyProfile> CompanyProfiles { get; set; }
         public virtual DbSet<Customer> Customers { get; set; }
+        public virtual DbSet<Employee> Employees { get; set; }
+        public virtual DbSet<ImageFile> ImageFiles { get; set; }
         public virtual DbSet<Industry> Industries { get; set; }
         public virtual DbSet<MasterBizType> MasterBizTypes { get; set; }
         public virtual DbSet<MasterCapabilityCat> MasterCapabilityCats { get; set; }
@@ -30,15 +35,20 @@ namespace Qlist.ModelM4s
         public virtual DbSet<MasterProvince> MasterProvinces { get; set; }
         public virtual DbSet<MasterRole> MasterRoles { get; set; }
         public virtual DbSet<MasterTambon> MasterTambons { get; set; }
+        public virtual DbSet<MasterType> MasterTypes { get; set; }
         public virtual DbSet<MemberAddress> MemberAddresses { get; set; }
         public virtual DbSet<MemberBizType> MemberBizTypes { get; set; }
         public virtual DbSet<MemberCategory> MemberCategories { get; set; }
         public virtual DbSet<MemberContactPerson> MemberContactPeople { get; set; }
+        public virtual DbSet<MemberDebt> MemberDebts { get; set; }
         public virtual DbSet<MemberMaster> MemberMasters { get; set; }
+        public virtual DbSet<MemberMasterJan12023> MemberMasterJan12023s { get; set; }
         public virtual DbSet<MemberPaymentTrn> MemberPaymentTrns { get; set; }
         public virtual DbSet<MemberProduct> MemberProducts { get; set; }
         public virtual DbSet<MemberProductService> MemberProductServices { get; set; }
+        public virtual DbSet<Mou> Mous { get; set; }
         public virtual DbSet<ProductImage> ProductImages { get; set; }
+        public virtual DbSet<SlipImage> SlipImages { get; set; }
         public virtual DbSet<TbPosition> TbPositions { get; set; }
         public virtual DbSet<Technology> Technologies { get; set; }
         public virtual DbSet<User> Users { get; set; }
@@ -65,7 +75,38 @@ namespace Qlist.ModelM4s
                     .HasColumnName("Application");
             });
 
-            modelBuilder.Entity<BizBatchingTrn>(entity =>
+            modelBuilder.Entity<BizMatching>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToTable("BizMatching");
+
+                entity.Property(e => e.Id)
+                    .ValueGeneratedOnAdd()
+                    .HasColumnName("id");
+
+                entity.Property(e => e.LineId)
+                    .HasMaxLength(50)
+                    .HasColumnName("LineID");
+
+                entity.Property(e => e.MemberName).HasMaxLength(100);
+
+                entity.Property(e => e.MemberNo).HasMaxLength(20);
+
+                entity.Property(e => e.Name).HasMaxLength(100);
+
+                entity.Property(e => e.Product).HasMaxLength(50);
+
+                entity.Property(e => e.Requirement).HasMaxLength(500);
+
+                entity.Property(e => e.Telephone).HasMaxLength(50);
+
+                entity.Property(e => e.TransDate)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+            });
+
+            modelBuilder.Entity<BizMatchingTrn>(entity =>
             {
                 entity.Property(e => e.Id).HasColumnName("id");
 
@@ -82,17 +123,17 @@ namespace Qlist.ModelM4s
                     .HasDefaultValueSql("(getdate())");
 
                 entity.HasOne(d => d.Customer)
-                    .WithMany(p => p.BizBatchingTrns)
+                    .WithMany(p => p.BizMatchingTrns)
                     .HasForeignKey(d => d.CustomerId)
                     .HasConstraintName("FK_Tara_Biz_Matching_Trans_Tara_Customer");
 
                 entity.HasOne(d => d.MemberNoNavigation)
-                    .WithMany(p => p.BizBatchingTrns)
+                    .WithMany(p => p.BizMatchingTrns)
                     .HasForeignKey(d => d.MemberNo)
                     .HasConstraintName("FK_Tara_Biz_Matching_Trans_Tara_Member");
 
                 entity.HasOne(d => d.Product)
-                    .WithMany(p => p.BizBatchingTrns)
+                    .WithMany(p => p.BizMatchingTrns)
                     .HasForeignKey(d => d.ProductId)
                     .HasConstraintName("FK_BizBatchingTrns_MemberProductService");
             });
@@ -106,6 +147,25 @@ namespace Qlist.ModelM4s
                 entity.Property(e => e.Certification1)
                     .HasMaxLength(255)
                     .HasColumnName("Certification");
+            });
+
+            modelBuilder.Entity<Company>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToTable("Company");
+
+                entity.Property(e => e.Address).HasMaxLength(250);
+
+                entity.Property(e => e.Country).HasMaxLength(250);
+
+                entity.Property(e => e.Id)
+                    .ValueGeneratedOnAdd()
+                    .HasColumnName("id");
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(100);
             });
 
             modelBuilder.Entity<CompanyImage>(entity =>
@@ -122,6 +182,21 @@ namespace Qlist.ModelM4s
                     .WithMany(p => p.CompanyImages)
                     .HasForeignKey(d => d.MemberNo)
                     .HasConstraintName("FK_Tara_Company_Image_Tara_Member");
+            });
+
+            modelBuilder.Entity<CompanyProfile>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToTable("CompanyProfile");
+
+                entity.Property(e => e.Id)
+                    .ValueGeneratedOnAdd()
+                    .HasColumnName("id");
+
+                entity.Property(e => e.MemberNo)
+                    .IsRequired()
+                    .HasMaxLength(50);
             });
 
             modelBuilder.Entity<Customer>(entity =>
@@ -151,6 +226,46 @@ namespace Qlist.ModelM4s
                 entity.Property(e => e.Name).HasMaxLength(50);
 
                 entity.Property(e => e.Telephone).HasMaxLength(20);
+            });
+
+            modelBuilder.Entity<Employee>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToTable("Employee");
+
+                entity.Property(e => e.Age).HasColumnName("age");
+
+                entity.Property(e => e.Id)
+                    .ValueGeneratedOnAdd()
+                    .HasColumnName("id");
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.Position).HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<ImageFile>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToTable("ImageFile");
+
+                entity.Property(e => e.Base64data).HasColumnName("base64data");
+
+                entity.Property(e => e.ContentType)
+                    .HasMaxLength(50)
+                    .HasColumnName("contentType");
+
+                entity.Property(e => e.FileName)
+                    .HasMaxLength(50)
+                    .HasColumnName("fileName");
+
+                entity.Property(e => e.Id)
+                    .ValueGeneratedOnAdd()
+                    .HasColumnName("id");
             });
 
             modelBuilder.Entity<Industry>(entity =>
@@ -341,44 +456,48 @@ namespace Qlist.ModelM4s
                     .HasConstraintName("FK_MasterTambon_MasterDistrict");
             });
 
+            modelBuilder.Entity<MasterType>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToTable("MasterType");
+
+                entity.Property(e => e.Description).HasMaxLength(50);
+
+                entity.Property(e => e.Id)
+                    .ValueGeneratedOnAdd()
+                    .HasColumnName("id");
+
+                entity.Property(e => e.MemberType).HasMaxLength(50);
+            });
+
             modelBuilder.Entity<MemberAddress>(entity =>
             {
+                entity.HasNoKey();
+
                 entity.ToTable("MemberAddress");
 
-                entity.Property(e => e.Id).HasColumnName("id");
+                entity.Property(e => e.AddressNo).HasMaxLength(255);
 
-                entity.Property(e => e.AddressNo).HasMaxLength(250);
+                entity.Property(e => e.Email).HasMaxLength(255);
 
-                entity.Property(e => e.Email).HasMaxLength(30);
+                entity.Property(e => e.Id)
+                    .ValueGeneratedOnAdd()
+                    .HasColumnName("id");
 
-                entity.Property(e => e.MemberNo)
-                    .IsRequired()
-                    .HasMaxLength(10);
+                entity.Property(e => e.MemberNo).HasMaxLength(255);
 
-                entity.Property(e => e.Moo).HasMaxLength(20);
+                entity.Property(e => e.Moo).HasMaxLength(255);
 
-                entity.Property(e => e.PostCode).HasMaxLength(10);
+                entity.Property(e => e.Road).HasMaxLength(255);
 
-                entity.Property(e => e.Road).HasMaxLength(50);
-
-                entity.Property(e => e.Soi).HasMaxLength(50);
+                entity.Property(e => e.Soi).HasMaxLength(255);
 
                 entity.Property(e => e.TambonId).HasColumnName("TambonID");
 
-                entity.Property(e => e.Telephone).HasMaxLength(50);
+                entity.Property(e => e.Telephone).HasMaxLength(255);
 
-                entity.Property(e => e.WebSite).HasMaxLength(50);
-
-                entity.HasOne(d => d.MemberNoNavigation)
-                    .WithMany(p => p.MemberAddresses)
-                    .HasForeignKey(d => d.MemberNo)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Tara_Member_Address_Tara_Member");
-
-                entity.HasOne(d => d.Tambon)
-                    .WithMany(p => p.MemberAddresses)
-                    .HasForeignKey(d => d.TambonId)
-                    .HasConstraintName("FK_MemberAddress_MasterTambon");
+                entity.Property(e => e.WebSite).HasMaxLength(255);
             });
 
             modelBuilder.Entity<MemberBizType>(entity =>
@@ -408,22 +527,28 @@ namespace Qlist.ModelM4s
 
             modelBuilder.Entity<MemberCategory>(entity =>
             {
-                entity.ToTable("MemberCategory");
+                entity.HasNoKey();
 
-                entity.Property(e => e.Id).HasColumnName("id");
+                entity.ToTable("MemberCategory");
 
                 entity.Property(e => e.CategoryId).HasColumnName("CategoryID");
 
                 entity.Property(e => e.CategorySubId).HasColumnName("CategorySubID");
 
-                entity.Property(e => e.MemberNo)
-                    .IsRequired()
-                    .HasMaxLength(10);
+                entity.Property(e => e.Id)
+                    .ValueGeneratedOnAdd()
+                    .HasColumnName("id");
+
+                entity.Property(e => e.MemberNo).HasMaxLength(10);
+
+                entity.HasOne(d => d.CategorySub)
+                    .WithMany()
+                    .HasForeignKey(d => d.CategorySubId)
+                    .HasConstraintName("FK_MemberCategory_MasterCapabilityCatSub1");
 
                 entity.HasOne(d => d.MemberNoNavigation)
-                    .WithMany(p => p.MemberCategories)
+                    .WithMany()
                     .HasForeignKey(d => d.MemberNo)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_MemberCategory_MemberMaster");
             });
 
@@ -480,12 +605,73 @@ namespace Qlist.ModelM4s
                     .HasConstraintName("FK_Tara_Contact_Person_Tara_Member");
             });
 
+            modelBuilder.Entity<MemberDebt>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToTable("MemberDebt");
+
+                entity.Property(e => e.DebtDescription).HasMaxLength(50);
+
+                entity.Property(e => e.Id)
+                    .ValueGeneratedOnAdd()
+                    .HasColumnName("id");
+
+                entity.Property(e => e.MemberNo).HasMaxLength(10);
+            });
+
             modelBuilder.Entity<MemberMaster>(entity =>
+            {
+                entity.HasKey(e => e.MemberNo);
+
+                entity.ToTable("MemberMaster");
+
+                entity.Property(e => e.MemberNo).HasMaxLength(10);
+
+                entity.Property(e => e.CompanyNameEn)
+                    .HasMaxLength(100)
+                    .HasColumnName("CompanyNameEN");
+
+                entity.Property(e => e.CompanyNameTh)
+                    .IsRequired()
+                    .HasMaxLength(100)
+                    .HasColumnName("CompanyNameTH");
+
+                entity.Property(e => e.CompanyRegistrationNo).HasMaxLength(20);
+
+                entity.Property(e => e.CreateDate)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.Email).HasMaxLength(50);
+
+                entity.Property(e => e.EstablishYear).HasMaxLength(10);
+
+                entity.Property(e => e.ExpiredDate).HasColumnType("datetime");
+
+                entity.Property(e => e.Facebook).HasMaxLength(100);
+
+                entity.Property(e => e.Id)
+                    .ValueGeneratedOnAdd()
+                    .HasColumnName("id");
+
+                entity.Property(e => e.IsBoi).HasColumnName("IsBOI");
+
+                entity.Property(e => e.MemberStartDate)
+                    .HasColumnType("datetime")
+                    .HasColumnName("Member_StartDate");
+
+                entity.Property(e => e.Telephone).HasMaxLength(50);
+
+                entity.Property(e => e.WebSite).HasMaxLength(100);
+            });
+
+            modelBuilder.Entity<MemberMasterJan12023>(entity =>
             {
                 entity.HasKey(e => e.MemberNo)
                     .HasName("PK_Tara_Member");
 
-                entity.ToTable("MemberMaster");
+                entity.ToTable("MemberMaster_Jan1_2023");
 
                 entity.Property(e => e.MemberNo).HasMaxLength(10);
 
@@ -542,11 +728,6 @@ namespace Qlist.ModelM4s
                 entity.Property(e => e.TransDate)
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("(getdate())");
-
-                entity.HasOne(d => d.MemberNoNavigation)
-                    .WithMany(p => p.MemberPaymentTrns)
-                    .HasForeignKey(d => d.MemberNo)
-                    .HasConstraintName("FK_Tara_Payment_trans_Tara_Member");
             });
 
             modelBuilder.Entity<MemberProduct>(entity =>
@@ -598,6 +779,27 @@ namespace Qlist.ModelM4s
                     .HasConstraintName("FK_MemberProductService_MemberMaster");
             });
 
+            modelBuilder.Entity<Mou>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToTable("MOU");
+
+                entity.Property(e => e.Id)
+                    .ValueGeneratedOnAdd()
+                    .HasColumnName("id");
+
+                entity.Property(e => e.MouFile)
+                    .HasMaxLength(150)
+                    .HasColumnName("MOU_File");
+
+                entity.Property(e => e.MouName)
+                    .HasMaxLength(50)
+                    .HasColumnName("MOU_Name");
+
+                entity.Property(e => e.Partner).HasMaxLength(50);
+            });
+
             modelBuilder.Entity<ProductImage>(entity =>
             {
                 entity.ToTable("ProductImage");
@@ -614,11 +816,38 @@ namespace Qlist.ModelM4s
 
                 entity.Property(e => e.FullImage).HasColumnName("Full_Image");
 
-                entity.Property(e => e.Image1).HasColumnType("image");
-
                 entity.Property(e => e.ProductId).HasColumnName("ProductID");
 
                 entity.Property(e => e.UpdDate)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+            });
+
+            modelBuilder.Entity<SlipImage>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToTable("Slip_Image");
+
+                entity.Property(e => e.Description).HasMaxLength(50);
+
+                entity.Property(e => e.FileName)
+                    .HasMaxLength(50)
+                    .HasColumnName("fileName");
+
+                entity.Property(e => e.FileType).HasMaxLength(50);
+
+                entity.Property(e => e.FullImage).HasColumnName("Full_Image");
+
+                entity.Property(e => e.Id)
+                    .ValueGeneratedOnAdd()
+                    .HasColumnName("id");
+
+                entity.Property(e => e.MemberNo).HasMaxLength(10);
+
+                entity.Property(e => e.SlipId).HasColumnName("Slip_ID");
+
+                entity.Property(e => e.UpLoadDate)
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("(getdate())");
             });
@@ -653,19 +882,15 @@ namespace Qlist.ModelM4s
 
             modelBuilder.Entity<User>(entity =>
             {
-                entity.HasNoKey();
-
                 entity.ToTable("USERS");
 
-                entity.Property(e => e.ContactId).HasColumnName("Contact_ID");
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Email).HasMaxLength(50);
 
                 entity.Property(e => e.FgForceChangePw).HasColumnName("FG_FORCE_CHANGE_PW");
 
                 entity.Property(e => e.FgPwNeverExpire).HasColumnName("FG_PW_NEVER_EXPIRE");
-
-                entity.Property(e => e.Id)
-                    .ValueGeneratedOnAdd()
-                    .HasColumnName("id");
 
                 entity.Property(e => e.LoginName)
                     .HasMaxLength(50)
@@ -692,7 +917,11 @@ namespace Qlist.ModelM4s
 
                 entity.Property(e => e.RoleId).HasColumnName("RoleID");
 
-                entity.Property(e => e.Visible).HasMaxLength(10);
+                entity.HasOne(d => d.Role)
+                    .WithMany(p => p.Users)
+                    .HasForeignKey(d => d.RoleId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_USERS_MasterRole1");
             });
 
             OnModelCreatingPartial(modelBuilder);

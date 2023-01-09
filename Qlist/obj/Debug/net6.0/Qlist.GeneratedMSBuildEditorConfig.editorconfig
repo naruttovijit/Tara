@@ -5,6 +5,7 @@ build_property.UsingMicrosoftNETSdkWeb = true
 build_property.ProjectTypeGuids = 
 build_property.InvariantGlobalization = 
 build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = Qlist
 build_property.RootNamespace = Qlist
@@ -19,6 +20,10 @@ build_property._RazorSourceGeneratorDebug =
 build_metadata.AdditionalFiles.TargetPath = QXBwLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/tovij/source/repos/QList/Qlist/Pages/ConcurrentComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ29uY3VycmVudENvbXBvbmVudC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/tovij/source/repos/QList/Qlist/Pages/Counter.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ291bnRlci5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
@@ -29,6 +34,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/tovij/source/repos/QList/Qlist/Pages/Index.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSW5kZXgucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/tovij/source/repos/QList/Qlist/Pages/Login.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTG9naW4ucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/tovij/source/repos/QList/Qlist/Pages/QListPage/CreateMemberAssign.razor]
@@ -65,6 +74,14 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/tovij/source/repos/QList/Qlist/Pages/QListPage/ProjectSubProgress.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUUxpc3RQYWdlXFByb2plY3RTdWJQcm9ncmVzcy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/tovij/source/repos/QList/Qlist/Pages/QListPage/Report.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUUxpc3RQYWdlXFJlcG9ydC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/tovij/source/repos/QList/Qlist/Shared/LoginLayout.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXExvZ2luTGF5b3V0LnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/tovij/source/repos/QList/Qlist/Shared/SurveyPrompt.razor]

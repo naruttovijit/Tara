@@ -11,7 +11,5 @@ namespace Qlist.ModelM4s
         public string BankName { get; set; }
         public string PaymentReference { get; set; }
         public decimal? PaymentTotal { get; set; }
-
-        public virtual MemberMaster MemberNoNavigation { get; set; }
     }
 }

@@ -5,11 +5,6 @@ namespace Qlist.ModelM4s
 {
     public partial class MasterTambon
     {
-        public MasterTambon()
-        {
-            MemberAddresses = new HashSet<MemberAddress>();
-        }
-
         public int Id { get; set; }
         public int ZipCode { get; set; }
         public string NameTh { get; set; }
@@ -20,6 +15,5 @@ namespace Qlist.ModelM4s
         public DateTime? DeletedAt { get; set; }
 
         public virtual MasterDistrict Amphure { get; set; }
-        public virtual ICollection<MemberAddress> MemberAddresses { get; set; }
     }
 }
