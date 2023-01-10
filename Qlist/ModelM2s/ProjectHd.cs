@@ -24,6 +24,7 @@ namespace Qlist.ModelM2s
         public DateTime? PlanStartDate { get; set; }
         public DateTime? PlanFinishDate { get; set; }
         public string Active { get; set; }
+        public int? CustomerId { get; set; }
 
         public virtual ICollection<ProjectHdhistory> ProjectHdhistories { get; set; }
         public virtual ICollection<ProjectSubProjectTl> ProjectSubProjectTls { get; set; }

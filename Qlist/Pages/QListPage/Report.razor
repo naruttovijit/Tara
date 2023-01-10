@@ -1,0 +1,227 @@
+﻿@page "/Data/Report"
+
+@implements IDisposable;
+
+@using ModelM2s;
+@using ModelM4s;
+@using Data;
+@using Radzen;
+@using Radzen.Blazor;
+@using System.Globalization;
+
+@inject ProjectData pj;
+@inject NavigationManager NavManager
+
+@attribute [Authorize(Roles = "1,3")]
+
+<br />
+<div class="container">
+     <div class="row">
+         <div class="col-sm-12 col-lg-6 offset-lg-3 my-5">
+                <RadzenCard Class="w-100 mb-4" >
+                    <RadzenCheckBox @bind-Value="@showDataLabels" Name="dataLabels"></RadzenCheckBox>
+                    <RadzenLabel Text="Show Data Labels" For="dataLabels" Style="margin-left: 8px; vertical-align: middle;" />
+                </RadzenCard>
+                <RadzenChart>
+                <RadzenDonutSeries Data="@chart" CategoryProperty="Status" ValueProperty="Count">
+                        <ChildContent>
+                        <RadzenSeriesDataLabels Visible="@showDataLabels" />
+                        </ChildContent>
+                        <TitleTemplate>
+                            <div class="rz-donut-content">
+                            <div><b>@total.ToString("#,##0")</b></div>
+                            <div>Projects</div>
+                            </div>
+                        </TitleTemplate>
+                    </RadzenDonutSeries>
+                </RadzenChart>
+        </div>
+    </div>     
+</div>
+
+<br />
+<div class="container">
+    <div class="row">
+        <div class="col"><h3>Queue List</h3></div>
+    </div>
+    <br />
+    <div class="row">
+        @if (project is null)
+        {
+            <p><em>Loading...</em></p>
+        }
+        else
+        {
+            <RadzenDataGrid @ref="grid" AllowFiltering="true" AllowPaging="true" PageSize="5" AllowSorting="true" RowRender="@RowRender" ExpandMode="DataGridExpandMode.Single"
+                        Data="@project" TItem="ProjectHd" RowExpand="RowExpand">
+                <Template Context="sub">
+                    <RadzenDataGrid AllowPaging="true" AllowSorting="true" Data="@sub.ProjectSubProjectTls" TItem="ProjectSubProjectTl">
+                        <Columns>
+                            <RadzenDataGridColumn TItem="ProjectSubProjectTl" Property="ProjectSubRunNo" Title="No" Width="150px" />
+                            <RadzenDataGridColumn TItem="ProjectSubProjectTl" Property="ProjectSubName" Title="Project Sub Name" Width="270px" />
+                            <RadzenDataGridColumn TItem="ProjectSubProjectTl" Property="Budget" Title="Budget" Width="180px">
+                                <Template Context="budg">
+                                    @String.Format(new System.Globalization.CultureInfo("th-TH"), "{0:C}", budg.Budget)
+                                </Template>
+                            </RadzenDataGridColumn>
+                            <RadzenDataGridColumn TItem="ProjectSubProjectTl" Property="Id" Title="Sub Capability" Width="300px">
+                                <Template Context="cap">
+                                    <p style="white-space:pre-wrap">@Getcap(cap.Id)</p>
+                                </Template>
+                            </RadzenDataGridColumn>
+                            <RadzenDataGridColumn TItem="ProjectSubProjectTl" Property="ProjectSubStatus" Title="Status" Width="150px" />
+                            <RadzenDataGridColumn TItem="ProjectSubProjectTl" Property="CreateDated" Title="Create Date" FormatString="{0:dd/MM/yyyy}" TextAlign="TextAlign.Center" Width="170px" />
+                        </Columns>
+                    </RadzenDataGrid>
+                </Template>
+                <Columns>
+                    <RadzenDataGridColumn TItem="ProjectHd" Property="ProjectHdrunNo" Title="No" Width="130px" />
+                    <RadzenDataGridColumn TItem="ProjectHd" Property="ProjectName" Title="Project Main Name" Width="270px" />
+                    <RadzenDataGridColumn TItem="ProjectHd" Property="CustomerInfo" Title="Customer" Width="270px">
+                        <Template Context="cust">
+                            @if (!string.IsNullOrEmpty(cust.CustomerInfo))
+                            {
+                                customerinfo = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Customer>>(cust.CustomerInfo);
+                                <p>
+                                    @customerinfo[0].CompanyName
+                                </p>
+                            }
+                        </Template>
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="ProjectHd" Property="Budget" Title="Budget" Width="180px">
+                        <Template Context="budg">
+                            @String.Format(new System.Globalization.CultureInfo("th-TH"), "{0:C}", budg.Budget)
+                        </Template>
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="ProjectHd" Property="ProjectHdstatus" Title="Status" Width="200px" />
+                    <RadzenDataGridColumn TItem="ProjectHd" Property="CreateDated" Title="Create Date" FormatString="{0:dd/MM/yyyy}" TextAlign="TextAlign.Center" Width="170px" />
+                </Columns>
+            </RadzenDataGrid>
+        }
+    </div>
+</div>
+
+@code {
+    private List<ProjectHd> project;
+    private RadzenDataGrid<ProjectHd>? grid;
+    private List<Customer>? customerinfo;
+    private List<ProjectRatypeTl> listra;
+    private List<ProjectRatypeTl> selectra;
+    private List<MasterCapabilityCatSub> subcapability;
+
+    private bool showDataLabels = false;
+    private int total;
+    class DataItem
+    {
+        public string Status { get; set; }
+        public double Count { get; set; }
+    }
+    DataItem[] chart;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        project = await pj.GetProjectHD();
+        project = project.OrderByDescending(n => n.ProjectHdrunNo).ToList();
+        listra = await pj.GetAllProjectRAType();
+        CreateGraph();
+        StateHasChanged();
+    }
+
+    private void CreateGraph()
+    {
+        total = project.Count;
+        var open = project.Where(w => w.ProjectHdstatus == "Open").ToList();
+        var closed = project.Where(w => w.ProjectHdstatus == "Closed").ToList();
+        var cancel = project.Where(w => w.ProjectHdstatus == "Closed with Cancelled").ToList();
+
+        chart = new DataItem[]
+        {
+            new DataItem
+            {
+                Status = "Open",
+                Count = open.Count
+            },
+            new DataItem
+            {
+                Status = "Closed",
+                Count = closed.Count
+            },
+            new DataItem
+            {
+                Status = "Closed with Cancelled",
+                Count = cancel.Count
+            },
+        };
+    }
+
+    private void MostCap()
+    {
+
+    }
+
+    void OnLinkClick(string number)
+    {
+
+    }
+
+    void RowRender(RowRenderEventArgs<ProjectHd> args)
+    {
+        args.Expandable = true;
+    }
+
+    void RowExpand(ProjectHd hd)
+    {
+        if (hd.ProjectSubProjectTls == null)
+        {
+
+            hd.ProjectSubProjectTls = hd.ProjectSubProjectTls.Where(o => o.ProjectHdid == hd.Id).ToList();
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        base.OnAfterRender(firstRender);
+
+        if (firstRender)
+        {
+            if (project is not null)
+            {
+                await grid.ExpandRow(project.FirstOrDefault());
+            }
+        }
+    }
+
+    private void GoCreate()
+    {
+        NavManager.NavigateTo("/Data/ProjectCreate");
+    }
+
+    private string Getcap(int id)
+    {
+        string cap = string.Empty;
+
+        if (id > 0)
+        {
+            var list = listra.Where(w => w.ProjectSubProjectTlid == id).FirstOrDefault();
+            subcapability = Newtonsoft.Json.JsonConvert.DeserializeObject<List<MasterCapabilityCatSub>>(list.MemberCapability);
+            foreach (var cat in subcapability)
+            {
+                cap = cap + cat.CategoryCatSub;
+            }
+        }
+
+        return cap;
+    }
+
+    public void Dispose()
+    {
+        if (project is not null) project.Clear();
+        if (customerinfo is not null) customerinfo.Clear();
+        if (listra is not null) listra.Clear();
+        if (selectra is not null) selectra.Clear();
+        if (subcapability is not null) subcapability.Clear();
+        Console.WriteLine("Disconnected");
+    }
+}

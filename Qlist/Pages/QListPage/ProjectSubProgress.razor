@@ -5,139 +5,133 @@
 @using Data;
 @using ModelM2s;
 @using ModelM4s;
+@using System.Globalization;
+@using Radzen;
+@using Radzen.Blazor;
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Components.Authorization
 
 @inject ProjectData pj;
 @inject NavigationManager NavManager
 
 <br />
 <h3>Project Sub Update Progress</h3>
+<br />
+
+
 <EditForm Model="projectsub">
-    <div class="container">
-        <div class="row">
-            <div class="col-2"><p><b>Sub Running Number :</b></p></div>
-            <div class="col">@projectsub.ProjectSubRunNo</div>
-        </div>
-        <div class="row">
-            <div class="col-2"><p><b>Project Sub Name :</b></p></div>
-            <div class="col">@projectsub.ProjectSubName</div>
-        </div>
-        <div class="row">
-            <div class="col-2"><p><b>Description :</b></p></div>
-            <div class="col">@projectsub.Description</div>
-        </div>
-        <div class="row">
-            <div class="col-2"><p><b>Remarked :</b></p></div>
-            <div class="col">@projectsub.Remark</div>
-        </div>
-        <div class="row">
-            <div class="col-2"><p><b>Budget :</b></p></div>
-            @if (string.IsNullOrEmpty(projectsub.Budget.ToString()))
-            {
-                <div class="col">0 THB</div>
-            }
-            else
-            {
-                <div class="col">@projectsub.Budget THB</div>
-            }
-        </div>
-        <div class="row">
-            <div class="col-2"><p><b>Status :</b></p></div>
-            <div class="col">@projectsub.ProjectSubStatus</div>
-        </div>
-        <div class="row">
-            <div class="col-2"><p><b>Started Date :</b></p></div>
-            @if (string.IsNullOrEmpty(projectsub.PlanStartDate.ToString()))
-            {
-                <div class="col">Not Planed</div>
-            }
-            else
-            {
-                <div class="col">@projectsub.PlanStartDate</div>
-            }
-        </div>
-        <div class="row">
-            <div class="col-2"><p><b>Finished Date :</b></p></div>
-            @if (string.IsNullOrEmpty(projectsub.PlanFinishDate.ToString()))
-            {
-                <div class="col">Not Planed</div>
-            }
-            else
-            {
-                <div class="col">@projectsub.PlanFinishDate</div>
-            }
-        </div>
-    </div>
-    <br />
-
-    <h4>Project Category</h4>
-    <div class="container">
-        <div class="row">
-            @if (subcapability is null)
-            {
-                <div class="col"><p><em>No Capability</em></p></div>
-            }
-            else
-            {
-                <table class="table table-striped" style="background-color:white; border:solid">
-                    <thead>
-                        <tr>
-                            <th>Capability Name</th>
-                            <th>Capability Sub Name</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var cat in subcapability)
-                        {
-                            var cate = capability.Where(w => w.Id == cat.CategoryCatId).FirstOrDefault();
-                            <tr>
-                                <td>@cate.CategoryCat</td>
-                                <td>@cat.CategoryCatSub</td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            }
-        </div>
-    </div>
-    <br />
-
-    <div class="container">
-        <div class="row">
-            @if (!show)
-            {
-                <div class="col-2"><p><b>Update Progress :</b></p></div>
-                <div class="col-2">
-                    <InputSelect @bind-Value="progress">
-                        <option>Pre Sales</option>
-                        <option>Proposal</option>
-                        <option>Quoted</option>
-                        <option>Negociated</option>
-                        <option>Issued PO</option>
-                        <option>Working</option>
-                        <option>Finalizing</option>
-                        <option>Wait-Payment</option>
-                        <option>In-Warranty</option>
-                        <option>On-Hold</option>
-                        <option>Job Complete</option>
-                        <option>Cancelled</option>
-                    </InputSelect>
-                </div>
-                <div class="col-2"><button @onclick="UpdateProjectSub">Update Progress</button></div>
-            }
-           
-        </div>
-    </div>
-    <br />
-
-    <div class="container">
-        <div class="row">
-            <div class="col-2">
-                <button type="submit" class="btn btn-primary" @onclick="()=>GoBack()">Project Sub</button>
+    <ConcurrentComponent ModuleName="ProjectSubProgress" ObjId="projectsub.Id" UserId="userid"></ConcurrentComponent>
+    <RadzenFieldset Text="Detail">
+        <div class="container">
+            <div class="row">
+                <div class="col-2"><p><b>Sub Running Number</b></p></div>
+                <div class="col">@projectsub.ProjectSubRunNo</div>
+            </div>
+            <div class="row">
+                <div class="col-2"><p><b>Project Sub Name</b></p></div>
+                <div class="col">@projectsub.ProjectSubName</div>
+            </div>
+            <div class="row">
+                <div class="col-2"><p><b>Description</b></p></div>
+                <div class="col"><a style="white-space: pre-wrap;">@projectsub.Description</a></div>
+            </div>
+            <div class="row">
+                <div class="col-2"><p><b>Remark</b></p></div>
+                <div class="col"><a style="white-space: pre-wrap;">@projectsub.Remark</a></div>
+            </div>
+            <div class="row">
+                <div class="col-2"><p><b>Budget</b></p></div>
+                @if (string.IsNullOrEmpty(projectsub.Budget.ToString()))
+                {
+                    <div class="col">@String.Format(new System.Globalization.CultureInfo("th-TH"), "{0:C}", 0)</div>
+                }
+                else
+                {
+                    <div class="col">@String.Format(new System.Globalization.CultureInfo("th-TH"), "{0:C}", projectsub.Budget)</div>
+                }
+            </div>
+            <div class="row">
+                <div class="col-2"><p><b>Status</b></p></div>
+                <div class="col">@projectsub.ProjectSubStatus</div>
+            </div>
+            <div class="row">
+                <div class="col-2"><p><b>Started Date</b></p></div>
+                @if (string.IsNullOrEmpty(projectsub.PlanStartDate.ToString()))
+                {
+                    <div class="col">Not Planed</div>
+                }
+                else
+                {
+                    <div class="col">@projectsub.PlanStartDate?.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)</div>
+                }
+            </div>
+            <div class="row">
+                <div class="col-2"><p><b>Finished Date</b></p></div>
+                @if (string.IsNullOrEmpty(projectsub.PlanFinishDate.ToString()))
+                {
+                    <div class="col">Not Planed</div>
+                }
+                else
+                {
+                    <div class="col">@projectsub.PlanFinishDate?.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)</div>
+                }
             </div>
         </div>
-    </div>
+    </RadzenFieldset>
     <br />
 
+    <RadzenFieldset Text="Project Category">
+        <div class="container">
+            <div class="row">
+                @if (subcapability is null)
+                {
+                    <div class="col"><p><em>No Capability</em></p></div>
+                }
+                else
+                {
+                    @foreach (var cat in subcapability)
+                    {
+                        var cate = capability.Where(w => w.Id == cat.CategoryCatId).FirstOrDefault();
+                        <div class="row">
+                            <div class="col">@cate.CategoryCat</div>
+                            <div class="col">@cat.CategoryCatSub</div>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    </RadzenFieldset>
+    <br />
+
+    <RadzenFieldset Text="Progress">
+        <div class="container">
+            <div class="row">
+                @if (!show)
+                {
+                    <div class="col-2"><p><b>Update Progress :</b></p></div>
+                    <div class="col-2">
+                        <InputSelect @bind-Value="progress">
+                            <option>Pre Sales</option>
+                            <option>Proposal</option>
+                            <option>Quoted</option>
+                            <option>Negociated</option>
+                            <option>Issued PO</option>
+                            <option>Working</option>
+                            <option>Finalizing</option>
+                            <option>Wait-Payment</option>
+                            <option>In-Warranty</option>
+                            <option>On-Hold</option>
+                            <option>Job Complete</option>
+                            <option>Cancelled</option>
+                        </InputSelect>
+                    </div>
+                    <div class="col-2"><RadzenButton Click=@(args => UpdateProjectSub()) Text="Update Progress" ButtonStyle="ButtonStyle.Success" /></div>
+                }
+
+            </div>
+        </div>
+    </RadzenFieldset>
+    <br />
 </EditForm>
 
 
@@ -154,6 +148,15 @@
 
     string progress = string.Empty;
     bool show = false;
+
+    [CascadingParameter]
+    private Task<AuthenticationState> authenticationStateTask { get; set; }
+
+    private ClaimsPrincipal AuthenticationStateUser { get; set; }
+
+    int userrole;
+    string usermemberno;
+    int userid;
 
     protected override async Task OnInitializedAsync()
     {
@@ -172,7 +175,22 @@
         {
             show = true;
         }
+
+        GetDataAuthen();
         StateHasChanged();
+    }
+
+    async Task GetDataAuthen()
+    {
+        usermemberno = string.Empty;
+
+        AuthenticationState authenticationState;
+        authenticationState = await authenticationStateTask;
+        this.AuthenticationStateUser = authenticationState.User;
+        var claim = this.AuthenticationStateUser.Claims.ToList();
+        userrole = int.Parse(claim[1].Value);
+        usermemberno = claim[2].Value;
+        userid = int.Parse(claim[3].Value);
     }
 
     async void UpdateProjectSub()
@@ -180,7 +198,7 @@
         if (projectsub.ProjectSubStatus != string.Empty)
         {
             projectsub.ProjectSubStatus = progress;
-            projectsub.ProjectSubProjectTlhistories.Add(new ProjectSubProjectTlhistory() { ProjectSubProjectTlid = projectsub.Id, Remark = projectsub.ProjectSubStatus, EditorId = 1 });
+            projectsub.ProjectSubProjectTlhistories.Add(new ProjectSubProjectTlhistory() { ProjectSubProjectTlid = projectsub.Id, Remark = projectsub.ProjectSubStatus, EditorId = userid });
             var result = await pj.SaveSubProject(projectsub);
 
             UpdateProjectHD();
@@ -212,13 +230,23 @@
             {
                 message = "Closed";
             }
-            projecthd.ProjectHdhistories.Add(new ProjectHdhistory() { ProjectHdid = projecthd.Id, Remark = message, TimeStamp = DateTime.Now, EditorId = 1 });
+            projecthd.ProjectHdhistories.Add(new ProjectHdhistory() { ProjectHdid = projecthd.Id, Remark = message, TimeStamp = DateTime.Now, EditorId = userid });
             projecthd.ProjectHdstatus = message;
             var result = await pj.SaveProjectHD(projecthd);
         }
     }
 
-    private void GoBack()
+    private void GoMain()
+    {
+        NavManager.NavigateTo("/Data/Project");
+    }
+
+    private void GoProject()
+    {
+        NavManager.NavigateTo("/Data/ProjectDetail/" + projectsub.ProjectHdid.ToString());
+    }
+
+    private void GoSub()
     {
         NavManager.NavigateTo("/Data/ProjectSubDetail/" + projectsub.Id.ToString());
     }

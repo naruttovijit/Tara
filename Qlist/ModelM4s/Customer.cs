@@ -7,7 +7,7 @@ namespace Qlist.ModelM4s
     {
         public Customer()
         {
-            BizBatchingTrns = new HashSet<BizBatchingTrn>();
+            BizMatchingTrns = new HashSet<BizMatchingTrn>();
         }
 
         public int Id { get; set; }
@@ -20,6 +20,6 @@ namespace Qlist.ModelM4s
         public string Email { get; set; }
         public string LineId { get; set; }
 
-        public virtual ICollection<BizBatchingTrn> BizBatchingTrns { get; set; }
+        public virtual ICollection<BizMatchingTrn> BizMatchingTrns { get; set; }
     }
 }

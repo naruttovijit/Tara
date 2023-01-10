@@ -1,25 +1,86 @@
+@using Qlist.Authentication;
 @inherits LayoutComponentBase
+@inject AuthenticationStateProvider authStateProvider;
+@inject IJSRuntime JSRuntime
+@inject NavigationManager navManager
+@inject DialogService DialogService
+@inject ContextMenuService ContextMenuService
+@inject TooltipService TooltipService
+@inject NotificationService NotificationService
 
+<RadzenLayout>
+    <RadzenHeader>
+        <div class="row justify-content-start align-items-center">
+            <div class="col-6 d-flex align-items-center">
+                <RadzenSidebarToggle Click="@SidebarToggleClick"></RadzenSidebarToggle>
+                <img src="/images/logo.png" height="40" />
 
-@*<header>
-  <NavMenu />
-</header>
-
-<div class="container">
-    <main role="main" class="pb-3">
-        @Body
-    </main>
-</div>*@
-
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
-
-    <div class="container">
-        <main role="main" class="pb-3">
+            </div>
+            <div class="col-6 d-flex align-items-center justify-content-end">
+                <RadzenButton Click=@(args => OnClick("Warning button with text and icon")) Text="Logout" Icon="power_settings_new" ButtonStyle="ButtonStyle.Warning" />
+               
+            </div>
+        </div>
+    </RadzenHeader>
+    <RadzenBody Expanded="@sidebarExpanded">
+        <RadzenContentContainer Name="main">
             @Body
-        </main>
-    </div>
-</div>
+        </RadzenContentContainer>
+    </RadzenBody>
+    <RadzenSidebar Expanded="@sidebarExpanded">
+        <NavMenu></NavMenu>
+    </RadzenSidebar>
+    <RadzenFooter>
+        <RadzenLabel Text="Thaitara Qlist, Copyright Ⓒ 2023">
+        </RadzenLabel>
+    </RadzenFooter>
+</RadzenLayout>
+
+@code {
+    bool sidebarExpanded = true;
+
+
+    void SidebarToggleClick()
+    {
+        sidebarExpanded = !sidebarExpanded;
+    }
+    private async Task Logout()
+    {
+        var customAuthStateProvider = (CustomAuthentication)authStateProvider;
+        await customAuthStateProvider.UpdateAuthenticationState(null);
+        navManager.NavigateTo("/", true);
+    }
+    void OnClick(string buttonName)
+    {
+        
+    }
+}
+
+
+@*<div class="page">
+        <Radzen.Blazor.RadzenDialog />
+        <div class="sidebar">
+            <NavMenu />
+        </div>
+
+
+            <div class="top-row px-4">
+                <AuthorizeView>
+                    <Authorized>
+
+                        <a @onclick="Logout" href="javascrip:void(0)">Logout</a>
+                    </Authorized>
+                    <NotAuthorized>
+                        <a href="/Login">Login</a>
+                    </NotAuthorized>
+                </AuthorizeView>
+            </div>
+
+            <main role="main" class="pb-3">
+                <div class="container">
+                    @Body
+                </div>
+            </main>
+
+    </div>*@
 

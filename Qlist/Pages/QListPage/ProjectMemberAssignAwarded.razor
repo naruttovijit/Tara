@@ -5,105 +5,115 @@
 @using Data;
 @using ModelM2s;
 @using ModelM4s;
+@using System.Globalization;
+@using Radzen;
+@using Radzen.Blazor;
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Components.Authorization
 
 @inject ProjectData pj;
 @inject NavigationManager NavManager
 
 <br />
 <h3>Project Sub Member Assignment Awarded</h3>
+<br />
 
 @if (awarded.Id > 0)
 {
-    <div class="container">
-        <div class="row">
-            <div class="col-2"><p><b>Running Number :</b></p></div>
-            <div class="col">@awarded.ProjectSubProjectTl.ProjectSubRunNo</div>
+    <ConcurrentComponent ModuleName="ProjectMemberAssignAwarded" ObjId="awarded.ProjectSubProjectTl.Id" UserId="userid"></ConcurrentComponent>
+    <RadzenFieldset Text="Detail">
+        <div class="container">
+            <div class="row">
+                <div class="col-2"><p><b>Running Number</b></p></div>
+                <div class="col">@awarded.ProjectSubProjectTl.ProjectSubRunNo</div>
+            </div>
+            <div class="row">
+                <div class="col-2"><p><b>Project Sub Name</b></p></div>
+                <div class="col">@awarded.ProjectSubProjectTl.ProjectSubName</div>
+            </div>
+            <div class="row">
+                <div class="col-2"><p><b>Description</b></p></div>
+                <div class="col"><a style="white-space: pre-wrap;">@awarded.ProjectSubProjectTl.Description</a></div>
+            </div>
+            <div class="row">
+                <div class="col-2"><p><b>Remark</b></p></div>
+                <div class="col"><a style="white-space: pre-wrap;">@awarded.ProjectSubProjectTl.Remark</a></div>
+            </div>
+            <div class="row">
+                <div class="col-2"><p><b>Budget</b></p></div>
+                @if (string.IsNullOrEmpty(awarded.ProjectSubProjectTl.Budget.ToString()))
+                {
+                    <div class="col">@String.Format(new System.Globalization.CultureInfo("th-TH"), "{0:C}", 0)</div>
+                }
+                else
+                {
+                    <div class="col">@String.Format(new System.Globalization.CultureInfo("th-TH"), "{0:C}", awarded.ProjectSubProjectTl.Budget)</div>
+                }
+            </div>
+            <div class="row">
+                <div class="col-2"><p><b>Status</b></p></div>
+                <div class="col">@awarded.ProjectSubProjectTl.ProjectSubStatus</div>
+            </div>
+            <div class="row">
+                <div class="col-2"><p><b>Started Date</b></p></div>
+                @if (string.IsNullOrEmpty(awarded.ProjectSubProjectTl.PlanStartDate.ToString()))
+                {
+                    <div class="col">Not Planed</div>
+                }
+                else
+                {
+                    <div class="col">@awarded.ProjectSubProjectTl.PlanStartDate?.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)</div>
+                }
+            </div>
+            <div class="row">
+                <div class="col-2"><p><b>Finished Date</b></p></div>
+                @if (string.IsNullOrEmpty(awarded.ProjectSubProjectTl.PlanFinishDate.ToString()))
+                {
+                    <div class="col">Not Planed</div>
+                }
+                else
+                {
+                    <div class="col">@awarded.ProjectSubProjectTl.PlanFinishDate?.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)</div>
+                }
+            </div>
         </div>
-        <div class="row">
-            <div class="col-2"><p><b>Project Sub Name :</b></p></div>
-            <div class="col">@awarded.ProjectSubProjectTl.ProjectSubName</div>
-        </div>
-        <div class="row">
-            <div class="col-2"><p><b>Description :</b></p></div>
-            <div class="col">@awarded.ProjectSubProjectTl.Description</div>
-        </div>
-        <div class="row">
-            <div class="col-2"><p><b>Remarked :</b></p></div>
-            <div class="col">@awarded.ProjectSubProjectTl.Remark</div>
-        </div>
-        <div class="row">
-            <div class="col-2"><p><b>Budget :</b></p></div>
-            @if (string.IsNullOrEmpty(awarded.ProjectSubProjectTl.Budget.ToString()))
-            {
-                <div class="col">0 THB</div>
-            }
-            else
-            {
-                <div class="col">@awarded.ProjectSubProjectTl.Budget THB</div>
-            }
-        </div>
-        <div class="row">
-            <div class="col-2"><p><b>Status :</b></p></div>
-            <div class="col">@awarded.ProjectSubProjectTl.ProjectSubStatus</div>
-        </div>
-        <div class="row">
-            <div class="col-2"><p><b>Started Date :</b></p></div>
-            @if (string.IsNullOrEmpty(awarded.ProjectSubProjectTl.PlanStartDate.ToString()))
-            {
-                <div class="col">Not Planed</div>
-            }
-            else
-            {
-                <div class="col">@awarded.ProjectSubProjectTl.PlanStartDate</div>
-            }
-        </div>
-        <div class="row">
-            <div class="col-2"><p><b>Finished Date :</b></p></div>
-            @if (string.IsNullOrEmpty(awarded.ProjectSubProjectTl.PlanFinishDate.ToString()))
-            {
-                <div class="col">Not Planed</div>
-            }
-            else
-            {
-                <div class="col">@awarded.ProjectSubProjectTl.PlanFinishDate</div>
-            }
-        </div>
-    </div>
+    </RadzenFieldset>
 }
 <br />
 
-<h3>Member Assignment</h3>
+<RadzenFieldset Text="Member Assignment">
+    @if (awarded.Id > 0)
+    {
+        <div class="container">
+            <div class="row">
+                <div class="col-2"><p><b>Company Name TH</b></p></div>
+                <div class="col">@member.CompanyNameTh</div>
+            </div>
+            <div class="row">
+                <div class="col-2"><p><b>Company Name EN</b></p></div>
+                <div class="col">@member.CompanyNameEn</div>
+            </div>
+            <div class="row">
+                <div class="col-2"><p><b>Telephone</b></p></div>
+                <div class="col">@member.Telephone</div>
+            </div>
+            <div class="row">
+                <div class="col-2"><p><b>Email</b></p></div>
+                <div class="col">@member.Email</div>
+            </div>
+            <div class="row">
+                <div class="col-2"><p><b>Website</b></p></div>
+                <div class="col">@member.WebSite</div>
+            </div>
+            <div class="row">
+                <div class="col-2"><p><b>Facebook</b></p></div>
+                <div class="col">@member.Facebook</div>
+            </div>
+        </div>
+    }
+</RadzenFieldset>
+<br />
 
-@if(awarded.MemberId > 0)
-{
-    var item = member.Where(w => w.Id == awarded.MemberId).FirstOrDefault();
-    <div class="container">
-        <div class="row">
-            <div class="col-2"><p><b>Company Name TH :</b></p></div>
-            <div class="col">@item.CompanyNameTh</div>
-        </div>
-        <div class="row">
-            <div class="col-2"><p><b>Company Name EN :</b></p></div>
-            <div class="col">@item.CompanyNameEn</div>
-        </div>
-        <div class="row">
-            <div class="col-2"><p><b>Telephone :</b></p></div>
-            <div class="col">@item.Telephone</div>
-        </div>
-        <div class="row">
-            <div class="col-2"><p><b>Email :</b></p></div>
-            <div class="col">@item.Email</div>
-        </div>
-        <div class="row">
-            <div class="col-2"><p><b>Website :</b></p></div>
-            <div class="col">@item.WebSite</div>
-        </div>
-        <div class="row">
-            <div class="col-2"><p><b>Facebook :</b></p></div>
-            <div class="col">@item.Facebook</div>
-        </div>
-    </div>
-}
 
 @if (awarded.Awarded == "Y")
 {
@@ -111,16 +121,16 @@
 }
 else
 {
-    <div class="container">
-        <div class="row">
-            <p>Is Awarded ?</p>
+    <RadzenFieldset Text="Is Awarded ?">
+        <div class="container">
+            <div class="row">
+                <div class="col-1"><RadzenButton Click=@(args => UpdateAwarded()) Text="Yes" ButtonStyle="ButtonStyle.Success" /></div>
+                &nbsp;
+                <div class="col-1">
+                    <RadzenButton Shade="Shade.Lighter" Click=@(args => GoBack()) Text="No" ButtonStyle="ButtonStyle.Light" /></div>
+            </div>
         </div>
-        <div class="row">
-            <div class="col-1"><p><button style="width:100%" @onclick="()=>UpdateAwarded()">Yes</button></p></div>
-            &nbsp;
-            <div class="col-1"><p><button style="width:100%" @onclick="()=>GoBack()">No</button></p></div>
-        </div>
-    </div>
+    </RadzenFieldset>
 }
 <br />
 
@@ -132,19 +142,36 @@ else
     public ProjectSubMemberAsgmt awarded { get; set; } = new ProjectSubMemberAsgmt();
     public ProjectSubProjectTl projectsub { get; set; } = new ProjectSubProjectTl();
     public ProjectHd projecthd { get; set; } = new ProjectHd();
-    private List<MemberMaster> member;
+    public MemberMaster member { get; set; } = new MemberMaster();
 
+    [CascadingParameter]
+    private Task<AuthenticationState> authenticationStateTask { get; set; }
+
+    private ClaimsPrincipal AuthenticationStateUser { get; set; }
+
+    int userrole;
+    string usermemberno;
+    int userid;
 
     protected override async Task OnInitializedAsync()
     {
-        await Initial();
+        awarded = await pj.GetMemberAssign(id);
+        member = await pj.GetMemberByID(awarded.MemberId);
+        GetDataAuthen();
+        StateHasChanged();
     }
 
-    private async Task Initial()
+    async Task GetDataAuthen()
     {
-        awarded = await pj.GetMemberAssign(id);
-        member = await pj.GetAllMember();
-        StateHasChanged();
+        usermemberno = string.Empty;
+
+        AuthenticationState authenticationState;
+        authenticationState = await authenticationStateTask;
+        this.AuthenticationStateUser = authenticationState.User;
+        var claim = this.AuthenticationStateUser.Claims.ToList();
+        userrole = int.Parse(claim[1].Value);
+        usermemberno = claim[2].Value;
+        userid = int.Parse(claim[3].Value);
     }
 
     async void UpdateAwarded()
@@ -154,8 +181,8 @@ else
         {
             awarded.Awarded = "Y";
             awarded.ProjectSubProjectTl.ProjectSubStatus = "Member Assignments Awarded";
-            awarded.MemberAsgmtawardedHistories.Add(new MemberAsgmtawardedHistory() { MemberAssignmentId = awarded.MemberId, DateAwarded = DateTime.Now, Active = "Y", LastUpdated = DateTime.Now, EditorId = 1 });
-            awarded.ProjectSubProjectTl.ProjectSubProjectTlhistories.Add(new ProjectSubProjectTlhistory() { ProjectSubProjectTlid = awarded.ProjectSubProjectTlid, Remark = "Member Assignments Awarded", EditorId = 1 });
+            awarded.MemberAsgmtawardedHistories.Add(new MemberAsgmtawardedHistory() { MemberAssignmentId = awarded.MemberId, DateAwarded = DateTime.Now, Active = "Y", LastUpdated = DateTime.Now, EditorId = userid });
+            awarded.ProjectSubProjectTl.ProjectSubProjectTlhistories.Add(new ProjectSubProjectTlhistory() { ProjectSubProjectTlid = awarded.ProjectSubProjectTlid, Remark = "Member Assignments Awarded", EditorId = userid });
             var result = await pj.SaveMemberAssign(awarded);
 
             NavManager.NavigateTo("/Data/MemberAssign/" + awarded.ProjectSubProjectTlid.ToString());
@@ -175,7 +202,7 @@ else
 
         if (subcount == award)
         {
-            projecthd.ProjectHdhistories.Add(new ProjectHdhistory() { ProjectHdid = projecthd.Id, Remark = "Member Assignments Awarded", TimeStamp = DateTime.Now, EditorId = 1 });
+            projecthd.ProjectHdhistories.Add(new ProjectHdhistory() { ProjectHdid = projecthd.Id, Remark = "Member Assignments Awarded", TimeStamp = DateTime.Now, EditorId = userid });
             projecthd.ProjectHdstatus = "Member Assignments Awarded";
             var result = await pj.SaveProjectHD(projecthd);
             NavManager.NavigateTo("/Data/MemberAssign/" + awarded.ProjectSubProjectTlid.ToString());
@@ -189,7 +216,6 @@ else
 
     public void Dispose()
     {
-        if (member is not null) member.Clear();
         Console.WriteLine("Disconnected");
     }
 }

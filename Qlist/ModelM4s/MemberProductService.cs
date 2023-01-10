@@ -7,7 +7,7 @@ namespace Qlist.ModelM4s
     {
         public MemberProductService()
         {
-            BizBatchingTrns = new HashSet<BizBatchingTrn>();
+            BizMatchingTrns = new HashSet<BizMatchingTrn>();
         }
 
         public int Id { get; set; }
@@ -19,7 +19,7 @@ namespace Qlist.ModelM4s
         public decimal? Price { get; set; }
         public int? MemberDiscountPercent { get; set; }
 
-        public virtual MemberMaster MemberNoNavigation { get; set; }
-        public virtual ICollection<BizBatchingTrn> BizBatchingTrns { get; set; }
+        public virtual MemberMasterJan12023 MemberNoNavigation { get; set; }
+        public virtual ICollection<BizMatchingTrn> BizMatchingTrns { get; set; }
     }
 }

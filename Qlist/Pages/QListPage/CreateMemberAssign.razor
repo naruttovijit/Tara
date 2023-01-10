@@ -6,202 +6,209 @@
 @using ModelM2s;
 @using ModelM4s;
 @using System.Linq;
+@using System.Globalization;
+@using Radzen;
+@using Radzen.Blazor;
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Components.Authorization
 
 @inject ProjectData pj;
 @inject NavigationManager NavManager
-
+<ConcurrentComponent ModuleName="MemberAssign" ObjId="projectsub.Id" UserId="userid"></ConcurrentComponent>
 <br />
 <h3>Project Sub Member Assignment</h3>
-<div class="container">
-    <div class="row">
-        <div class="col-2"><p>Running Number :</p></div>
-        <div class="col"><p>@projectsub.ProjectSubRunNo </p></div>
-    </div>
 
-    <div class="row">
-        <div class="col-2"><p>Project Sub Name :</p></div>
-        <div class="col"><p>@projectsub.ProjectSubName </p></div>
-    </div>
-
-    <div class="row">
-        <div class="col-2"><p>Description :</p></div>
-        <div class="col"><p>@projectsub.Description </p></div>
-    </div>
-
-    <div class="row">
-        <div class="col-2"><p>Remarked :</p></div>
-        <div class="col"><p>@projectsub.Remark </p></div>
-    </div>
-
-    <div class="row">
-        <div class="col-2"><p>Budget :</p></div>
-        @if (string.IsNullOrEmpty(projectsub.Budget.ToString()))
-        {
-            <div class="col"><p>0 THB</p></div>
-        }
-        else
-        {
-            <div class="col"><p>@projectsub.Budget THB</p></div>
-        }
-    </div>
-
-    <div class="row">
-        <div class="col-2"><p>Status :</p></div>
-        <div class="col"><p>@projectsub.ProjectSubStatus </p></div>
-    </div>
-
-    <div class="row">
-        <div class="col-2"><p>Started Date :</p></div>
-        @if (string.IsNullOrEmpty(projectsub.PlanStartDate.ToString()))
-        {
-            <div class="col"><p>Not Planed</p></div>
-        }
-        else
-        {
-            <div class="col"><p>@projectsub.PlanStartDate</p></div>
-        }
-    </div>
-
-    <div class="row">
-        <div class="col-2"><p>Finished Date :</p></div>
-        @if (string.IsNullOrEmpty(projectsub.PlanFinishDate.ToString()))
-        {
-            <div class="col"><p>Not Planed</p></div>
-        }
-        else
-        {
-            <div class="col"><p>@projectsub.PlanFinishDate</p></div>
-        }
-    </div>
+<div class="card">
+    <div class="card-header">Project Sub List</div>
+    <div class="card-body"></div>
 </div>
 <br />
 
-<div class="container">
-    <h4>Project Category</h4>
-    @if (subcapability is null)
-    {
-        <p><em>No Capability</em></p>
-    }
-    else
-    {
-        <table class="table table-striped" style="background-color:white; border:solid">
-            <thead>
-                <tr>
-                    <th>Capability Name</th>
-                    <th>Capability Sub Name</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var cat in subcapability)
-                {
-                    var cate = capability.Where(w => w.Id == cat.CategoryCatId).FirstOrDefault();
-                    <tr>
-                        <td>@cate.CategoryCat</td>
-                        <td>@cat.CategoryCatSub</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    }
-</div>
-<br />
+<div class="card">
+    <div class="card-header">Running Number : @projectsub.ProjectSubRunNo</div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-2"><p></p></div>
+            <div class="col"><p> </p></div>
+        </div>
 
-<div class="container">
-    <h4>Member Assignment</h4>
-    <div class="row" style="background-color:white; border:solid">
-        <table style="width:100%">
-        <tr>
-            <th style="width:10%">No.</th>
-            <th style="width:30%">Company Name TH</th>
-            <th style="width:20%">Telephone</th>
-            <th style="width:10%">Comfirm Date</th>
-            <th class="text-center" style="width:10%">Comfirm</th>
-            <th class="text-center" style="width:10%">Awarded</th>
-            <th class="text-center" style="width:10%">Delete</th>
-        </tr>
-        @if (projectsub.ProjectSubMemberAsgmts is not null)
-        {
-            int no = 0;
-            foreach (var list in projectsub.ProjectSubMemberAsgmts)
+        <div class="row">
+            <div class="col-2"><p>Project Sub Name</p></div>
+            <div class="col"><p>@projectsub.ProjectSubName </p></div>
+        </div>
+
+        <div class="row">
+            <div class="col-2"><p>Description</p></div>
+            <div class="col"><p style="white-space: pre-wrap;">@projectsub.Description </p></div>
+        </div>
+
+        <div class="row">
+            <div class="col-2"><p>Remark</p></div>
+            <div class="col"><p style="white-space: pre-wrap;">@projectsub.Remark </p></div>
+        </div>
+
+        <div class="row">
+            <div class="col-2"><p>Budget</p></div>
+            @if (string.IsNullOrEmpty(projectsub.Budget.ToString()))
             {
-                no++;
-                var item = member.Where(w => w.Id == list.MemberId).FirstOrDefault();
-                <tr>
-                    <td>@no</td>
-                    <td>@item.CompanyNameTh</td>
-                    <td>@item.Telephone</td>
-                    <td>@list.DateConfirm</td>
-                    @if (list.DateConfirm is not null)
-                    {
-                        <td></td>
-                        @if (awarded)
+                <div class="col">@String.Format(new System.Globalization.CultureInfo("th-TH"), "{0:C}", 0)</div>
+            }
+            else
+            {
+                <div class="col">@String.Format(new System.Globalization.CultureInfo("th-TH"), "{0:C}", projectsub.Budget)</div>
+            }
+        </div>
+
+        <div class="row">
+            <div class="col-2"><p>Status</p></div>
+            <div class="col"><p>@projectsub.ProjectSubStatus </p></div>
+        </div>
+
+        <div class="row">
+            <div class="col-2"><p>Started Date</p></div>
+            @if (string.IsNullOrEmpty(projectsub.PlanStartDate.ToString()))
+            {
+                <div class="col"><p>Not Planed</p></div>
+            }
+            else
+            {
+                <div class="col"><p>@projectsub.PlanStartDate?.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)</p></div>
+            }
+        </div>
+
+        <div class="row">
+            <div class="col-2"><p>Finished Date</p></div>
+            @if (string.IsNullOrEmpty(projectsub.PlanFinishDate.ToString()))
+            {
+                <div class="col"><p>Not Planed</p></div>
+            }
+            else
+            {
+                <div class="col"><p>@projectsub.PlanFinishDate?.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)</p></div>
+            }
+        </div>
+    </div>
+</div>
+<br />
+
+<div class="card">
+    <div class="card-header">Project Category</div>
+    <div class="card-body">
+        @if (subcapability is null)
+        {
+            <p><em>No Capability</em></p>
+        }
+        else
+        {
+            @foreach (var cat in subcapability)
+            {
+                @* var cate = capability.Where(w => w.Id == cat.CategoryCatId).FirstOrDefault();*@
+                <div class="row">
+                    @*<div class="col">@cat.CategoryCat.CategoryCat</div>*@
+                    <div class="col">@cat.CategoryCatSub</div>
+                </div>
+            }
+        }
+    </div>
+</div>
+<br />
+
+
+<div class="card">
+    <div class="card-header">Member Assignment</div>
+    <div class="card-body">
+        <table class="table table-bordered" style="width:100%">
+            <tr>
+                <th style="width:10%">No.</th>
+                <th style="width:30%">Company Name TH</th>
+                <th style="width:15%">Telephone</th>
+                <th style="width:15%">Comfirm Date</th>
+                <th class="text-center" style="width:10%">Comfirm</th>
+                <th class="text-center" style="width:10%">Awarded</th>
+                <th class="text-center" style="width:10%">Delete</th>
+            </tr>
+            @if (projectsub.ProjectSubMemberAsgmts is not null)
+            {
+                int no = 0;
+                foreach (var list in projectsub.ProjectSubMemberAsgmts)
+                {
+                    no++;
+                    var select = member.Where(w => w.Id == list.MemberId).FirstOrDefault();
+                    var date = allassign.Where(w => w.Id == list.Id).FirstOrDefault();
+                    <tr>
+                        <td>@no</td>
+                        <td>@select.CompanyNameTh</td>
+                        <td>@select.Telephone</td>
+                        <td>@list.DateConfirm?.ToString("dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture)</td>
+                        @if (list.DateConfirm is not null)
                         {
-                            <td class="text-center">@list.Awarded</td>
+                            <td></td>
+                            @if (awarded)
+                            {
+                                <td class="text-center">@list.Awarded</td>
+                            }
+                            else
+                            {
+                                if (list.Id > 0 && !string.IsNullOrEmpty(date.DateConfirm.ToString()))
+                                {
+                                    <td class="text-center"><a href="/Data/ProjectMemberAssignAwarded/@list.Id">Link</a></td>
+                                }
+                            }
+                            <td></td>
                         }
                         else
                         {
-                            if (list.Id > 0)
-                            {
-                                <td class="text-center"><a href="/Data/ProjectMemberAssignAwarded/@list.Id">Link</a></td>
-                            }
+                            <td class="text-center"><input type="checkbox" @onchange="EventArgs => { CheckboxClicked(list,EventArgs.Value);}" /></td>
+                            <td></td>
+                            <td class="text-center"><RadzenButton Click=@(args => projectsub.ProjectSubMemberAsgmts.Remove(list)) Text="X" ButtonStyle="ButtonStyle.Danger" /></td>
                         }
-                        <td></td>
-                    }
-                    else
-                    {
-                        <td class="text-center"><input type="checkbox" @onchange="EventArgs => { CheckboxClicked(list,EventArgs.Value);}" /></td>
-                        <td></td>
-                        <td class="text-center"><button @onclick="() => projectsub.ProjectSubMemberAsgmts.Remove(list)">X</button></td>
-                    }
-                </tr>
+                    </tr>
+                }
             }
-        }
-        else
-        {
-            if (count is not null)
+            else
             {
+                if (count is not null)
+                {
 
+                }
             }
-        }
-    </table>
+        </table>
     </div>
 </div>
 <br />
 
-@if (!awarded)
-{
+<RadzenFieldset Text="">
     <div class="container">
-        <EditForm Model="memberassign">
-            <div class="row">
-                <div class="col-4">
+        <div class="row">
+            
+        </div>
+    </div>
+    <br />
+    @if (!awarded)
+    {
+        <div class="container">
+            <EditForm Model="memberassign">
+                <div class="row">
+                    <div class="col-4">
+                        <p>
+                            <RadzenAutoComplete Placeholder="Select a Member..." Data=@custommember TextProperty="CompanyNameEn"
+                                                LoadData=@OnLoadData Style="width: 100%;" Change=@(args => GetMemberID(args)) />
+                        </p>
+                    </div>
+                    <div class="col">
+                        <RadzenButton Click=@(args => AddMember(idMember)) Icon="add_circle_outline" ButtonStyle="ButtonStyle.Primary" Size="ButtonSize.Medium" />
+                    </div>
+                </div>
+                <div class="row">
                     <p>
-                        <InputSelect id="AssignMember" @bind-Value="idMember">
-                            <option value="0">------------Select Member------------</option>
-                            @if (member is not null)
-                            {
-                                foreach (var list in member)
-                                {
-                                    <option value="@list.Id">@list.CompanyNameTh</option>
-                                }
-                            }
-                        </InputSelect>
+                        <RadzenButton Click=@(args => UpdateMemberAssign()) Icon="update" Text="Update" ButtonStyle="ButtonStyle.Success" />
                     </p>
                 </div>
-                <div class="col">
-                    <button @onclick="()=>AddMember(idMember)">Add Member</button>
-                </div>
-            </div>
-            <div class="row">
-                <p>
-                    <button style="width:10%" @onclick="()=>UpdateMemberAssign()">Update</button>
-                </p>
-            </div>
-        </EditForm>
-    </div>
-}
+            </EditForm>
+        </div>
+    }
+</RadzenFieldset>
 <br />
-
-<button type="submit" class="btn btn-primary" style="float:left;" @onclick="()=>GoBack()">Go Back</button>
 
 
 @code {
@@ -213,15 +220,25 @@
     public ProjectSubMemberAsgmt memberassign { get; set; } = new ProjectSubMemberAsgmt();
     public ProjectRatypeTl projectra { get; set; } = new ProjectRatypeTl();
 
-    private List<MasterCapabilityCat> capability;
+    //private List<MasterCapabilityCat> capability;
     private List<MasterCapabilityCatSub> subcapability;
     private List<MemberContactPerson> contact;
     private List<MemberMaster> member;
+    private List<MemberMaster> custommember;
     private List<ProjectSubMemberAsgmt> assign;
     private List<MemberAddress> membercap;
     private List<ProjectSubMemberAsgmt> allassign;
-    private List<MemberAsgmtawardedHistory> allawarded;
     private List<CountAwarded> count;
+    private List<MemberCategory> membercate;
+
+    [CascadingParameter]
+    private Task<AuthenticationState> authenticationStateTask { get; set; }
+
+    private ClaimsPrincipal AuthenticationStateUser { get; set; }
+
+    int userrole;
+    string usermemberno;
+    int userid;
 
     string JsonCat;
     int idMember;
@@ -236,10 +253,9 @@
     {
         projectsub = await pj.GetProjectSubProjectTLbyID(id);
         projectra = await pj.GetProjectRATypeBySubProjectID(projectsub.Id);
-        capability = await pj.GetAllCapability();
+        allassign = await pj.GetMemberAssignmentBySubID(projectsub.Id);
         member = await pj.GetAllMember();
-        allassign = await pj.GetAllMemberAssignment();
-        allawarded = await pj.GetAllMemberAwarded();
+        membercate = await pj.GetAllMemberCategory();
 
         subcapability = Newtonsoft.Json.JsonConvert.DeserializeObject<List<MasterCapabilityCatSub>>(projectra.MemberCapability);
         if (projectsub.ProjectSubMemberAsgmts.Count > 0)
@@ -258,7 +274,22 @@
             AutoAssignment();
         }
 
+        GetDataAuthen();
+
         StateHasChanged();
+    }
+
+    async Task GetDataAuthen()
+    {
+        usermemberno = string.Empty;
+
+        AuthenticationState authenticationState;
+        authenticationState = await authenticationStateTask;
+        this.AuthenticationStateUser = authenticationState.User;
+        var claim = this.AuthenticationStateUser.Claims.ToList();
+        userrole = int.Parse(claim[1].Value);
+        usermemberno = claim[2].Value;
+        userid = int.Parse(claim[3].Value);
     }
 
     private void AutoAssignment()
@@ -270,16 +301,29 @@
             sub.Add(list.Id);
         }
 
-        var result = member.Where(o => o.MemberCategories.Any(m => sub.Contains(m.CategorySubId.GetValueOrDefault())));
-        List<MemberMaster> result2 = result.Where(w => (w.RegisterCapital / projectsub.Budget) <= 10).ToList();
+        var result = membercate.Where(w => sub.Contains(w.CategorySubId.GetValueOrDefault())).Select(w => w.MemberNo).ToList();
+        var result2 = member.Where(w => result.Contains(w.MemberNo) && (w.RegisterCapital / projectsub.Budget) <= 10);
+        //var result2 = result.Where(w => ((w.MemberNoNavigation.RegisterCapital?? 0) / projectsub.Budget) <= 10).ToList();
         count = new List<CountAwarded>();
         foreach (var list in result2)
         {
-            count.Add(new CountAwarded() {MemberId = list.Id, Count = 0});
+            var check = count.Where(w => w.MemberId == list.Id);
+            if (check == null || check.Count() == 0)
+            {
+                count.Add(new CountAwarded() { MemberId = list.Id, Count = 0 });
+            }
         }
 
+        //var result = member.Where(o => o..Any(m => sub.Contains(m.CategorySubId.GetValueOrDefault())));
+        //List<MemberMaster> result2 = result.Where(w => (w.RegisterCapital / projectsub.Budget) <= 10).ToList();
+        //count = new List<CountAwarded>();
+        //foreach (var list in result2)
+        //{
+        //    count.Add(new CountAwarded() {MemberId = list.Id, Count = 0});
+        //}
+
         var assign = allassign.Where(w => w.Awarded == "Y").ToList();
-        foreach(var list in assign)
+        foreach (var list in assign)
         {
             awardid.Add(list.MemberId);
         }
@@ -306,19 +350,26 @@
         }
     }
 
-    void AddMember(int member) //Add contact to Project HD
+    void AddMember(int memberid) //Add contact to Project HD
     {
-        memberassign.ProjectSubProjectTlid = id;
-        memberassign.MemberId = member;
-        memberassign.Active = "Y";
-        memberassign.EditorId = 1;
-        projectsub.ProjectSubMemberAsgmts.Add(memberassign);
-        memberassign = new ProjectSubMemberAsgmt();
+        if (memberid > 0)
+        {
+            var select = projectsub.ProjectSubMemberAsgmts.Where(w => w.MemberId == memberid).ToList();
+            if (select.Count == 0)
+            {
+                memberassign.ProjectSubProjectTlid = id;
+                memberassign.MemberId = memberid;
+                memberassign.Active = "Y";
+                memberassign.EditorId = userid;
+                projectsub.ProjectSubMemberAsgmts.Add(memberassign);
+                memberassign = new ProjectSubMemberAsgmt();
+            }
+        }
     }
 
     async void UpdateMemberAssign() //Update member assignment in table
     {
-        projectsub.ProjectSubProjectTlhistories.Add(new ProjectSubProjectTlhistory() { ProjectSubProjectTlid = projectsub.Id, Remark = "Update Member Assignments", EditorId = 1 });
+        projectsub.ProjectSubProjectTlhistories.Add(new ProjectSubProjectTlhistory() { ProjectSubProjectTlid = projectsub.Id, Remark = "Update Member Assignments", EditorId = userid });
         projectsub.ProjectSubStatus = "Member Assignment";
         var result = await pj.SaveSubProject(projectsub);
 
@@ -338,19 +389,46 @@
         NavManager.NavigateTo("/Data/ProjectSubDetail/" + id.ToString());
     }
 
+    private async Task OnLoadData(LoadDataArgs args)
+    {
+        if (args.Filter.Length <= 2)
+        {
+            if (custommember is not null)
+            {
+                custommember.Clear();
+            }
+        }
+        if (args.Filter.Length > 2)
+        {
+            custommember = member.Where(c => c.CompanyNameEn.ToUpper().Contains(args.Filter.ToUpper())).ToList();
+            InvokeAsync(StateHasChanged);
+        }
+    }
+
+    async void GetMemberID(object value)
+    {
+        if (custommember is not null)
+        {
+            var select = custommember.Where(c => c.CompanyNameEn.ToUpper() == value.ToString().ToUpper()).ToList();
+            if (select.Count == 1)
+            {
+                idMember = select[0].Id;
+            }
+        }
+    }
+
     public void Dispose()
     {
         if (CheckBox is not null) CheckBox.Clear();
-        if (capability is not null) capability.Clear();
+        //if (capability is not null) capability.Clear();
         if (subcapability is not null) subcapability.Clear();
         if (member is not null) member.Clear();
         if (allassign is not null) allassign.Clear();
-        if (allawarded is not null) allawarded.Clear();
         if (count is not null) count.Clear();
         if (contact is not null) contact.Clear();
         if (assign is not null) assign.Clear();
         if (membercap is not null) membercap.Clear();
-        
+
         Console.WriteLine("Disconnected");
     }
 }

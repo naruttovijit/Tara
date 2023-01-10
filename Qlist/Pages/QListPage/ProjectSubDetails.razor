@@ -5,329 +5,358 @@
 @using Data;
 @using ModelM2s;
 @using ModelM4s;
+@using System.Globalization;
+@using Radzen;
+@using Radzen.Blazor;
 
 @inject ProjectData pj;
 @inject NavigationManager NavManager
 
 <br />
-<div class="container">
-    <div class="row">
-        <div class="col"><h3>Project Sub Details</h3></div>
-        <div class="col">
+<h3>Project Sub Details</h3>
+<br />
+
+<div class="card" >
+    <div class="card-header">
+        <b>Running Number : </b>@projectsub.ProjectSubRunNo
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-2"><p></p></div>
+            <div class="col"></div>
             @if (projectsub.ProjectSubMemberAsgmts.Count == 0)
             {
-                <button type="submit" class="btn btn-primary" style="float:right" @onclick="()=>GoEdit()">Edit</button>
+                <div class="col-1"> <button type="submit" class="btn btn-primary" style="float:right" @onclick="()=>GoEdit()">Edit</button></div>
+            }
+        </div>
+        <div class="row">
+            <div class="col-2"><p><b>Project Sub Name</b></p></div>
+            <div class="col">@projectsub.ProjectSubName</div>
+        </div>
+        <div class="row">
+            <div class="col-2"><p><b>Description</b></p></div>
+            <div class="col"><a style="white-space: pre-wrap;">@projectsub.Description</a></div>
+        </div>
+        <div class="row">
+            <div class="col-2"><p><b>Remark</b></p></div>
+            <div class="col"><a style="white-space: pre-wrap;">@projectsub.Remark</a></div>
+        </div>
+        <div class="row">
+            <div class="col-2"><p><b>Budget</b></p></div>
+            @if (string.IsNullOrEmpty(projectsub.Budget.ToString()))
+            {
+                <div class="col">@String.Format(new System.Globalization.CultureInfo("th-TH"), "{0:C}", 0)</div>
+            }
+            else
+            {
+                <div class="col">@String.Format(new System.Globalization.CultureInfo("th-TH"), "{0:C}", projectsub.Budget)</div>
+            }
+        </div>
+        <div class="row">
+            <div class="col-2"><p><b>Status</b></p></div>
+            <div class="col">@projectsub.ProjectSubStatus</div>
+        </div>
+        <div class="row">
+            <div class="col-2"><p><b>Started Date</b></p></div>
+            @if (string.IsNullOrEmpty(projectsub.PlanStartDate.ToString()))
+            {
+                <div class="col">Not Planed</div>
+            }
+            else
+            {
+                <div class="col">@projectsub.PlanStartDate?.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)</div>
+            }
+        </div>
+        <div class="row">
+            <div class="col-2"><p><b>Finished Date</b></p></div>
+            @if (string.IsNullOrEmpty(projectsub.PlanFinishDate.ToString()))
+            {
+                <div class="col">Not Planed</div>
+            }
+            else
+            {
+                <div class="col">@projectsub.PlanFinishDate?.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)</div>
+            }
+        </div>
+        <div class="row">
+            <div class="col-2"><p><b>RA Type</b></p></div>
+            <div class="col">@Selectratype</div>
+        </div>
+    </div>
+</div>
+<br />
+<div class="card">
+    <div class="card-header">
+        Project Category
+    </div>
+
+
+    <div class="card-body">
+        @if (subcapability is null || subcapability.Count == 0)
+        {
+            <div class="row"><p><em>No Capability</em></p></div>
+        }
+        else
+        {
+            @foreach (var cat in subcapability)
+            {
+                var cate = capability.Where(w => w.Id == cat.CategoryCatId).FirstOrDefault();
+                <div class="row">
+                    <div class="col">@(cat.CategoryCat!=null? cat.CategoryCat.CategoryCat:"")</div>
+                    <div class="col">@cat.CategoryCatSub</div>
+                </div>
+            }
+        }
+    </div>
+</div>
+<br />
+<div class="card">
+    <div class="card-header">
+        Project Document
+    </div>
+    <div class="card-body">
+        @if (projectdoc is null || projectdoc.Count == 0)
+        {
+            <div class="row"><p><em>No Document</em></p></div>
+        }
+        else
+        {
+            @foreach (var doc in projectdoc)
+            {
+                string filename = string.Empty;
+                <div class="row">
+                    @if (doc.DocumentPath.ToUpper().Contains("PDFFILES"))
+                    {
+                        filename = Path.GetFileName(doc.DocumentPath);
+                        <div class="col"><a href="@doc.DocumentPath">@filename</a></div>
+                    }
+                    else
+                    {
+                        <div class="col"><img src="@doc.DocumentPath" width="300px" /></div>
+                    }
+                    <div class="col"><a style="white-space: pre-wrap;">@doc.Description</a></div>
+                </div>
+            }
+        }
+    </div>
+</div>
+<br />
+ <div class="card">
+     <div class="card-header">
+         Membership Assignments
+     </div>
+     <div class="card-body">
+
+         @if (projectsub.ProjectSubMemberAsgmts is not null)
+         {
+             if (projectsub.ProjectSubMemberAsgmts.Count > 0)
+             {
+                 int no = 0;
+                 foreach (var list in projectsub.ProjectSubMemberAsgmts)
+                 {
+                     var member = selectmember.Where(w => w.Id == list.Id).FirstOrDefault();
+                     if (member is not null)
+                     {
+                         @*                        no++;*@
+                         if (list.Awarded == "Y")
+                         {
+                             <RadzenCard class="rz-background-color-success-light">
+                                 @*<div class="row">
+                                    <div class="col-2"><p>No.</p></div>
+                                    <div class="col">@no</div>
+                                </div>*@
+                                 <div class="row">
+                                     <div class="col-2"><p>Thai Name :</p></div>
+                                     <div class="col">@member.CompanyNameTh</div>
+                                 </div>
+                                 <div class="row">
+                                     <div class="col-2"><p>English Name :</p></div>
+                                     <div class="col">@member.CompanyNameEn</div>
+                                 </div>
+                                 <div class="row">
+                                     <div class="col-2"><p>Telephone :</p></div>
+                                     <div class="col">@member.Telephone</div>
+                                 </div>
+                                 <div class="row">
+                                     <div class="col-2"><p>Date Confirmed :</p></div>
+                                     <div class="col">@list.DateConfirm</div>
+                                 </div>
+                                 <div class="row">
+                                     <div class="col-2"><p>Awarded :</p></div>
+                                     <div class="col">Yes</div>
+                                 </div>
+                             </RadzenCard>
+                             <br />
+                         }
+                         else
+                         {
+                             <RadzenCard class="rz-background-color-base-100">
+                                 @*<div class="row">
+                                    <div class="col-2"><p>No.</p></div>
+                                    <div class="col">@no</div>
+                                </div>*@
+                                 <div class="row">
+                                     <div class="col-2"><p>Thai Name :</p></div>
+                                     <div class="col">@member.CompanyNameTh</div>
+                                 </div>
+                                 <div class="row">
+                                     <div class="col-2"><p>English Name :</p></div>
+                                     <div class="col">@member.CompanyNameEn</div>
+                                 </div>
+                                 <div class="row">
+                                     <div class="col-2"><p>Telephone :</p></div>
+                                     <div class="col">@member.Telephone</div>
+                                 </div>
+                                 <div class="row">
+                                     <div class="col-2"><p>Date Confirmed :</p></div>
+                                     <div class="col">@list.DateConfirm</div>
+                                 </div>
+                             </RadzenCard>
+                             <br />
+                         }
+                     }
+                 }
+             }
+             else
+             {
+                 <div class="row">
+                     <p><em>No Membership Assignments</em></p>
+                 </div>
+             }
+
+             if (!show)
+             {
+                 <br />
+                 <div class="col-3"><RadzenButton Shade="Shade.Light" Click=@(args => UpdateAssignment()) Text="Update Member Assignments" ButtonStyle="ButtonStyle.Primary" /></div>
+             }
+         }
+     </div>
+ </div>
+
+
+
+    <div class="container">
+        <div class="row">
+            @if (show)
+            {
+                <div class="col-3"><RadzenButton Shade="Shade.Light" Click=@(args => UpdateProgress()) Text="Update Progress" ButtonStyle="ButtonStyle.Primary" /></div>
             }
         </div>
     </div>
-    <div class="row">
-        <div class="col-2"><p><b>Running Number :</b></p></div>
-        <div class="col">@projectsub.ProjectSubRunNo</div>
-    </div>
-    <div class="row">
-        <div class="col-2"><p><b>Project Sub Name :</b></p></div>
-        <div class="col">@projectsub.ProjectSubName</div>
-    </div>
-    <div class="row">
-        <div class="col-2"><p><b>Description :</b></p></div>
-        <div class="col">@projectsub.Description</div>
-    </div>
-    <div class="row">
-        <div class="col-2"><p><b>Remarked :</b></p></div>
-        <div class="col">@projectsub.Remark</div>
-    </div>
-    <div class="row">
-        <div class="col-2"><p><b>Budget :</b></p></div>
-        @if (string.IsNullOrEmpty(projectsub.Budget.ToString()))
-        {
-            <div class="col">0 THB</div>
-        }
-        else
-        {
-            <div class="col">@projectsub.Budget THB</div>
-        }
-    </div>
-    <div class="row">
-        <div class="col-2"><p><b>Status :</b></p></div>
-        <div class="col">@projectsub.ProjectSubStatus</div>
-    </div>
-    <div class="row">
-        <div class="col-2"><p><b>Started Date :</b></p></div>
-        @if (string.IsNullOrEmpty(projectsub.PlanStartDate.ToString()))
-        {
-            <div class="col">Not Planed</div>
-        }
-        else
-        {
-            <div class="col">@projectsub.PlanStartDate</div>
-        }
-    </div>
-    <div class="row">
-        <div class="col-2"><p><b>Finished Date :</b></p></div>
-        @if (string.IsNullOrEmpty(projectsub.PlanFinishDate.ToString()))
-        {
-            <div class="col">Not Planed</div>
-        }
-        else
-        {
-            <div class="col">@projectsub.PlanFinishDate</div>
-        }
-    </div>
-</div>
-<br />
+    <br />
 
-<h4>Project Category</h4>
-<div class="container">
-    @if (subcapability is null)
-    {
-        <div class="row"><p><em>No Capability</em></p></div>
-    }
-    else
-    {
-        <table class="table table-striped" style="background-color:white; border:solid">
-            <thead>
-                <tr>
-                    <th>Capability Name</th>
-                    <th>Capability Sub Name</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var cat in subcapability)
-                {
-                    var cate = capability.Where(w => w.Id == cat.CategoryCatId).FirstOrDefault();
-                    <tr>
-                        <td>@cate.CategoryCat</td>
-                        <td>@cat.CategoryCatSub</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    }
-    
-</div>
-<br />
 
-<h4>Project Document</h4>
-<div class="container">
-    @if (showdoc is null)
-    {
-        <div class="row"><p><em>No Document</em></p></div>
-    }
-    else
-    {
-        <table class="table table-striped" style="background-color:white; border:solid">
-            <thead>
-                <tr>
-                    <th>Document Name</th>
-                    <th>Description</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var doc in showdoc)
-                {
-                    <tr>
-                        @if (doc.DocumentPath.ToUpper().Contains("PDFFILES"))
-                        {
-                            <td>
-                                <a href="@doc.DocumentPath">Link</a>
-                            </td>
-                        }
-                        else
-                        {
-                            <td>
-                                <img src="@doc.DocumentPath" width="300px" />
-                            </td>
-                        }
-                        <td>@doc.Description</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    }
-</div>
-<br />
+    @code {
+        [Parameter]
+        public int id { get; set; }
 
-<h4>Membership Assignments</h4>
-<div class="container">
-    @if (projectsub.ProjectSubMemberAsgmts is not null)
-    {
-        if (projectsub.ProjectSubMemberAsgmts.Count > 0)
+        public ProjectSubProjectTl projectsub { get; set; } = new ProjectSubProjectTl();
+        public ProjectRatypeTl projectra { get; set; } = new ProjectRatypeTl();
+
+        private List<MasterCapabilityCatSub> subcapability;
+        private List<MasterCapabilityCat> capability;
+        private List<ProjectDocument> projectdoc;
+        private List<RatypeMaster> ratype;
+        private List<MemberMaster> selectmember;
+
+        bool show = false;
+        private string Selectratype;
+
+        protected override async Task OnInitializedAsync()
         {
-            int no = 0;
+            projectsub = await pj.GetProjectSubProjectTLbyID(id);
+            GetMemberData();
+            projectdoc = await pj.GetProjectDocumentByProjectSubID(projectsub.Id);
+            ratype = await pj.GetRATypeMaster();
+            projectra = await pj.GetProjectRATypeBySubProjectID(projectsub.Id);
+            if (projectra is not null)
+            {
+                var list = ratype.Where(w => w.Id == projectra.RatypeMasterId).FirstOrDefault();
+                Selectratype = list.Name;
+            }
+
+            capability = await pj.GetAllCapability();
+            subcapability = Newtonsoft.Json.JsonConvert.DeserializeObject<List<MasterCapabilityCatSub>>(projectra.MemberCapability);
+
+            checkProgress();
+            StateHasChanged();
+        }
+
+        async Task GetMemberData()
+        {
+            selectmember = new List<MemberMaster>();
             foreach (var list in projectsub.ProjectSubMemberAsgmts)
             {
-                no++;
-                var item = member.Where(w => w.Id == list.MemberId).FirstOrDefault();
+                var select = await pj.GetMemberByID(list.Id);
+                selectmember.Add(new MemberMaster()
+                {
+                    Id = select.Id,
+                    CreateDate = select.CreateDate,
+                    MemberNo = select.MemberNo,
+                    MemberType = select.MemberType,
+                    CompanyNameTh = select.CompanyNameTh,
+                    CompanyNameEn = select.CompanyNameEn,
+                    CompanyRegistrationNo = select.CompanyRegistrationNo,
+                    RegisterCapital = select.RegisterCapital,
+                    ThaiCapitalPercentage = select.ThaiCapitalPercentage,
+                    EstablishYear = select.EstablishYear,
+                    FixedAsset = select.FixedAsset,
+                    NumberofEmployee = select.NumberofEmployee,
+                    Telephone = select.Telephone,
+                    Email = select.Email,
+                    WebSite = select.WebSite,
+                    Facebook = select.Facebook,
+                    IsBoi = select.IsBoi,
+                    IsCoreMemeber = select.IsCoreMemeber,
+                    IsEnable = select.IsEnable,
+                    ExpiredDate = select.ExpiredDate
+                });
+            }
+        }
+
+        private void checkProgress()
+        {
+            foreach (var list in projectsub.ProjectSubMemberAsgmts)
+            {
                 if (list.Awarded == "Y")
                 {
-                    <div class="row" style="background-color:lightgreen; border:solid">
-                        <div class="row">
-                            <div class="col-2"><p>No.</p></div>
-                            <div class="col">@no</div>
-                        </div>
-                        <div class="row">
-                            <div class="col-2"><p>Thai Name :</p></div>
-                            <div class="col">@item.CompanyNameTh</div>
-                        </div>
-                        <div class="row">
-                            <div class="col-2"><p>English Name :</p></div>
-                            <div class="col">@item.CompanyNameEn</div>
-                        </div>
-                        <div class="row">
-                            <div class="col-2"><p>Telephone :</p></div>
-                            <div class="col">@item.Telephone</div>
-                        </div>
-                        <div class="row">
-                            <div class="col-2"><p>Date Confirmed :</p></div>
-                            <div class="col">@list.DateConfirm</div>
-                        </div>
-                        <div class="row">
-                            <div class="col-2"><p>Awarded :</p></div>
-                            <div class="col">@list.Awarded</div>
-                        </div>
-                    </div>
-                    <br />
-                }
-                else
-                {
-                    <div class="row" style="background-color:lightgray; border:solid">
-                        <div class="row">
-                            <div class="col-2"><p>No.</p></div>
-                            <div class="col">@no</div>
-                        </div>
-                        <div class="row">
-                            <div class="col-2"><p>Thai Name :</p></div>
-                            <div class="col">@item.CompanyNameTh</div>
-                        </div>
-                        <div class="row">
-                            <div class="col-2"><p>English Name :</p></div>
-                            <div class="col">@item.CompanyNameEn</div>
-                        </div>
-                        <div class="row">
-                            <div class="col-2"><p>Telephone :</p></div>
-                            <div class="col">@item.Telephone</div>
-                        </div>
-                        <div class="row">
-                            <div class="col-2"><p>Date Confirmed :</p></div>
-                            <div class="col">@list.DateConfirm</div>
-                        </div>
-                        <div class="row">
-                            <div class="col-2"><p>Awarded :</p></div>
-                            <div class="col">@list.Awarded</div>
-                        </div>
-                    </div>
-                    <br />
+                    show = true;
+                    return;
                 }
             }
         }
-        else
+
+        private void UpdateAssignment()
         {
-            <div class="row">
-                <p><em>No Membership Assignments</em></p>
-            </div>
+            NavManager.NavigateTo("/Data/MemberAssign/" + id.ToString());
+        }
+
+        private void UpdateProgress()
+        {
+            NavManager.NavigateTo("/Data/ProjectSubProgress/" + id.ToString());
+        }
+
+        private void GoEdit()
+        {
+            NavManager.NavigateTo("/Data/ProjectSubEdit/" + id.ToString());
+        }
+
+        private void Goback()
+        {
+            NavManager.NavigateTo("/Data/ProjectDetail/" + projectsub.ProjectHdid.ToString());
+        }
+
+        private void Gomain()
+        {
+            NavManager.NavigateTo("/Data/Project");
+        }
+
+        public void Dispose()
+        {
+            if (subcapability is not null) subcapability.Clear();
+            if (capability is not null) capability.Clear();
+            if (projectdoc is not null) projectdoc.Clear();
+            Console.WriteLine("Disconnected");
         }
     }
-</div>
-<br />
-
-<div class="container">
-    <div class="row">
-        @if (show)
-        {
-            <div class="col-3"><button type="submit" class="btn btn-primary" style="left" @onclick="()=>UpdateProgress()">Update Progress</button></div>
-        }
-        else
-        {
-            <div class="col-3"> <button type="submit" class="btn btn-primary" style="left" @onclick="()=>UpdateAssignment()">Update Member Assignments</button></div>
-        }
-        
-    </div>
-</div>
-<br />
-
-<div class="container">
-    <div class="row">
-        <div class="col-2"><button type="submit" class="btn btn-primary" style="left" @onclick="()=>Gomain()">Project Main</button></div>
-        <div class="col-2"><button type="submit" class="btn btn-primary" style="left" @onclick="()=>Goback()">Project Detail</button></div>
-    </div>
-</div>
-<br />
-
-@code {
-    [Parameter]
-    public int id { get; set; }
-
-    public ProjectSubProjectTl projectsub { get; set; } = new ProjectSubProjectTl();
-    public ProjectRatypeTl projectra { get; set; } = new ProjectRatypeTl();
-
-    private List<MasterCapabilityCatSub> subcapability;
-    private List<MasterCapabilityCat> capability;
-    private List<MemberMaster> member;
-    private List<ProjectDocument> projectdoc;
-    private List<ProjectDocument> showdoc;
-
-    bool show = false;
-
-    protected override async Task OnInitializedAsync()
-    {
-        projectsub = await pj.GetProjectSubProjectTLbyID(id);
-        projectdoc = await pj.GetAllProjectDocument();
-        projectra = await pj.GetProjectRATypeBySubProjectID(projectsub.Id);
-        capability = await pj.GetAllCapability();
-        member = await pj.GetAllMember();
-
-        subcapability = Newtonsoft.Json.JsonConvert.DeserializeObject<List<MasterCapabilityCatSub>>(projectra.MemberCapability);
-        showdoc = projectdoc.Where(w => w.ProjectSubProjectTlid == id).ToList();
-
-        checkProgress();
-        StateHasChanged();
-    }
-
-    private void checkProgress()
-    {
-        foreach (var list in projectsub.ProjectSubMemberAsgmts)
-        {
-            if (list.Awarded == "Y")
-            {
-                show = true;
-                return;
-            }
-        }
-    }
-
-    private void UpdateAssignment()
-    {
-        NavManager.NavigateTo("/Data/MemberAssign/" + id.ToString());
-    }
-
-    private void UpdateProgress()
-    {
-        NavManager.NavigateTo("/Data/ProjectSubProgress/" + id.ToString());
-    }
-
-    private void GoEdit()
-    {
-        NavManager.NavigateTo("/Data/ProjectSubEdit/" + id.ToString());
-    }
-
-    private void Goback()
-    {
-        NavManager.NavigateTo("/Data/ProjectDetail/" + projectsub.ProjectHdid.ToString());
-    }
-
-    private void Gomain()
-    {
-        NavManager.NavigateTo("/Data/Project");
-    }
-
-    public void Dispose()
-    {
-        if (subcapability is not null) subcapability.Clear();
-        if (capability is not null) capability.Clear();
-        if (member is not null) member.Clear();
-        if (projectdoc is not null) projectdoc.Clear();
-        if (showdoc is not null) showdoc.Clear();
-        Console.WriteLine("Disconnected");
-    }
-}
 
