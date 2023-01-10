@@ -102,8 +102,7 @@
             {
                 var cate = capability.Where(w => w.Id == cat.CategoryCatId).FirstOrDefault();
                 <div class="row">
-                    <div class="col">@(cat.CategoryCat!=null? cat.CategoryCat.CategoryCat:"")</div>
-                    <div class="col">@cat.CategoryCatSub</div>
+                    <div class="col">@cate.CategoryCat - @cat.CategoryCatSub</div>
                 </div>
             }
         }

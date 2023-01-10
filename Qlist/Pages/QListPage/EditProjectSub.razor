@@ -20,8 +20,9 @@
 
 <EditForm Model="projectsub">
     <ConcurrentComponent ModuleName="ProjectSubEdit" ObjId="projectsub.Id" UserId="userid"></ConcurrentComponent>
-    <RadzenFieldset Text="Detail">
-        <div class="container">
+    <div class="card">
+        <div class="card-header">Detail</div>
+        <div class="card-body">
             <div class="row">
                 <div class="col-2"><p><b>Project Sub Name</b></p></div>
                 <div class="col"><InputText style="width: 100%" id="SubName" @bind-Value="projectsub.ProjectSubName"></InputText></div>
@@ -87,19 +88,20 @@
                 </div>
             </div>
         </div>
-    </RadzenFieldset>
+    </div>
+
     <br />
 
-    <RadzenFieldset Text="Project Capability">
-        <div class="container">
+    <div class="card">
+        <div class="card-header">Project Capability</div>
+        <div class="card-body">
             @if (subcategory is not null)
             {
                 foreach (var cat in subcategory)
                 {
                     var cate = capability.Where(w => w.Id == cat.CategoryCatId).FirstOrDefault();
                     <div class="row">
-                        <div class="col">@cate.CategoryCat</div>
-                        <div class="col">@cat.CategoryCatSub</div>
+                        <div class="col">@cate.CategoryCat - @cat.CategoryCatSub</div>
                         <div class="col-1"><RadzenButton Click=@(args => subcategory.Remove(cat)) Text="X" ButtonStyle="ButtonStyle.Danger" /></div>
                     </div>
                 }
@@ -125,11 +127,13 @@
                 <div class="col"><button @onclick="()=>SaveCategory(categoryid)">Add Category</button></div>
             </div>
         </div>
-    </RadzenFieldset>    
+    </div>
+  
     <br />
 
-    <RadzenFieldset Text="Project Document">
-        <div class="container">
+    <div class="card">
+        <div class="card-header">Project Document</div>
+        <div class="card-body">
             @if (projectdoc is not null)
             {
                 foreach (var doc in projectdoc)
@@ -162,8 +166,7 @@
                 <p><RadzenButton Click=@(args => OnSubmit()) Text="Upload Selected File" ButtonStyle="ButtonStyle.Primary" /></p>
             </div>
         </div>
-    </RadzenFieldset>
-    <br />
+    </div>
 
     <div class="container">
         <RadzenButton Click=@(args => UpdateProjectSub()) Text="Update" ButtonStyle="ButtonStyle.Success" />

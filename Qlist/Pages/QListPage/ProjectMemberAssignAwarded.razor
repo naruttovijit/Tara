@@ -14,18 +14,19 @@
 @inject ProjectData pj;
 @inject NavigationManager NavManager
 
+
 <br />
 <h3>Project Sub Member Assignment Awarded</h3>
 <br />
-
 @if (awarded.Id > 0)
 {
     <ConcurrentComponent ModuleName="ProjectMemberAssignAwarded" ObjId="awarded.ProjectSubProjectTl.Id" UserId="userid"></ConcurrentComponent>
-    <RadzenFieldset Text="Detail">
-        <div class="container">
+    <div class="card">
+        <div class="card-header"><b>Running Number : </b>@awarded.ProjectSubProjectTl.ProjectSubRunNo</div>
+        <div class="card-body">
             <div class="row">
-                <div class="col-2"><p><b>Running Number</b></p></div>
-                <div class="col">@awarded.ProjectSubProjectTl.ProjectSubRunNo</div>
+                <div class="col-2"><p></p></div>
+                <div class="col"></div>
             </div>
             <div class="row">
                 <div class="col-2"><p><b>Project Sub Name</b></p></div>
@@ -77,14 +78,16 @@
                 }
             </div>
         </div>
-    </RadzenFieldset>
-}
-<br />
+    </div>
 
-<RadzenFieldset Text="Member Assignment">
-    @if (awarded.Id > 0)
-    {
-        <div class="container">
+
+    <br />
+
+    <div class="card">
+        <div class="card-header">
+            Member Assignment
+        </div>
+        <div class="card-body">
             <div class="row">
                 <div class="col-2"><p><b>Company Name TH</b></p></div>
                 <div class="col">@member.CompanyNameTh</div>
@@ -110,9 +113,13 @@
                 <div class="col">@member.Facebook</div>
             </div>
         </div>
-    }
-</RadzenFieldset>
+    </div>
+
+}
 <br />
+
+
+
 
 
 @if (awarded.Awarded == "Y")
@@ -121,16 +128,14 @@
 }
 else
 {
-    <RadzenFieldset Text="Is Awarded ?">
-        <div class="container">
-            <div class="row">
-                <div class="col-1"><RadzenButton Click=@(args => UpdateAwarded()) Text="Yes" ButtonStyle="ButtonStyle.Success" /></div>
-                &nbsp;
-                <div class="col-1">
-                    <RadzenButton Shade="Shade.Lighter" Click=@(args => GoBack()) Text="No" ButtonStyle="ButtonStyle.Light" /></div>
-            </div>
+    <div class="card text-center">
+        <div class="card-body">
+            <h5 class="card-title">Is Awarded ?</h5>
+            <RadzenButton Style="margin-right:1rem" Click=@(args => UpdateAwarded()) Text="Yes" ButtonStyle="ButtonStyle.Success" />
+            <RadzenButton Shade="Shade.Lighter" Click=@(args => GoBack()) Text="No" ButtonStyle="ButtonStyle.Light" />
         </div>
-    </RadzenFieldset>
+    </div>
+
 }
 <br />
 

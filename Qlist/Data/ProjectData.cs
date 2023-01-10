@@ -192,6 +192,15 @@ namespace Qlist.Data
             return obj;
         }
 
+        public async Task<List<MasterCapabilityCatSub>> GetAllSubCapability() //get all project RA type data
+        {
+            HttpClient hc = new HttpClient();
+            var response = await hc.GetAsync("http://119.59.114.151:8001/api/MasterCapabilityCatSub");
+
+            var obj = await response.Content.ReadFromJsonAsync<List<MasterCapabilityCatSub>>();
+            return obj;
+        }
+
         public async Task<List<MemberMaster>> GetAllMember() //get all member
         {
             HttpClient hc = new HttpClient();

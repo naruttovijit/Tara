@@ -20,9 +20,9 @@
 <h3>Edit Project</h3>
 <EditForm Model="projecthd">
     <ConcurrentComponent ModuleName="ProjectEdit" ObjId="projecthd.Id" UserId="userid"></ConcurrentComponent>
-
-    <RadzenFieldset Text="Project Main">
-        <div class="container">
+    <div class="card">
+        <div class="card-header">Project Main</div>
+        <div class="card-body">
             <div class="row">
                 <div class="col-2"><p><b>Main Project Name</b></p></div>
                 <div class="col"><InputText style="width: 100%" id="MainName" @bind-Value="projecthd.ProjectName"></InputText></div>
@@ -65,116 +65,133 @@
                 </div>
             </div>
         </div>
-    </RadzenFieldset>
+    </div>
+
     <br />
 
-    <RadzenFieldset Text="Customer">
-        <div class="container">
+    <div class="card">
+        <div class="card-header">Customer</div>
+        <div class="card-body">
             <div class="row">
-                <div class="col-2"><p><b>Old Customer</b></p></div>
-                @if (customer is not null)
-                {
-                    var cust = customer[0];
-                    <div class="col">@cust.CompanyName</div>
-                }
-            </div>
-            <div class="row">
-                <div class="col-2"><p><b>New Customer</b></p></div>
-                <div class="col">
-                    <RadzenAutoComplete Placeholder="Select a customer..." Data=@custommember TextProperty="CompanyNameEn"
-                                        LoadData=@OnLoadData Style="width: 100%;" Change=@(args => GetMemberID(args)) />
+                    <div class="col-2"><p><b>Name</b></p></div>
+                    <div class="col"><RadzenTextBox style="width: 100%" @bind-Value="custname" /></div>
                 </div>
-            </div>
-            <br />
-            <div class="row">
-                @if (listcontact is not null)
-                {
-                    foreach (var list in listcontact)
-                    {
-                        <p>
-                            <RadzenCard class="rz-background-color-info-lighter">
-                                <div class="row">
-                                    <div class="col-2"><b>Name</b></div>
-                                    <div class="col">@list.Name</div>
-                                    <div class="col-1"><RadzenButton Click=@(args => listcontact.Remove(list)) Text="X" ButtonStyle="ButtonStyle.Danger" /></div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-2"><b>Position</b></div>
-                                    <div class="col">@list.Position</div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-2"><b>Address</b></div>
-                                    <div class="col"><a style="white-space: pre-wrap;">@list.Address</a></div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-2"><b>Email</b></div>
-                                    <div class="col">@list.Email</div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-2"><b>MobileNo</b></div>
-                                    <div class="col">@list.MobileNo</div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-2"><b>Other</b></div>
-                                    <div class="col"><a style="white-space: pre-wrap;">@list.Other</a></div>
-                                </div>
-                            </RadzenCard>
-                        </p>
-                    }
-                }
-            </div>
-            <br />
-
-            <RadzenCard class="rz-background-color-base-100">
                 <div class="row">
-                     <div class="row">
-                        <div class="col-2"><b>Name</b></div>
-                        <div class="col"><InputText style="width: 100%" id="MainName" @bind-Value="contactname" /></div>
-                    </div>
-                    <div class="row">
-                         <div class="col-2"><b>Position</b></div>
-                         <div class="col"><InputText style="width: 100%" @bind-Value="contactpos" /></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-2"><b>Address</b></div>
-                        <div class="col"><RadzenTextArea style="width: 100%" @bind-Value="contactaddr" Cols="30" Rows="3" /></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-2"><b>Email</b></div>
-                        <div class="col"><InputText style="width: 100%" @bind-Value="contactemail" /></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-2"><b>MobileNo</b></div>
-                        <div class="col"><InputText style="width: 100%" @bind-Value="contactmobile" /></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-2"><b>Other</b></div>
-                        <div class="col"><RadzenTextArea style="width: 100%" @bind-Value="contactother" Cols="30" Rows="3" /></div>
-                    </div>
-                    <div class="row-cols-sm-auto">
-                        <RadzenButton Click=@(args => SaveContact()) Icon="add" Text="Add Contact" ButtonStyle="ButtonStyle.Primary" Size="ButtonSize.Medium" />
-                    </div>
+                    <div class="col-2"><p><b>Address</b></p></div>
+                    <div class="col"><RadzenTextArea style="width: 100%" @bind-Value="custaddress" Cols="30" Rows="3" /></div>
                 </div>
-                
-            </RadzenCard>
-            <br />
-            <div class="row">
-                    <div class="col-1">
-                        <RadzenButton Click=@(args => UpdateProjectHD()) Icon="update" Text="Update" ButtonStyle="ButtonStyle.Success" />
-                    </div>
+                <div class="row">
+                <div class="col-2"><p><b>Telephone</b></p></div>
+                    <div class="col"><RadzenTextBox style="width: 100%" @bind-Value="custtelephone" /></div>
+                </div>
+                <div class="row">
+                    <div class="col-2"><p><b>Email</b></p></div>
+                    <div class="col"><RadzenTextBox style="width: 100%" @bind-Value="custemail" /></div>
+                </div>
+                <div class="row">
+                    <div class="col-2"><p><b>Website</b></p></div>
+                    <div class="col"><RadzenTextBox style="width: 100%" @bind-Value="custwebsite" /></div>
+                </div>
+                <div class="row">
+                    <div class="col-2"><p><b>Facebook</b></p></div>
+                    <div class="col"><RadzenTextBox style="width: 100%" @bind-Value="custfacebook" /></div>
+                </div>
+                <div class="row">
+                    <div class="col-2"><p><b>Other</b></p></div>
+                    <div class="col"><RadzenTextArea style="width: 100%" @bind-Value="custother" Cols="30" Rows="3" /></div>
                 </div>
         </div>
-    </RadzenFieldset>
+    </div>
+
+    <br />
+
+    <div class="card">
+        <div class="card-header">Contact List</div>
+        <div class="card-body">
+            @if (listcontact is not null)
+            {
+                foreach (var list in listcontact)
+                {
+                    <div class="card-body bg-info bg-opacity-10">
+                        <div class="row">
+                            <div class="col-2"><b>Name</b></div>
+                            <div class="col">@list.Name</div>
+                            <div class="col-1"><RadzenButton Click=@(args => listcontact.Remove(list)) Text="X" ButtonStyle="ButtonStyle.Danger" /></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-2"><b>Position</b></div>
+                            <div class="col">@list.Position</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-2"><b>Address</b></div>
+                            <div class="col"><a style="white-space: pre-wrap;">@list.Address</a></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-2"><b>Email</b></div>
+                            <div class="col">@list.Email</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-2"><b>MobileNo</b></div>
+                            <div class="col">@list.MobileNo</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-2"><b>Other</b></div>
+                            <div class="col"><a style="white-space: pre-wrap;">@list.Other</a></div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-2"><p><b>Name</b></p></div>
+                <div class="col"><InputText style="width: 100%" id="MainName" @bind-Value="contactname" /></div>
+            </div>
+            <div class="row">
+                <div class="col-2"><p><b>Position</b></p></div>
+                <div class="col"><InputText style="width: 100%" @bind-Value="contactpos" /></div>
+            </div>
+            <div class="row">
+                <div class="col-2"><p><b>Address</b></p></div>
+                <div class="col"><RadzenTextArea style="width: 100%" @bind-Value="contactaddr" Cols="30" Rows="3" /></div>
+            </div>
+            <div class="row">
+                <div class="col-2"><p><b>Email</b></p></div>
+                <div class="col"><InputText style="width: 100%" @bind-Value="contactemail" /></div>
+            </div>
+            <div class="row">
+                <div class="col-2"><p><b>MobileNo</b></p></div>
+                <div class="col"><InputText style="width: 100%" @bind-Value="contactmobile" /></div>
+            </div>
+            <div class="row">
+                <div class="col-2"><p><b>Other</b></p></div>
+                <div class="col"><RadzenTextArea style="width: 100%" @bind-Value="contactother" Cols="30" Rows="3" /></div>
+            </div>
+            <div class="row-cols-sm-auto">
+                <RadzenButton Click=@(args => SaveContact()) Icon="add" Text="Add Contact" ButtonStyle="ButtonStyle.Primary" Size="ButtonSize.Medium" />
+            </div>
+        </div>
+    </div>
+
+    <br />
+    <div class="row">
+        <div class="col-1">
+            <RadzenButton Click=@(args => UpdateProjectHD()) Icon="update" Text="Update" ButtonStyle="ButtonStyle.Success" />
+        </div>
+    </div>
 </EditForm>
 <br />
+
+
+
 
 @code {
     [Parameter]
     public int id { get; set; }
 
     public ProjectHd projecthd { get; set; } = new ProjectHd();
-    private List<Customer> customer;
-    private List<Customer> custommember;
+
+    private List<CustomCustomer> customerinfo;
     private List<CustomContact> listcontact;
 
     [CascadingParameter]
@@ -195,15 +212,25 @@
     string contactmobile;
     string contactother;
 
+    string custname;
+    string custaddress;
+    string custtelephone;
+    string custemail;
+    string custwebsite;
+    string custfacebook;
+    string custother;
+
     protected override async Task OnInitializedAsync()
     {
-        await Initial();
-    }
-
-    private async Task Initial()
-    {
         projecthd = await pj.GetProjectHDbyID(id);
-        customer = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Customer>>(projecthd.CustomerInfo);
+        customerinfo = Newtonsoft.Json.JsonConvert.DeserializeObject<List<CustomCustomer>>(projecthd.CustomerInfo);
+        custname = customerinfo[0].Name;
+        custaddress = customerinfo[0].Address;
+        custtelephone = customerinfo[0].Telephone;
+        custemail = customerinfo[0].Email;
+        custwebsite = customerinfo[0].WebSite;
+        custfacebook = customerinfo[0].Facebook;
+        custother = customerinfo[0].Other;
         listcontact = Newtonsoft.Json.JsonConvert.DeserializeObject<List<CustomContact>>(projecthd.ContactInfo);
         GetDataAuthen();
         StateHasChanged();
@@ -239,6 +266,14 @@
             await ErrorMessage("Please fill in Contact Mobile!");
             return;
         }
+        if (!string.IsNullOrEmpty(contactaddr))
+        {
+            contactaddr = contactaddr.Replace("\r\n", "" + ((char)13).ToString() + (char)10).ToString();
+        }
+        if (!string.IsNullOrEmpty(contactother))
+        {
+            contactother = contactother.Replace("\r\n", "" + ((char)13).ToString() + (char)10).ToString();
+        }
 
         listcontact.Add(new CustomContact()
                 {
@@ -270,26 +305,40 @@
             await ErrorMessage("Please fill Contact!");
             return;
         }
-
-        if (customerid > 0)
+        if (string.IsNullOrEmpty(custname))
         {
-            List<Customer> customersave = new List<Customer>();
-            var result = custommember.Where(c => c.Id == customerid).FirstOrDefault();
-            customersave.Add(new Customer()
-            {
-                Id = result.Id,
-                CreateDate = result.CreateDate,
-                CustomerId = result.CustomerId,
-                Name = result.Name,
-                MemberNo = result.MemberNo,
-                CompanyName = result.CompanyName,
-                Telephone = result.Telephone,
-                Email = result.Email,
-                LineId = result.LineId    
-            });
-            projecthd.CustomerInfo = Newtonsoft.Json.JsonConvert.SerializeObject(customersave);
-            projecthd.CustomerId = result.Id;
+            await ErrorMessage("Please fill Customer Name!");
+            return;
         }
+        if (string.IsNullOrEmpty(custaddress))
+        {
+            await ErrorMessage("Please fill Customer Address!");
+            return;
+        }
+        if (string.IsNullOrEmpty(custtelephone))
+        {
+            await ErrorMessage("Please fill Customer Telephone!");
+            return;
+        }
+        if (string.IsNullOrEmpty(custemail))
+        {
+            await ErrorMessage("Please fill Customer Email!");
+            return;
+        }
+
+        if (!string.IsNullOrEmpty(custother))
+        {
+            custother = custother.Replace("\r\n", "" + ((char)13).ToString() + (char)10).ToString();
+        }
+
+        customerinfo[0].Name = custname;
+        customerinfo[0].Address = custaddress.Replace("\r\n", "" + ((char)13).ToString() + (char)10).ToString();
+        customerinfo[0].Telephone = custtelephone;
+        customerinfo[0].Email = custemail;
+        customerinfo[0].WebSite = custwebsite;
+        customerinfo[0].Facebook = custfacebook;
+        customerinfo[0].Other = custother;
+        projecthd.CustomerInfo = Newtonsoft.Json.JsonConvert.SerializeObject(customerinfo);
 
         projecthd.ContactInfo = Newtonsoft.Json.JsonConvert.SerializeObject(listcontact);
         projecthd.ProjectHdstatus = "Open";
@@ -310,33 +359,33 @@
         projecthd.PlanFinishDate = DateTime.Now;
     }
 
-    async Task OnLoadData(LoadDataArgs args)
-    {
-        if (args.Filter.Length <= 2)
-        {
-            if (custommember is not null)
-            {
-                custommember.Clear();
-            }
-        }
-        if (args.Filter.Length > 2)
-        {
-            custommember = await pj.GetCustomerByContain(args.Filter.ToUpper().ToString());
-            InvokeAsync(StateHasChanged);
-        }
-    }
+    //async Task OnLoadData(LoadDataArgs args)
+    //{
+    //    if (args.Filter.Length <= 2)
+    //    {
+    //        if (custommember is not null)
+    //        {
+    //            custommember.Clear();
+    //        }
+    //    }
+    //    if (args.Filter.Length > 2)
+    //    {
+    //        custommember = await pj.GetCustomerByContain(args.Filter.ToUpper().ToString());
+    //        InvokeAsync(StateHasChanged);
+    //    }
+    //}
 
-    async Task GetMemberID(object value)
-    {
-        if (custommember is not null)
-        {
-            var select = custommember.Where(c => c.CompanyName.ToUpper() == value.ToString().ToUpper()).ToList();
-            if (select.Count == 1)
-            {
-                customerid = select[0].Id;
-            }
-        }
-    }
+    //async Task GetMemberID(object value)
+    //{
+    //    if (custommember is not null)
+    //    {
+    //        var select = custommember.Where(c => c.CompanyName.ToUpper() == value.ToString().ToUpper()).ToList();
+    //        if (select.Count == 1)
+    //        {
+    //            customerid = select[0].Id;
+    //        }
+    //    }
+    //}
 
     async Task ErrorMessage(string message)
     {
@@ -349,9 +398,8 @@
 
     public void Dispose()
     {
+        if (customerinfo is not null) customerinfo.Clear();
         if (listcontact is not null) listcontact.Clear();
-        if (customer is not null) customer.Clear();
-        if (custommember is not null) custommember.Clear();
         Console.WriteLine("Disconnected");
     }
 }

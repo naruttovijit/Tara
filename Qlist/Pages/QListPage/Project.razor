@@ -69,9 +69,9 @@
                         <Template Context="cust">
                             @if (!string.IsNullOrEmpty(cust.CustomerInfo))
                             {
-                                customerinfo = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Customer>>(cust.CustomerInfo);
+                                customerinfo = Newtonsoft.Json.JsonConvert.DeserializeObject<List<CustomCustomer>>(cust.CustomerInfo);
                                 <p>
-                                    @customerinfo[0].CompanyName
+                                    @customerinfo[0].Name
                                 </p>
                             }
                         </Template>
@@ -92,7 +92,7 @@
 @code {
     private List<ProjectHd> project;
     private RadzenDataGrid<ProjectHd>? grid;
-    private List<Customer>? customerinfo;
+    private List<CustomCustomer>? customerinfo;
     private List<ProjectRatypeTl> listra;
     private List<ProjectRatypeTl> selectra;
     private List<MasterCapabilityCatSub> subcapability;

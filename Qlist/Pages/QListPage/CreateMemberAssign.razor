@@ -18,10 +18,6 @@
 <br />
 <h3>Project Sub Member Assignment</h3>
 
-<div class="card">
-    <div class="card-header">Project Sub List</div>
-    <div class="card-body"></div>
-</div>
 <br />
 
 <div class="card">
@@ -102,10 +98,9 @@
         {
             @foreach (var cat in subcapability)
             {
-                @* var cate = capability.Where(w => w.Id == cat.CategoryCatId).FirstOrDefault();*@
+                 var cate = capability.Where(w => w.Id == cat.CategoryCatId).FirstOrDefault();
                 <div class="row">
-                    @*<div class="col">@cat.CategoryCat.CategoryCat</div>*@
-                    <div class="col">@cat.CategoryCatSub</div>
+                    <div class="col">@cate.CategoryCat - @cat.CategoryCatSub</div>
                 </div>
             }
         }
@@ -176,38 +171,35 @@
     </div>
 </div>
 <br />
-
-<RadzenFieldset Text="">
-    <div class="container">
-        <div class="row">
-            
-        </div>
-    </div>
-    <br />
-    @if (!awarded)
-    {
-        <div class="container">
-            <EditForm Model="memberassign">
-                <div class="row">
-                    <div class="col-4">
+<div class="card">
+   
+    <div class="card-body">
+        @if (!awarded)
+        {
+            <div class="container">
+                <EditForm Model="memberassign">
+                    <div class="row">
+                        <div class="col-4">
+                            <p>
+                                <RadzenAutoComplete Placeholder="Select a Member..." Data=@custommember TextProperty="CompanyNameEn"
+                                                    LoadData=@OnLoadData Style="width: 100%;" Change=@(args => GetMemberID(args)) />
+                            </p>
+                        </div>
+                        <div class="col">
+                            <RadzenButton Click=@(args => AddMember(idMember)) Icon="add_circle_outline" ButtonStyle="ButtonStyle.Primary" Size="ButtonSize.Medium" />
+                        </div>
+                    </div>
+                    <div class="row">
                         <p>
-                            <RadzenAutoComplete Placeholder="Select a Member..." Data=@custommember TextProperty="CompanyNameEn"
-                                                LoadData=@OnLoadData Style="width: 100%;" Change=@(args => GetMemberID(args)) />
+                            <RadzenButton Click=@(args => UpdateMemberAssign()) Icon="update" Text="Update" ButtonStyle="ButtonStyle.Success" />
                         </p>
                     </div>
-                    <div class="col">
-                        <RadzenButton Click=@(args => AddMember(idMember)) Icon="add_circle_outline" ButtonStyle="ButtonStyle.Primary" Size="ButtonSize.Medium" />
-                    </div>
-                </div>
-                <div class="row">
-                    <p>
-                        <RadzenButton Click=@(args => UpdateMemberAssign()) Icon="update" Text="Update" ButtonStyle="ButtonStyle.Success" />
-                    </p>
-                </div>
-            </EditForm>
-        </div>
-    }
-</RadzenFieldset>
+                </EditForm>
+            </div>
+        }
+    </div>
+</div>
+
 <br />
 
 
@@ -220,7 +212,7 @@
     public ProjectSubMemberAsgmt memberassign { get; set; } = new ProjectSubMemberAsgmt();
     public ProjectRatypeTl projectra { get; set; } = new ProjectRatypeTl();
 
-    //private List<MasterCapabilityCat> capability;
+    private List<MasterCapabilityCat> capability;
     private List<MasterCapabilityCatSub> subcapability;
     private List<MemberContactPerson> contact;
     private List<MemberMaster> member;
@@ -246,16 +238,12 @@
 
     protected override async Task OnInitializedAsync()
     {
-        await Initial();
-    }
-
-    private async Task Initial()
-    {
         projectsub = await pj.GetProjectSubProjectTLbyID(id);
         projectra = await pj.GetProjectRATypeBySubProjectID(projectsub.Id);
         allassign = await pj.GetMemberAssignmentBySubID(projectsub.Id);
         member = await pj.GetAllMember();
         membercate = await pj.GetAllMemberCategory();
+        capability = await pj.GetAllCapability();
 
         subcapability = Newtonsoft.Json.JsonConvert.DeserializeObject<List<MasterCapabilityCatSub>>(projectra.MemberCapability);
         if (projectsub.ProjectSubMemberAsgmts.Count > 0)
@@ -314,14 +302,6 @@
             }
         }
 
-        //var result = member.Where(o => o..Any(m => sub.Contains(m.CategorySubId.GetValueOrDefault())));
-        //List<MemberMaster> result2 = result.Where(w => (w.RegisterCapital / projectsub.Budget) <= 10).ToList();
-        //count = new List<CountAwarded>();
-        //foreach (var list in result2)
-        //{
-        //    count.Add(new CountAwarded() {MemberId = list.Id, Count = 0});
-        //}
-
         var assign = allassign.Where(w => w.Awarded == "Y").ToList();
         foreach (var list in assign)
         {
@@ -373,7 +353,7 @@
         projectsub.ProjectSubStatus = "Member Assignment";
         var result = await pj.SaveSubProject(projectsub);
 
-        await Initial();
+        await OnInitializedAsync();
     }
 
     void CheckboxClicked(ProjectSubMemberAsgmt assignmember, object checkedValue)
@@ -420,7 +400,7 @@
     public void Dispose()
     {
         if (CheckBox is not null) CheckBox.Clear();
-        //if (capability is not null) capability.Clear();
+        if (capability is not null) capability.Clear();
         if (subcapability is not null) subcapability.Clear();
         if (member is not null) member.Clear();
         if (allassign is not null) allassign.Clear();

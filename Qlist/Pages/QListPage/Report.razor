@@ -8,43 +8,41 @@
 @using Radzen;
 @using Radzen.Blazor;
 @using System.Globalization;
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Components.Authorization
 
 @inject ProjectData pj;
 @inject NavigationManager NavManager
 
-@attribute [Authorize(Roles = "1,3")]
-
-<br />
-<div class="container">
-     <div class="row">
-         <div class="col-sm-12 col-lg-6 offset-lg-3 my-5">
-                <RadzenCard Class="w-100 mb-4" >
-                    <RadzenCheckBox @bind-Value="@showDataLabels" Name="dataLabels"></RadzenCheckBox>
-                    <RadzenLabel Text="Show Data Labels" For="dataLabels" Style="margin-left: 8px; vertical-align: middle;" />
-                </RadzenCard>
-                <RadzenChart>
-                <RadzenDonutSeries Data="@chart" CategoryProperty="Status" ValueProperty="Count">
-                        <ChildContent>
-                        <RadzenSeriesDataLabels Visible="@showDataLabels" />
-                        </ChildContent>
-                        <TitleTemplate>
-                            <div class="rz-donut-content">
-                            <div><b>@total.ToString("#,##0")</b></div>
-                            <div>Projects</div>
-                            </div>
-                        </TitleTemplate>
-                    </RadzenDonutSeries>
-                </RadzenChart>
-        </div>
-    </div>     
-</div>
+@attribute [Authorize(Roles = "1,2,3")]
 
 <br />
 <div class="container">
     <div class="row">
-        <div class="col"><h3>Queue List</h3></div>
+        <div class="col-sm-12 col-lg-6 offset-lg-3 my-5">
+            <RadzenCard Class="w-100 mb-4">
+                <RadzenCheckBox @bind-Value="@showDataLabels" Name="dataLabels"></RadzenCheckBox>
+                <RadzenLabel Text="Show Data Labels" For="dataLabels" Style="margin-left: 8px; vertical-align: middle;" />
+            </RadzenCard>
+            <RadzenChart>
+                <RadzenDonutSeries Data="@graph" CategoryProperty="Status" ValueProperty="Count">
+                    <ChildContent>
+                        <RadzenSeriesDataLabels Visible="@showDataLabels" />
+                    </ChildContent>
+                    <TitleTemplate>
+                        <div class="rz-donut-content">
+                            <div><b>@total.ToString("#,##0")</b></div>
+                            <div>Projects</div>
+                        </div>
+                    </TitleTemplate>
+                </RadzenDonutSeries>
+            </RadzenChart>
+        </div>
     </div>
-    <br />
+</div>
+
+<br />
+<div class="container">
     <div class="row">
         @if (project is null)
         {
@@ -52,12 +50,16 @@
         }
         else
         {
-            <RadzenDataGrid @ref="grid" AllowFiltering="true" AllowPaging="true" PageSize="5" AllowSorting="true" RowRender="@RowRender" ExpandMode="DataGridExpandMode.Single"
+            <RadzenDataGrid @ref="grid" AllowFiltering="true" AllowPaging="true" PageSize="10" AllowSorting="true" RowRender="@RowRender" ExpandMode="DataGridExpandMode.Single"
                         Data="@project" TItem="ProjectHd" RowExpand="RowExpand">
                 <Template Context="sub">
                     <RadzenDataGrid AllowPaging="true" AllowSorting="true" Data="@sub.ProjectSubProjectTls" TItem="ProjectSubProjectTl">
                         <Columns>
-                            <RadzenDataGridColumn TItem="ProjectSubProjectTl" Property="ProjectSubRunNo" Title="No" Width="150px" />
+                            <RadzenDataGridColumn TItem="ProjectSubProjectTl" Property="ProjectSubRunNo" Title="No" Width="150px">
+                                <Template Context="subp">
+                                    <a href="@($"/Data/ProjectSubDetail/{subp.Id}")">@subp.ProjectSubRunNo</a>
+                                </Template>
+                            </RadzenDataGridColumn>
                             <RadzenDataGridColumn TItem="ProjectSubProjectTl" Property="ProjectSubName" Title="Project Sub Name" Width="270px" />
                             <RadzenDataGridColumn TItem="ProjectSubProjectTl" Property="Budget" Title="Budget" Width="180px">
                                 <Template Context="budg">
@@ -75,7 +77,11 @@
                     </RadzenDataGrid>
                 </Template>
                 <Columns>
-                    <RadzenDataGridColumn TItem="ProjectHd" Property="ProjectHdrunNo" Title="No" Width="130px" />
+                    <RadzenDataGridColumn TItem="ProjectHd" Property="ProjectHdrunNo" Title="No" Width="130px">
+                        <Template Context="hd">
+                            <a href="@($"/Data/ProjectDetail/{hd.Id}")">@hd.ProjectHdrunNo</a>
+                        </Template>
+                    </RadzenDataGridColumn>
                     <RadzenDataGridColumn TItem="ProjectHd" Property="ProjectName" Title="Project Main Name" Width="270px" />
                     <RadzenDataGridColumn TItem="ProjectHd" Property="CustomerInfo" Title="Customer" Width="270px">
                         <Template Context="cust">
@@ -103,20 +109,24 @@
 
 @code {
     private List<ProjectHd> project;
-    private RadzenDataGrid<ProjectHd>? grid;
+    private RadzenDataGrid<ProjectHd>? grid = new RadzenDataGrid<ProjectHd>();
     private List<Customer>? customerinfo;
     private List<ProjectRatypeTl> listra;
     private List<ProjectRatypeTl> selectra;
     private List<MasterCapabilityCatSub> subcapability;
+    private List<Graph> graph;
 
     private bool showDataLabels = false;
     private int total;
-    class DataItem
-    {
-        public string Status { get; set; }
-        public double Count { get; set; }
-    }
-    DataItem[] chart;
+
+    [CascadingParameter]
+    private Task<AuthenticationState> authenticationStateTask { get; set; }
+
+    private ClaimsPrincipal AuthenticationStateUser { get; set; }
+
+    int role;
+    string memberno;
+    int userid;
 
     protected override async Task OnInitializedAsync()
     {
@@ -126,7 +136,22 @@
         project = project.OrderByDescending(n => n.ProjectHdrunNo).ToList();
         listra = await pj.GetAllProjectRAType();
         CreateGraph();
+        GetDataAuthen();
+
         StateHasChanged();
+    }
+
+    async Task GetDataAuthen()
+    {
+        memberno = string.Empty;
+
+        AuthenticationState authenticationState;
+        authenticationState = await authenticationStateTask;
+        this.AuthenticationStateUser = authenticationState.User;
+        var claim = this.AuthenticationStateUser.Claims.ToList();
+        role = int.Parse(claim[1].Value);
+        memberno = claim[2].Value;
+        userid = int.Parse(claim[3].Value);
     }
 
     private void CreateGraph()
@@ -136,34 +161,10 @@
         var closed = project.Where(w => w.ProjectHdstatus == "Closed").ToList();
         var cancel = project.Where(w => w.ProjectHdstatus == "Closed with Cancelled").ToList();
 
-        chart = new DataItem[]
-        {
-            new DataItem
-            {
-                Status = "Open",
-                Count = open.Count
-            },
-            new DataItem
-            {
-                Status = "Closed",
-                Count = closed.Count
-            },
-            new DataItem
-            {
-                Status = "Closed with Cancelled",
-                Count = cancel.Count
-            },
-        };
-    }
-
-    private void MostCap()
-    {
-
-    }
-
-    void OnLinkClick(string number)
-    {
-
+        graph = new List<Graph>();
+        graph.Add(new Graph() { Status = "Open", Count = open.Count() });
+        graph.Add(new Graph() { Status = "Closed", Count = closed.Count() });
+        graph.Add(new Graph() { Status = "Closed with Cancelled", Count = cancel.Count() });
     }
 
     void RowRender(RowRenderEventArgs<ProjectHd> args)

@@ -5,7 +5,6 @@ using Qlist.Authentication;
 using Qlist.Data;
 using Radzen;
 using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -108,8 +108,8 @@
                     <div class="col">@list.Name</div>
                 </div>
                 <div class="row">
-                    <div class="col-2"><b>Company Name</b></div>
-                    <div class="col">@list.CompanyName</div>
+                    <div class="col-2"><b>Address</b></div>
+                    <div class="col"><a style="white-space: pre-wrap;">@list.Address</a></div>
                 </div>
                 <div class="row">
                     <div class="col-2"><b>Telephone</b></div>
@@ -120,8 +120,16 @@
                     <div class="col">@list.Email</div>
                 </div>
                 <div class="row">
-                    <div class="col-2"><b>Line ID</b></div>
-                    <div class="col">@list.LineId</div>
+                    <div class="col-2"><b>Website</b></div>
+                    <div class="col">@list.WebSite</div>
+                </div>
+                <div class="row">
+                    <div class="col-2"><b>Facebook</b></div>
+                    <div class="col">@list.Facebook</div>
+                </div>
+                <div class="row">
+                    <div class="col-2"><b>Other</b></div>
+                    <div class="col"><a style="white-space: pre-wrap;">@list.Other</a></div>
                 </div>
             }
             <br>
@@ -213,9 +221,8 @@
     public ProjectHd projecthd { get; set; } = new ProjectHd();
     public ProjectSubProjectTl formsub { get; set; } = new ProjectSubProjectTl();
 
-    private List<Customer> customerinfo;
+    private List<CustomCustomer> customerinfo;
     private List<CustomContact> listcontact;
-    //private List<MemberAddress> address;
     private List<MasterTambon> tambon;
 
     bool hideEdit = false;
@@ -223,10 +230,7 @@
     protected override async Task OnInitializedAsync()
     {
         projecthd = await pj.GetProjectHDbyID(id);
-        customerinfo = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Customer>>(projecthd.CustomerInfo);
-        //address = await pj.GetAddressByMemberNo(customerinfo[0].MemberNo);
-        //tambon = await pj.GetTambonByID(address[0].TambonId);
-
+        customerinfo = Newtonsoft.Json.JsonConvert.DeserializeObject<List<CustomCustomer>>(projecthd.CustomerInfo);
         listcontact = Newtonsoft.Json.JsonConvert.DeserializeObject<List<CustomContact>>(projecthd.ContactInfo);
         checkEdit();
         StateHasChanged();

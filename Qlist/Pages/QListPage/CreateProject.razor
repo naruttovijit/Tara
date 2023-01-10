@@ -25,51 +25,32 @@
 <br />
 @*Create Project HD*@
 <EditForm Model="formmain">
-    <RadzenFieldset Text="Create Project Main">
-        <div class="container">
+    <div class="card">
+        <div class="card-header">Create Project Main</div>
+        <div class="card-body">
             <div class="row">
-                 <div class="col-2">
-                        <p>Main Project Name</p>
-                 </div>
-                <div class="col">
-                    <RadzenTextBox style="width: 100%" id="MainName" @bind-Value="formmain.ProjectName" />
-                </div>
+                <div class="col-2"><p><b>Main Project Name</b></p></div>
+                <div class="col"><RadzenTextBox style="width: 100%" id="MainName" @bind-Value="formmain.ProjectName" /></div>
             </div>
 
             <div class="row">
-                <div class="col-2">
-                    <p>Description</p>
-                </div>
-                <div class="col">
-                    <RadzenTextArea style="width: 100%" @bind-Value="maindesc" Cols="30" Rows="3" />
-                </div>
+                <div class="col-2"><p><b>Description</b></p></div>
+                <div class="col"><RadzenTextArea style="width: 100%" @bind-Value="maindesc" Cols="30" Rows="3" /></div>
             </div>
 
             <div class="row">
-                <div class="col-2">
-                    <p>Remark</p>
-                </div>
-                <div class="col">
-                    <RadzenTextArea style="width: 100%" @bind-Value="mainremark" Cols="30" Rows="3" />
-                </div>
+                <div class="col-2"><p><b>Remark</b></p></div>
+                <div class="col"><RadzenTextArea style="width: 100%" @bind-Value="mainremark" Cols="30" Rows="3" /></div>
             </div>
 
             <div class="row">
-                <div class="col-2">
-                    <p>Budget</p>
-                </div>
-                <div class="col">
-                    <InputNumber style="width: 100%" id="MainBudget" @bind-Value="formmain.Budget"></InputNumber>
-                </div>
-                <div class="col-1">
-                    <p>THB</p>
-                </div>
+                <div class="col-2"><p><b>Budget</b></p></div>
+                <div class="col"><InputNumber style="width: 100%" id="MainBudget" @bind-Value="formmain.Budget"></InputNumber></div>
+                <div class="col-1"><p>THB</p></div>
             </div>
 
             <div class="row">
-                <div class="col-2">
-                    <p>Started Date</p>
-                </div>
+                <div class="col-2"><p><b>Started Date</b></p></div>
                 <div class="col">
                     <p>
                          <RadzenDatePicker @bind-Value=@formmain.PlanStartDate DateFormat="dd/MM/yyyy" Class="w-100">
@@ -79,9 +60,7 @@
                         </RadzenDatePicker>
                     </p>
                 </div>
-                <div class="col-2">
-                    <p>Finished Date</p>
-                </div>
+                <div class="col-2"><p><b>Finished Date</b></p></div>
                 <div class="col">
                     <p>
                         <RadzenDatePicker @bind-Value=@formmain.PlanFinishDate DateFormat="dd/MM/yyyy" Class="w-100">
@@ -92,80 +71,106 @@
                     </p>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-2">
-                    <p>Customer</p>
-                </div>
-                <div class="col">
-                    <p>
-                        <RadzenAutoComplete Placeholder="Select a customer..." Data=@custommember TextProperty="CompanyName"
-                                                    LoadData=@OnLoadData Style="width: 100%;" Change=@(args => GetCustomerID(args)) />
-                    </p>
+            <br />
+
+            <div class="card">
+                <div class="card-header">Customer</div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-2"><p><b>Customer Name</b></p></div>
+                        <div class="col"><RadzenTextBox style="width: 100%" @bind-Value="custname" /></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-2"><p><b>Address</b></p></div>
+                        <div class="col"><RadzenTextArea style="width: 100%" @bind-Value="custaddress" Cols="30" Rows="3" /></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-2"><p><b>Telephone</b></p></div>
+                        <div class="col"><RadzenTextBox style="width: 100%" @bind-Value="custtelephone" /></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-2"><p><b>Email</b></p></div>
+                        <div class="col"><RadzenTextBox style="width: 100%" @bind-Value="custemail" /></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-2"><p><b>Website</b></p></div>
+                        <div class="col"><RadzenTextBox style="width: 100%" @bind-Value="custwebsite" /></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-2"><p><b>Facebook</b></p></div>
+                        <div class="col"><RadzenTextBox style="width: 100%" @bind-Value="custfacebook" /></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-2"><p><b>Other</b></p></div>
+                        <div class="col"><RadzenTextArea style="width: 100%" @bind-Value="custother" Cols="30" Rows="3" /></div>
+                    </div>
                 </div>
             </div>
 
-            <RadzenFieldset Text="Contact">
-                @if (ListContact is not null)
-                {
-                    foreach(var list in ListContact)
+            <br />
+
+            <div class="card">
+                <div class="card-header">Contact</div>
+                <div class="card-body">
+                    @if (ListContact is not null)
                     {
-                        <p>
-                            <RadzenCard class="rz-background-color-info-lighter">
+                        foreach(var list in ListContact)
+                        {
+                            <div class="card-body bg-info bg-opacity-10">
                                 <div class="row">
-                                    <div class="col-1"><p>Name</p></div>
+                                    <div class="col-1"><p><b>Name</b></p></div>
                                     <div class="col">@list.Name</div>
                                     <div class="col-1">
                                         <RadzenButton Click=@(args => ListContact.Remove(list)) Text="X" ButtonStyle="ButtonStyle.Danger" />
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-1"><p>Position</p></div>
+                                    <div class="col-1"><p><b>Position</b></p></div>
                                     <div class="col">@list.Position</div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-1"><p>Address</p></div>
+                                    <div class="col-1"><p><b>Address</b></p></div>
                                     <div class="col" style="white-space: pre-wrap;">@list.Address</div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-1"><p>Email</p></div>
+                                    <div class="col-1"><p><b>Email</b></p></div>
                                     <div class="col">@list.Email</div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-1"><p>MobileNo</p></div>
+                                    <div class="col-1"><p><b>Mobile No.</b></p></div>
                                     <div class="col">@list.MobileNo</div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-1"><p>Other</p></div>
+                                    <div class="col-1"><p><b>Other</b></p></div>
                                     <div class="col" style="white-space: pre-wrap;">@list.Other</div>
                                 </div>
-                            </RadzenCard>
-                        </p>
-                        <br />
+                            </div>
+                        }
                     }
-                }
-                <RadzenCard class="rz-background-color-base-100">
+                </div>
+                <div class="card-body">
                     <div class="row">
-                        <div class="col-2"><p>Name</p></div>
+                        <div class="col-2"><p><b>Name</b></p></div>
                         <div class="col"><RadzenTextBox style="width: 100%" id="MainName" @bind-Value="contactname" /></div>
                     </div>
                     <div class="row">
-                        <div class="col-2"><p>Position</p></div>
+                        <div class="col-2"><p><b>Position</b></p></div>
                         <div class="col"><RadzenTextBox style="width: 100%" @bind-Value="contactpos" /></div>
                     </div>
                     <div class="row">
-                        <div class="col-2"><p>Address</p></div>
+                        <div class="col-2"><p><b>Address</b></p></div>
                         <div class="col"><RadzenTextArea style="width: 100%" @bind-Value="contactaddr" Cols="30" Rows="3" /></div>
                     </div>
                     <div class="row">
-                        <div class="col-2"><p>Email</p></div>
+                        <div class="col-2"><p><b>Email</b></p></div>
                         <div class="col"><RadzenTextBox style="width: 100%" @bind-Value="contactemail" /></div>
                     </div>
                     <div class="row">
-                        <div class="col-2"><p>MobileNo</p></div>
+                        <div class="col-2"><p><b>Mobile No.</b></p></div>
                         <div class="col"><RadzenTextBox style="width: 100%" @bind-Value="contactmobile" /></div>
                     </div>
                     <div class="row">
-                        <div class="col-2"><p>Other</p></div>
+                        <div class="col-2"><p><b>Other</b></p></div>
                         <div class="col"><RadzenTextArea style="width: 100%" @bind-Value="contactother" Cols="30" Rows="3" /></div>
                     </div>
                     <div class="row">
@@ -173,273 +178,205 @@
                             <RadzenButton Click=@(args => SaveContact()) Icon="add" Text="Add Contact" ButtonStyle="ButtonStyle.Primary" Size="ButtonSize.Medium" />
                         </div>
                     </div>
-                </RadzenCard>
-            </RadzenFieldset>
-
+                </div>
+            </div>
             <div class="row-cols-sm-auto">
-                @if(MainSaveshow)
+                @if (MainSaveshow)
                 {
-                        <br />
                     <RadzenButton Click=@(args => SaveProjectMain()) Icon="save" Text="Next" ButtonStyle="ButtonStyle.Info" />
                 }
             </div>
-            
         </div>
-    </RadzenFieldset>
+    </div> 
 </EditForm>
 <br />
 
 @*Create Project Sub*@
 @if (Subshow)
 {
-    <RadzenFieldset Text="Create Project Sub">
-    <div class="container">
-        <EditForm Model="formsub">
-            <div class="container">
-                <div class="row">
-                    <div class="col-2"><p>Project Sub Name</p></div>
-                    <div class="col"><RadzenTextBox style="width: 100%" id="SubName" @bind-Value="formsub.ProjectSubName" /></div>
-                </div>
-
-                <div class="row">
-                    <div class="col-2"><p>Description</p></div>
-                        <div class="col"><RadzenTextArea style="width: 100%" @bind-Value="subdesc" Cols="30" Rows="3" /></div>
-                </div>
-
-                <div class="row">
-                    <div class="col-2"><p>Remark</p></div>
-                        <div class="col"><RadzenTextArea style="width: 100%" @bind-Value="subremark" Cols="30" Rows="3" /></div>
-                </div>
-
-                <div class="row">
-                    <div class="col-2"><p>Budget</p></div>
-                    <div class="col"><InputNumber style="width: 100%" id="SubName" @bind-Value="formsub.Budget"></InputNumber></div>
-                    <div class="col-1"><p>THB</p></div>
-                </div>
-
-                <div class="row">
-                    <div class="col-2"><p>Started Date</p></div>
-                    <div class="col">
-                        <p>
-                            <RadzenDatePicker @bind-Value=@formsub.PlanStartDate DateFormat="dd/MM/yyyy" Class="w-100">
+    <div class="card">
+        <div class="card-header">Create Project Sub</div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-2"><p><b>Project Sub Name</b></p></div>
+                <div class="col"><RadzenTextBox style="width: 100%" id="SubName" @bind-Value="formsub.ProjectSubName" /></div>
+            </div>
+            <div class="row">
+                <div class="col-2"><p><b>Description</b></p></div>
+                <div class="col"><RadzenTextArea style="width: 100%" @bind-Value="subdesc" Cols="30" Rows="3" /></div>
+            </div>
+            <div class="row">
+                <div class="col-2"><p><b>Remark</b></p></div>
+                <div class="col"><RadzenTextArea style="width: 100%" @bind-Value="subremark" Cols="30" Rows="3" /></div>
+            </div>
+            <div class="row">
+                <div class="col-2"><p><b>Budget</b></p></div>
+                <div class="col"><InputNumber style="width: 100%" id="SubName" @bind-Value="formsub.Budget"></InputNumber></div>
+                <div class="col-1"><p>THB</p></div>
+            </div>
+            <div class="row">
+                <div class="col-2"><p><b>Started Date</b></p></div>
+                <div class="col">
+                    <p>
+                        <RadzenDatePicker @bind-Value=@formsub.PlanStartDate DateFormat="dd/MM/yyyy" Class="w-100">
                             <FooterTemplate>
                                 <RadzenButton Click=@OnTodaySubStart Text="Today" Class="my-3 w-100" />
                             </FooterTemplate>
                         </RadzenDatePicker>
-                        </p>
-                    </div>
-                    <div class="col-2"><p>Finished Date</p></div>
-                    <div class="col">
-                        <p>
-                            <RadzenDatePicker @bind-Value=@formsub.PlanFinishDate DateFormat="dd/MM/yyyy" Class="w-100">
+                    </p>
+                </div>
+                <div class="col-2"><p><b>Finished Date</b></p></div>
+                <div class="col">
+                    <p>
+                        <RadzenDatePicker @bind-Value=@formsub.PlanFinishDate DateFormat="dd/MM/yyyy" Class="w-100">
                             <FooterTemplate>
                                 <RadzenButton Click=@OnTodaySubFinish Text="Today" Class="my-3 w-100" />
                             </FooterTemplate>
                         </RadzenDatePicker>
-                        </p>
-                    </div>
+                    </p>
                 </div>
-
-                <div class="row">
-                    <div class="col-2"><p>RA Type</p></div>
-                    <div class="col">
-                        <p>
-                                <InputSelect style="width: 100%" id="SubRAType" @bind-Value="formRAType.RatypeMasterId">
-                                    <option value="0">------------Select RA Type------------</option>
-                                    @if (ratype is not null)
-                                    {
-                                        foreach (var list in ratype)
-                                        {
-                                            <option value="@list.Id">@list.Name</option>
-                                        }
-                                    }
-                                </InputSelect>
-                        </p>
-                    </div>
+            </div>
+            <div class="row">
+                <div class="col-2"><p><b>RA Type</b></p></div>
+                <div class="col">
+                    <p>
+                        <InputSelect style="width: 100%" id="SubRAType" @bind-Value="formRAType.RatypeMasterId">
+                            <option value="0">------------Select RA Type------------</option>
+                            @if (ratype is not null)
+                            {
+                                foreach (var list in ratype)
+                                {
+                                    <option value="@list.Id">@list.Name</option>
+                                }
+                            }
+                        </InputSelect>
+                    </p>
                 </div>
+            </div>
 
-                    <RadzenFieldset Text="Capability">
-                    <div class="container">
-                        @if (ListCategory is not null)
+            <br>
+
+            <div class="card">
+                <div class="card-header">Project Capability</div>
+                <div class="card-body">
+                    @if (ListCategory is not null)
                         {
                             foreach (var list in ListCategory)
                             {
                                 var cate = capability.Where(w => w.Id == list.CategoryCatId).FirstOrDefault();
-                                    <div class="row">
-                                        <div class="col">@cate.CategoryCat</div>
-                                        <div class="col">@list.CategoryCatSub</div>
-                                        <div class="col-1"><RadzenButton Click=@(args => ListCategory.Remove(list)) Text="X" ButtonStyle="ButtonStyle.Danger" /></div>
-                                    </div>
-                            }
-                        }
-
-                        <div class="container">
-                            <p>
-                                <InputSelect id="SubCategory" @bind-Value="categoryid">
-                                    <option value="0">------------Select Category------------</option>
-                                    @if (capability is not null)
-                                    {
-                                        foreach (var list in capability)
-                                        {
-                                            foreach (var sub in list.MasterCapabilityCatSubs)
-                                            {
-                                                <option value="@sub.Id">@list.CategoryCat - @sub.CategoryCatSub</option>
-                                            }
-                                        }
-                                    }
-                                </InputSelect>
-                                <RadzenButton Click=@(args => SaveCategory(categoryid)) Icon="add" ButtonStyle="ButtonStyle.Primary" Size="ButtonSize.Medium" />
-                            </p>
-                        </div>
-                    </div>
-                </RadzenFieldset>
-                <br>
-                @* <RadzenFieldset Text="Project Document">
-                    <div class="container">
-                        @if (formsub.ProjectDocuments is not null)
-                        {
-                            foreach (var doc in formsub.ProjectDocuments)
-                            {
                                 <div class="row">
-                                    @if (doc.DocumentPath.ToUpper().Contains("PDFFILES"))
-                                    {
-                                        <div class="col"><a href="@doc.DocumentPath">Link</a></div>
-                                    }
-                                    else
-                                    {
-                                        <div class="col"><img src="@doc.DocumentPath" width="300px" /></div>
-                                    }
-                                    <div class="col">@doc.Description</div>
-                                    <div class="col-1"><RadzenButton Click=@(args => formsub.ProjectDocuments.Remove(doc)) Text="X" ButtonStyle="ButtonStyle.Danger" /></div>
+                                    <div class="col">@cate.CategoryCat - @list.CategoryCatSub</div>
+                                    <div class="col-1"><RadzenButton Click=@(args => ListCategory.Remove(list)) Text="X" ButtonStyle="ButtonStyle.Danger" /></div>
                                 </div>
-                                
                             }
                         }
-
-                        <div class="row">
-                            <p><InputFile OnChange="OnInputFileChange" /></p>
-                        </div>
-                        <div class="row">
-                            <div class="col-2"><p>Description :</p></div>
-                            <div class="col"><InputText style="width: 100%" id="docdesc" @bind-Value="DocDesc"></InputText></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-3">
-                                <RadzenButton Click=@(args => OnSubmit()) Text="Upload Selected File" ButtonStyle="ButtonStyle.Primary" />
-                            </div>
-                        </div>
-                    </div>
-                 </RadzenFieldset>
-                 <br>*@
-                <div class="container">
-                    <RadzenButton Click=@(args => SaveProjectSub()) Text="Add Project Sub" Icon="add_circle_outline" ButtonStyle="ButtonStyle.Primary" />
                 </div>
-            </div>
-        </EditForm>
-        
-    </div>
-    </RadzenFieldset>
-    
-    if (formmain.ProjectSubProjectTls.Count > 0)
-    {
-        <br />
-        <RadzenFieldset Text="Project Sub List">
-        @foreach (var sub in formmain.ProjectSubProjectTls)
-        {
-            <RadzenCard class="rz-background-color-info-lighter">
-                 <div class="row">
-                    <div class="col-2"><p>Project Sub Name</p></div>
-                    <div class="col"><p>@sub.ProjectSubName</p></div>
-                    <div class="col-1"><div class="col-1"><RadzenButton Click=@(args => formmain.ProjectSubProjectTls.Remove(sub)) Text="X" ButtonStyle="ButtonStyle.Danger" /></div></div>
-                </div>
-
-                <div class="row">
-                    <div class="col-2"><p>Description</p></div>
-                    <div class="col"><p style="white-space: pre-wrap;">@sub.Description</p></div>
-                </div>
-
-                <div class="row">
-                    <div class="col-2"><p>Remarked</p></div>
-                    <div class="col"><p style="white-space: pre-wrap;">@sub.Remark</p></div>
-                </div>
-
-                <div class="row">
-                    <div class="col-2"><p>Budget</p></div>
-                    <div class="col"><p>@String.Format(new System.Globalization.CultureInfo("th-TH"), "{0:C}", sub.Budget)</p></div>
-                </div>
-
-                <div class="row">
-                    <div class="col-2"><p>Started Date</p></div>
-                    <div class="col"><p>@sub.PlanStartDate?.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)</p></div>
-                    <div class="col-2"><p>Finished Date</p></div>
-                    <div class="col"><p>@sub.PlanFinishDate?.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)</p></div>
-                </div>
-
-                @foreach (var list in @sub.ProjectRatypeTls)
-                {
-                    var ra = ratype.Where(w => w.Id == list.RatypeMasterId).FirstOrDefault();
+                <div class="card-body">
                     <div class="row">
-                        <div class="col-2"><p>RA Type</p></div>
-                        <div class="col"><p>@ra.Name</p></div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-2"><p>Capability</p></div>
-                        <div class="col">
-                            <p>
-                                @if (list.MemberCapability is not null)
+                        <InputSelect id="SubCategory" @bind-Value="categoryid">
+                            <option value="0">------------Select Category------------</option>
+                            @if (capability is not null)
+                            {
+                                foreach (var list in capability)
                                 {
-                                    ShowCategory(list.MemberCapability);
-                                    if(showcate is not null)
+                                    foreach (var sub in list.MasterCapabilityCatSubs)
                                     {
-                                        <p>
-                                            <table style="width:100%">
-                                                @foreach (var categorylist in showcate)
-                                                {
-                                                        var cate = capability.Where(w => w.Id == categorylist.CategoryCatId).FirstOrDefault();
-                                                    <tr>
-                                                        <td>@cate.CategoryCat - @categorylist.CategoryCatSub</td>
-                                                    </tr>
-                                                }
-                                            </table>
-                                        </p>
-                            
+                                        <option value="@sub.Id">@list.CategoryCat - @sub.CategoryCatSub</option>
                                     }
                                 }
-                            </p>
-                        </div>
+                            }
+                        </InputSelect>
+                        <RadzenButton Click=@(args => SaveCategory(categoryid)) Icon="add" ButtonStyle="ButtonStyle.Primary" Size="ButtonSize.Medium" />
                     </div>
-                }
-
-                @*<div class="row">
-                    <div class="col-2"><p>Documents</p></div>
-                    <div class="col">
-                        <p>
-                             @foreach (var file in sub.ProjectDocuments)
-                             {
-                                    if (file.DocumentPath.ToUpper().Contains("PDFFILES"))
-                                    {
-                                        <a href="@file.DocumentPath">Link</a>
-                                    }
-                                    else
-                                    {
-                                        <img src="@file.DocumentPath" width="300px" />
-                                    }
-                                    <br />
-                             }
-                        </p>
-                    </div>
-                </div>*@
-            </RadzenCard>
-            <br />
-        }
-
-            <div class="container">
-                <div class="row-cols-4">
-                    <RadzenButton style="width: 160px" Icon="save" BusyText="Saving ..." IsBusy=@busy Click=@SaveAll Text="Save All" />
                 </div>
             </div>
-         </RadzenFieldset>
+
+            <div class="row">
+                <RadzenButton Click=@(args => SaveProjectSub()) Text="Add Project Sub" Icon="add_circle_outline" ButtonStyle="ButtonStyle.Primary" />
+            </div>
+        </div>
+    </div>
+    <br />
+
+    @if (formmain.ProjectSubProjectTls.Count > 0)
+    {
+        <div class="card">
+            <div class="card-header">Project Sub List</div>
+            <div class="card-body">
+                 @foreach (var sub in formmain.ProjectSubProjectTls)
+                 {
+                     <div class="card-body bg-info bg-opacity-10">
+                         <div class="row">
+                            <div class="col-2"><p><b>Project Sub Name</b></p></div>
+                            <div class="col"><p>@sub.ProjectSubName</p></div>
+                            <div class="col-1"><div class="col-1"><RadzenButton Click=@(args => formmain.ProjectSubProjectTls.Remove(sub)) Text="X" ButtonStyle="ButtonStyle.Danger" /></div></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-2"><p><b>Description</b></p></div>
+                            <div class="col"><p style="white-space: pre-wrap;">@sub.Description</p></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-2"><p><b>Remarked</b></p></div>
+                            <div class="col"><p style="white-space: pre-wrap;">@sub.Remark</p></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-2"><p><b>Budget</b></p></div>
+                            <div class="col"><p>@String.Format(new System.Globalization.CultureInfo("th-TH"), "{0:C}", sub.Budget)</p></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-2"><p><b>Started Date</b></p></div>
+                            <div class="col"><p>@sub.PlanStartDate?.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)</p></div>
+                            <div class="col-2"><p><b>Finished Date</b></p></div>
+                            <div class="col"><p>@sub.PlanFinishDate?.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)</p></div>
+                        </div>
+
+                        @foreach (var list in @sub.ProjectRatypeTls)
+                        {
+                            var ra = ratype.Where(w => w.Id == list.RatypeMasterId).FirstOrDefault();
+                            <div class="row">
+                                <div class="col-2"><p><b>RA Type</b></p></div>
+                                <div class="col"><p>@ra.Name</p></div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-2"><p>Capability</p></div>
+                                <div class="col">
+                                    <p>
+                                        @if (list.MemberCapability is not null)
+                                        {
+                                            ShowCategory(list.MemberCapability);
+                                            if(showcate is not null)
+                                            {
+                                                <p>
+                                                    <table style="width:100%">
+                                                        @foreach (var categorylist in showcate)
+                                                        {
+                                                            var cate = capability.Where(w => w.Id == categorylist.CategoryCatId).FirstOrDefault();
+                                                            <tr>
+                                                                <td>@cate.CategoryCat - @categorylist.CategoryCatSub</td>
+                                                            </tr>
+                                                        }
+                                                    </table>
+                                                </p>
+                            
+                                            }
+                                        }
+                                    </p>
+                                </div>
+                            </div>
+                        }
+                     </div>
+                 }
+             
+                 <div class="row">
+                     <RadzenButton style="width: 160px" Icon="save" BusyText="Saving ..." IsBusy=@busy Click=@SaveAll Text="Save All" />
+                 </div>
+            </div>
+        </div>
     }
 }
 
@@ -449,13 +386,12 @@
     public ProjectRatypeTl formRAType { get; set; } = new ProjectRatypeTl();
     public List<CustomContact> ListContact { get; set; } = new List<CustomContact>();
     public List<MasterCapabilityCatSub> ListCategory { get; set; } = new List<MasterCapabilityCatSub>();
-    public List<Customer> CustomerData { get; set; } = new List<Customer>();
     public List<ProjectHdhistory> HDhis { get; set; } = new List<ProjectHdhistory>();
     public List<ProjectSubProjectTlhistory> Subhis { get; set; } = new List<ProjectSubProjectTlhistory>();
+    public List<CustomCustomer> CustomerData { get; set; } = new List<CustomCustomer>();
 
     private List<MasterCapabilityCat> capability;
     private List<RatypeMaster> ratype;
-    private List<Customer> custommember;
     private List<MasterCapabilityCatSub> showcate;
 
     int customerid;
@@ -483,6 +419,14 @@
     string contactemail;
     string contactmobile;
     string contactother;
+
+    string custname;
+    string custaddress;
+    string custtelephone;
+    string custemail;
+    string custwebsite;
+    string custfacebook;
+    string custother;
 
     [CascadingParameter]
     private Task<AuthenticationState> authenticationStateTask { get; set; }
@@ -569,6 +513,9 @@
     {
         if (id > 0)
         {
+            //var result = subcapability.Where(w=>id == id).FirstOrDefault();
+            //ListCategory.Add(new MasterCapabilityCatSub() { Id = result.Id, CategoryCatSub = result.CategoryCatSub, CategoryCatId = result.CategoryCatId, CategoryCat = result.CategoryCat });
+
             foreach (var cate in capability)
             {
                 var sorted = cate.MasterCapabilityCatSubs.Where(w => w.Id == id).FirstOrDefault();
@@ -593,9 +540,24 @@
             await ErrorMessage("Please fill in Main Project Name!");
             return;
         }
-        if (customerid == 0)
+        if (string.IsNullOrEmpty(custname))
         {
-            await ErrorMessage("Please select Customer!");
+            await ErrorMessage("Please fill Customer Name!");
+            return;
+        }
+        if (string.IsNullOrEmpty(custaddress))
+        {
+            await ErrorMessage("Please fill Customer Address!");
+            return;
+        }
+        if (string.IsNullOrEmpty(custtelephone))
+        {
+            await ErrorMessage("Please fill Customer Telephone!");
+            return;
+        }
+        if (string.IsNullOrEmpty(custemail))
+        {
+            await ErrorMessage("Please fill Customer Email!");
             return;
         }
         if (ListContact is null || ListContact.Count == 0)
@@ -611,26 +573,6 @@
             return;
         }
 
-        HDSave();
-        CustomerData = new List<Customer>();
-        var result = custommember.Where(c => c.Id == customerid).FirstOrDefault();
-        if (result is not null)
-        {
-            CustomerData.Add(new Customer()
-                {
-                    Id = result.Id,
-                    CreateDate = result.CreateDate,
-                    CustomerId = result.CustomerId,
-                    Name = result.Name,
-                    MemberNo = result.MemberNo,
-                    CompanyName = result.CompanyName,
-                    Telephone = result.Telephone,
-                    Email = result.Email,
-                    LineId = result.LineId
-                });
-            formmain.CustomerId = result.Id;
-        }
-
         if (!string.IsNullOrEmpty(maindesc))
         {
             formmain.Description = maindesc.Replace("\r\n", "" + ((char)13).ToString() + (char)10).ToString();
@@ -640,6 +582,40 @@
              formmain.Remark = mainremark.Replace("\r\n", "" + ((char)13).ToString() + (char)10).ToString();
         }
 
+        HDSave();
+        //CustomerData = new List<Customer>();
+        //var result = custommember.Where(c => c.Id == customerid).FirstOrDefault();
+        //if (result is not null)
+        //{
+        //    CustomerData.Add(new Customer()
+        //        {
+        //            Id = result.Id,
+        //            CreateDate = result.CreateDate,
+        //            CustomerId = result.CustomerId,
+        //            Name = result.Name,
+        //            MemberNo = result.MemberNo,
+        //            CompanyName = result.CompanyName,
+        //            Telephone = result.Telephone,
+        //            Email = result.Email,
+        //            LineId = result.LineId
+        //        });
+        //    formmain.CustomerId = result.Id;
+        //}
+
+        if (string.IsNullOrEmpty(custother))
+        {
+            custother = custother.Replace("\r\n", "" + ((char)13).ToString() + (char)10).ToString();
+        }
+        CustomerData.Add(new CustomCustomer()
+                {
+            Name = custname,
+            Address = custaddress.Replace("\r\n", "" + ((char)13).ToString() + (char)10).ToString(),
+            Telephone = custtelephone,
+            Email = custemail,
+            WebSite = custwebsite,
+            Facebook = custfacebook,
+            Other = custother
+        });
         formmain.CustomerInfo = Newtonsoft.Json.JsonConvert.SerializeObject(CustomerData);
         
         formmain.ProjectHdstatus = "Open";
@@ -794,33 +770,33 @@
         formsub.PlanFinishDate = DateTime.Now;
     }
 
-    async Task OnLoadData(LoadDataArgs args)
-    {
-        if (args.Filter.Length <= 2)
-        {
-            if (custommember is not null)
-            {
-                custommember.Clear();
-            }
-        }
-        if (args.Filter.Length > 2)
-        {
-            custommember = await pj.GetCustomerByContain(args.Filter.ToUpper().ToString());
-            InvokeAsync(StateHasChanged);
-        }
-    }
+    //async Task OnLoadData(LoadDataArgs args)
+    //{
+    //    if (args.Filter.Length <= 2)
+    //    {
+    //        if (custommember is not null)
+    //        {
+    //            custommember.Clear();
+    //        }
+    //    }
+    //    if (args.Filter.Length > 2)
+    //    {
+    //        custommember = await pj.GetCustomerByContain(args.Filter.ToUpper().ToString());
+    //        InvokeAsync(StateHasChanged);
+    //    }
+    //}
 
-    async void GetCustomerID(object value)
-    {
-        if (custommember is not null)
-        {
-            var select = custommember.Where(c => c.CompanyName.ToUpper() == value.ToString().ToUpper()).ToList();
-            if (select.Count == 1)
-            {
-                customerid = select[0].Id;
-            }
-        }
-    }
+    //async void GetCustomerID(object value)
+    //{
+    //    if (custommember is not null)
+    //    {
+    //        var select = custommember.Where(c => c.CompanyName.ToUpper() == value.ToString().ToUpper()).ToList();
+    //        if (select.Count == 1)
+    //        {
+    //            customerid = select[0].Id;
+    //        }
+    //    }
+    //}
 
     void Open(string title, Type type, Dictionary<string, object> parameters, DialogOptions options)
     {
