@@ -11,10 +11,13 @@ namespace Qlist.ModelM4s
         public string Moo { get; set; }
         public string Soi { get; set; }
         public string Road { get; set; }
-        public double? TambonId { get; set; }
-        public double? PostCode { get; set; }
+        public int? TambonId { get; set; }
+        public string PostCode { get; set; }
         public string Telephone { get; set; }
         public string Email { get; set; }
         public string WebSite { get; set; }
+
+        public virtual MemberMaster MemberNoNavigation { get; set; }
+        public virtual MasterTambon Tambon { get; set; }
     }
 }

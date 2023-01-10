@@ -5,6 +5,18 @@ namespace Qlist.ModelM4s
 {
     public partial class MemberMaster
     {
+        public MemberMaster()
+        {
+            BizBatchingTrns = new HashSet<BizBatchingTrn>();
+            CompanyImages = new HashSet<CompanyImage>();
+            MemberAddresses = new HashSet<MemberAddress>();
+            MemberBizTypes = new HashSet<MemberBizType>();
+            MemberCategories = new HashSet<MemberCategory>();
+            MemberContactPeople = new HashSet<MemberContactPerson>();
+            MemberPaymentTrns = new HashSet<MemberPaymentTrn>();
+            MemberProductServices = new HashSet<MemberProductService>();
+        }
+
         public int Id { get; set; }
         public DateTime CreateDate { get; set; }
         public string MemberNo { get; set; }
@@ -27,5 +39,14 @@ namespace Qlist.ModelM4s
         public int? IsCoreMemeber { get; set; }
         public int? IsEnable { get; set; }
         public DateTime? ExpiredDate { get; set; }
+
+        public virtual ICollection<BizBatchingTrn> BizBatchingTrns { get; set; }
+        public virtual ICollection<CompanyImage> CompanyImages { get; set; }
+        public virtual ICollection<MemberAddress> MemberAddresses { get; set; }
+        public virtual ICollection<MemberBizType> MemberBizTypes { get; set; }
+        public virtual ICollection<MemberCategory> MemberCategories { get; set; }
+        public virtual ICollection<MemberContactPerson> MemberContactPeople { get; set; }
+        public virtual ICollection<MemberPaymentTrn> MemberPaymentTrns { get; set; }
+        public virtual ICollection<MemberProductService> MemberProductServices { get; set; }
     }
 }

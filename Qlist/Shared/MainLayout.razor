@@ -1,37 +1,25 @@
-@using Qlist.Authentication;
 @inherits LayoutComponentBase
-@inject AuthenticationStateProvider authStateProvider;
-@inject NavigationManager navManager;
+
+
+@*<header>
+  <NavMenu />
+</header>
+
+<div class="container">
+    <main role="main" class="pb-3">
+        @Body
+    </main>
+</div>*@
 
 <div class="page">
-    <Radzen.Blazor.RadzenDialog />
     <div class="sidebar">
         <NavMenu />
     </div>
 
     <div class="container">
-        <div class="top-row px-4">
-            <AuthorizeView>
-                <Authorized>
-                    <a @onclick="Logout" href="javascrip:void(0)">Logout</a>
-                </Authorized>
-                <NotAuthorized>
-                    <a href="/Login">Login</a>
-                </NotAuthorized>
-            </AuthorizeView>
-        </div>
-
         <main role="main" class="pb-3">
             @Body
         </main>
     </div>
 </div>
 
-@code{
-    private async Task Logout()
-    {
-        var customAuthStateProvider = (CustomAuthentication)authStateProvider;
-        await customAuthStateProvider.UpdateAuthenticationState(null);
-        navManager.NavigateTo("/", true);
-    }
-}

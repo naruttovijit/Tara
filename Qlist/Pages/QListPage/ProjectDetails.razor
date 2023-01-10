@@ -5,183 +5,213 @@
 @using Data;
 @using ModelM2s;
 @using ModelM4s;
-@using System.Globalization;
-@using Radzen;
-@using Radzen.Blazor;
 
 @inject ProjectData pj;
 @inject NavigationManager NavManager
 
 <br />
-<h3>Project Details</h3>
-<br />
-
-<RadzenFieldset Text="Detail">
-    <div class="container">
-        <div class="row">
-            <div class="col-2"><b>Running Number</b></div>
-            <div class="col">@projecthd.ProjectHdrunNo</div>
+<div class="container">
+    <div class="row">
+        <div class="col"><h3>Project Details</h3></div>
+        <div class="col">
             @if (!hideEdit)
             {
-                <div class="col-1"><button type="submit" class="btn btn-primary" style="float:right" @onclick="()=>GoEdit()">Edit</button></div>
-            }
-        </div>
-
-        <div class="row">
-            <div class="col-2"><b>Project Name</b></div>
-            <div class="col">@projecthd.ProjectName</div>
-        </div>
-
-        <div class="row">
-            <div class="col-2"><b>Description</b></div>
-            <div class="col"><a style="white-space: pre-wrap;">@projecthd.Description</a></div>
-        </div>
-
-        <div class="row">
-            <div class="col-2"><b>Remark</b></div>
-            <div class="col"><a style="white-space: pre-wrap;">@projecthd.Remark</a></div>
-        </div>
-
-        <div class="row">
-            <div class="col-2"><b>Status</b></div>
-            <div class="col">@projecthd.ProjectHdstatus</div>
-        </div>
-
-        <div class="row">
-            <div class="col-2"><b>Budget</b></div>
-            @if (string.IsNullOrEmpty(projecthd.Budget.ToString()))
-            {
-                <div class="col">@String.Format(new System.Globalization.CultureInfo("th-TH"), "{0:C}", 0)</div>
-            }
-            else
-            {
-                <div class="col">@String.Format(new System.Globalization.CultureInfo("th-TH"), "{0:C}", projecthd.Budget)</div>
-            }
-        </div>
-
-        <div class="row">
-            <div class="col-2"><b>Started Date</b></div>
-            @if (string.IsNullOrEmpty(projecthd.PlanStartDate.ToString()))
-            {
-                <div class="col">Not Planed</div>
-            }
-            else
-            {
-                <div class="col">@projecthd.PlanStartDate?.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)</div>
-            }
-        </div>
-
-        <div class="row">
-            <div class="col-2"><b>Finished Date</b></div>
-            @if (string.IsNullOrEmpty(projecthd.PlanFinishDate.ToString()))
-            {
-                <div class="col">Not Planed</div>
-            }
-            else
-            {
-                <div class="col">@projecthd.PlanFinishDate?.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)</div>
+                <button type="submit" class="btn btn-primary" style="float:right" @onclick="()=>GoEdit()">Edit</button>
             }
         </div>
     </div>
-</RadzenFieldset>
+
+    <div class="row">
+        <div class="col-2"><b>Running Number :</b></div>
+        <div class="col">@projecthd.ProjectHdrunNo</div>
+    </div>
+
+    <div class="row">
+        <div class="col-2"><b>Project Name :</b></div>
+        <div class="col">@projecthd.ProjectName</div>
+    </div>
+
+    <div class="row">
+        <div class="col-2"><b>Description :</b></div>
+        <div class="col">@projecthd.Description</div>
+    </div>
+
+    <div class="row">
+        <div class="col-2"><b>Remarked :</b></div>
+        <div class="col">@projecthd.Remark</div>
+    </div>
+
+    <div class="row">
+        <div class="col-2"><b>Status :</b></div>
+        <div class="col">@projecthd.ProjectHdstatus</div>
+    </div>
+
+    <div class="row">
+        <div class="col-2"><b>Budget :</b></div>
+        @if (string.IsNullOrEmpty(projecthd.Budget.ToString()))
+        {
+            <div class="col">0 THB</div>
+        }
+        else
+        {
+            <div class="col">@projecthd.Budget THB</div>
+        }
+    </div>
+
+    <div class="row">
+        <div class="col-2"><b>Started Date :</b></div>
+        @if (string.IsNullOrEmpty(projecthd.PlanStartDate.ToString()))
+        {
+            <div class="col">Not Planed</div>
+        }
+        else
+        {
+            <div class="col">@projecthd.PlanStartDate</div>
+        }
+    </div>
+
+    <div class="row">
+        <div class="col-2"><b>Finished Date :</b></div>
+        @if (string.IsNullOrEmpty(projecthd.PlanFinishDate.ToString()))
+        {
+            <div class="col">Not Planed</div>
+        }
+        else
+        {
+            <div class="col">@projecthd.PlanFinishDate</div>
+        }
+    </div>
+</div>
 <br />
 
 @if (customerinfo is not null)
 {
-    <RadzenFieldset Text="Customer">
-        <div class="container">
-            @foreach (var list in customerinfo)
-            {
+    <div class="container">
+        @foreach (var list in customerinfo)
+        {
+            <div class="row"><h4>Customer Information</h4></div>
+            @*var districe = tambon[0].Amphure;
+            var province = districe.Province;
+            var country = province.Country;*@
+            <p>
                 <div class="row">
-                    <div class="col-2"><b>Name</b></div>
-                    <div class="col">@list.Name</div>
+                    <div class="col-2"><b>English Name :</b></div>
+                    <div class="col">@list.CompanyNameEn</div>
                 </div>
                 <div class="row">
-                    <div class="col-2"><b>Company Name</b></div>
-                    <div class="col">@list.CompanyName</div>
+                    <div class="col-2"><b>Thai Name :</b></div>
+                    <div class="col">@list.CompanyNameTh</div>
                 </div>
                 <div class="row">
-                    <div class="col-2"><b>Telephone</b></div>
+                    <div class="col-2"><b>Address :</b></div>
+                    <div class="col">@address[0].AddressNo @address[0].Moo @address[0].Soi @address[0].Road</div>
+                    @*&nbsp; @tambon[0].NameTh @tambon[0].Amphure.NameTh @tambon[0].Amphure.Province.NameTh <br/>
+                    &nbsp; @tambon[0].Amphure.Province.Country.Country @address[0].PostCode*@
+                </div>
+                <div class="row">
+                    <div class="col-2"><b>Telephone :</b></div>
                     <div class="col">@list.Telephone</div>
                 </div>
                 <div class="row">
-                    <div class="col-2"><b>E-Mail</b></div>
+                    <div class="col-2"><b>E-Mail :</b></div>
                     <div class="col">@list.Email</div>
                 </div>
                 <div class="row">
-                    <div class="col-2"><b>Line ID</b></div>
-                    <div class="col">@list.LineId</div>
+                    <div class="col-2"><b>Website :</b></div>
+                    <div class="col">@list.WebSite</div>
                 </div>
-            }
-            <br>
+                <div class="row">
+                    <div class="col-2"><b>Facebook :</b></div>
+                    <div class="col">@list.Facebook</div>
+                </div>
+            </p>
+        }
+    </div>
+}
 
-            <div class="row">
-                @if (listcontact is not null)
-                {
-                    foreach (var list in listcontact)
-                    {
-                        <p>
-                            <RadzenCard class="rz-background-color-info-lighter">
-                                <div class="row">
-                                    <div class="col-2"><b>Contact Name</b></div>
-                                    <div class="col">@list.Name</div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-2"><b>Position</b></div>
-                                    <div class="col">@list.Position</div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-2"><b>Address</b></div>
-                                    <div class="col"><a style="white-space: pre-wrap;">@list.Address</a></div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-2"><b>Email</b></div>
-                                    <div class="col">@list.Email</div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-2"><b>MobileNo</b></div>
-                                    <div class="col">@list.MobileNo</div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-2"><b>Other</b></div>
-                                    <div class="col"><a style="white-space: pre-wrap;">@list.Other</a></div>
-                                </div>
-                            </RadzenCard>
-                        </p>
-                    }
-                }
-            </div>
-        </div>
-    </RadzenFieldset>
-    
+
+@if (contactinfo is not null)
+{
+    <div class="container">
+        <div class="row"><h4>Contact Information</h4></div>
+        @foreach (var record in contactinfo)
+        {
+            <p>
+                <div class="row">
+                    <div class="col-2"><b>Thai Name :</b></div>
+                    <div class="col">@record.Title @record.FirstNameTh @record.LastNameTh</div>
+                </div>
+                <div class="row">
+                    <div class="col-2"><b>English Name :</b></div>
+                    <div class="col">@record.FirstNameEn @record.LastNameEn</div>
+                </div>
+                <div class="row">
+                    <div class="col-2"><b>Phone Number :</b></div>
+                    <div class="col">@record.PhoneNo</div>
+                </div>
+                <div class="row">
+                    <div class="col-2"><b>Mobile Number :</b></div>
+                    <div class="col">@record.MobileNo</div>
+                </div>
+                <div class="row">
+                    <div class="col-2"><b>E-Mail :</b></div>
+                    <div class="col">@record.Email</div>
+                </div>
+                <div class="row">
+                    <div class="col-2"><b>Line :</b></div>
+                    <div class="col">@record.LineId</div>
+                </div>
+                <div class="row">
+                    <div class="col-2"><b>Facebook :</b></div>
+                    <div class="col">@record.FaceBook</div>
+                </div>
+                <div class="row">
+                    <div class="col-2"><b>LinkedIn :</b></div>
+                    <div class="col">@record.Linkedin</div>
+                </div>
+            </p>
+        }
+    </div>
 }
 <br />
-
-<RadzenFieldset Text="Project Sub List">
-    <div class="container">
-        <div class="row">
-            <p>
-                <RadzenDataGrid PageSize="5" AllowPaging="true" AllowSorting="true" Data="@projecthd.ProjectSubProjectTls" TItem="ProjectSubProjectTl" ColumnWidth="400px">
-                    <Columns>
-                        <RadzenDataGridColumn TItem="ProjectSubProjectTl" Property="ProjectSubRunNo" Title="Running Number" Width="150px" >
-                            <Template Context="sub">
-                                <a href="@($"/Data/ProjectSubDetail/{sub.Id}")">@sub.ProjectSubRunNo</a>
-                            </Template>
-                        </RadzenDataGridColumn>
-                        <RadzenDataGridColumn TItem="ProjectSubProjectTl" Property="ProjectSubName" Title="Project Sub Name" Width="250px" />
-                        <RadzenDataGridColumn TItem="ProjectSubProjectTl" Property="Description" Title="Description" Width="150px" >
-                            <Template Context="desc">
-                                <a style="white-space: pre-wrap;">@desc.Description</a>
-                            </Template>
-                        </RadzenDataGridColumn>
-                        <RadzenDataGridColumn TItem="ProjectSubProjectTl" Property="ProjectSubStatus" Title="Status" Width="150px" />
-                    </Columns>
-                </RadzenDataGrid>
-            </p>
-        </div>
+<div class="container">
+    <div class="row"><h4>Project Sub List</h4></div>
+    <div class="row">
+        <p>
+            <table class="table table-striped" style="background-color:white; border:solid">
+                <thead>
+                    <tr>
+                        <th style="width: 15%">Running Number</th>
+                        <th style="width: 30%">Project Sub Name</th>
+                        <th style="width: 30%">Description</th>
+                        <th style="width: 15%">Status</th>
+                        <th style="width: 10%" class="text-center">Detail</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (projecthd.ProjectSubProjectTls != null)
+                    {
+                        @foreach (var sub in projecthd.ProjectSubProjectTls)
+                        {
+                            <tr>
+                                <td>@sub.ProjectSubRunNo</td>
+                                <td>@sub.ProjectSubName</td>
+                                <td>@sub.Description</td>
+                                <td>@sub.ProjectSubStatus</td>
+                                <td class="text-center"><a href="/Data/ProjectSubDetail/@sub.Id">Link</a></td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </p>
     </div>
-</RadzenFieldset>
+</div>
 <br />
+
+<div class="container">
+    <button type="submit" class="btn btn-primary" style="left" @onclick="()=>Goback()">Project Main</button>
+</div>
 
 
 
@@ -192,9 +222,9 @@
     public ProjectHd projecthd { get; set; } = new ProjectHd();
     public ProjectSubProjectTl formsub { get; set; } = new ProjectSubProjectTl();
 
-    private List<Customer> customerinfo;
-    private List<CustomContact> listcontact;
-    //private List<MemberAddress> address;
+    private List<MemberMaster> customerinfo;
+    private List<MemberContactPerson> contactinfo;
+    private List<MemberAddress> address;
     private List<MasterTambon> tambon;
 
     bool hideEdit = false;
@@ -202,11 +232,11 @@
     protected override async Task OnInitializedAsync()
     {
         projecthd = await pj.GetProjectHDbyID(id);
-        customerinfo = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Customer>>(projecthd.CustomerInfo);
-        //address = await pj.GetAddressByMemberNo(customerinfo[0].MemberNo);
+        customerinfo = Newtonsoft.Json.JsonConvert.DeserializeObject<List<MemberMaster>>(projecthd.CustomerInfo);
+        address = await pj.GetAddressByMemberNo(customerinfo[0].MemberNo);
         //tambon = await pj.GetTambonByID(address[0].TambonId);
 
-        listcontact = Newtonsoft.Json.JsonConvert.DeserializeObject<List<CustomContact>>(projecthd.ContactInfo);
+        contactinfo = Newtonsoft.Json.JsonConvert.DeserializeObject<List<MemberContactPerson>>(projecthd.ContactInfo);
         checkEdit();
         StateHasChanged();
     }
@@ -236,8 +266,8 @@
     public void Dispose()
     {
         if (customerinfo is not null) customerinfo.Clear();
-        if (listcontact is not null) listcontact.Clear();
-        //if (address is not null) address.Clear();
+        if (contactinfo is not null) contactinfo.Clear();
+        if (address is not null) address.Clear();
         if (tambon is not null) tambon.Clear();
         Console.WriteLine("Disconnected");
     }
