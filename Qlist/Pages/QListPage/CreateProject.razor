@@ -17,6 +17,8 @@
 @inject NavigationManager NavManager
 @inject DialogService DialogService
 
+@attribute [Authorize(Roles = "1,2")]
+
 <br />
 <h3>New Project</h3>
 <br />
@@ -364,14 +366,16 @@
                         }
                      </div>
                  }
-             
-                 <div class="row">
-                     <RadzenButton style="width: 160px" Icon="save" BusyText="Saving ..." IsBusy=@busy Click=@SaveAll Text="Save All" />
-                 </div>
             </div>
+        </div>
+
+        <br />
+        <div class="card">
+            <div class="row"><RadzenButton style="width: 160px" Icon="save" BusyText="Saving ..." IsBusy=@busy Click=@SaveAll Text="Save All" /></div>
         </div>
     }
 }
+<br />
 
 @code {
     public ProjectHd formmain { get; set; } = new ProjectHd();

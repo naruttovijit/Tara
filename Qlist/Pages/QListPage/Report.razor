@@ -1,6 +1,6 @@
 ﻿@page "/Data/Report"
 
-@*@implements IDisposable;*@
+@implements IDisposable;
 
 @using ModelM2s;
 @using ModelM4s;
@@ -220,13 +220,13 @@
         return cap;
     }
 
-    //private void Dispose()
-    //{
-    //    if (project is not null) project.Clear();
-    //    if (customerinfo is not null) customerinfo.Clear();
-    //    if (listra is not null) listra.Clear();
-    //    if (capability is not null) capability.Clear();
-    //    if (subcapability is not null) subcapability.Clear();
-    //    Console.WriteLine("Disconnected");
-    //}
+    public void Dispose()
+    {
+        if (project is not null) project.Clear();
+        if (customerinfo is not null) customerinfo.Clear();
+        if (listra is not null) listra.Clear();
+        if (capability is not null) capability.Clear();
+        if (subcapability is not null) subcapability.Clear();
+        Console.WriteLine("Disconnected");
+    }
 }
