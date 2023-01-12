@@ -240,6 +240,8 @@
 
     protected override async Task OnInitializedAsync()
     {
+        await base.OnInitializedAsync();
+        await GetDataAuthen();
         projectsub = await pj.GetProjectSubProjectTLbyID(id);
         projectra = await pj.GetProjectRATypeBySubProjectID(projectsub.Id);
         allassign = await pj.GetMemberAssignmentBySubID(projectsub.Id);
@@ -263,8 +265,6 @@
         {
             AutoAssignment();
         }
-
-        GetDataAuthen();
 
         StateHasChanged();
     }

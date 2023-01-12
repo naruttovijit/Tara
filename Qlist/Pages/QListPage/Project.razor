@@ -114,13 +114,11 @@
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-
+        await GetDataAuthen();
         project = await pj.GetProjectHD();
         project = project.OrderByDescending(n => n.ProjectHdrunNo).ToList();
         listra = await pj.GetAllProjectRAType();
         capability = await pj.GetAllCapability();
-        GetDataAuthen();
-
         StateHasChanged();
     }
 

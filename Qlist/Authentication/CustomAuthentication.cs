@@ -27,7 +27,6 @@ namespace Qlist.Authentication
                     {
                         new Claim(ClaimTypes.Name, userSession.UserName),
                         new Claim(ClaimTypes.Role, userSession.Role.ToString()),
-                        new Claim(ClaimTypes.NameIdentifier, userSession.ContactID.ToString()),
                         new Claim(ClaimTypes.UserData, userSession.MemberNo),
                         new Claim(ClaimTypes.System, userSession.UserID.ToString()),
                         new Claim(ClaimTypes.Name, userSession.UserLongName)

@@ -267,6 +267,7 @@
 
         protected override async Task OnInitializedAsync()
         {
+            await base.OnInitializedAsync();
             projectsub = await pj.GetProjectSubProjectTLbyID(id);
             GetMemberData();
             projectdoc = await pj.GetProjectDocumentByProjectSubID(projectsub.Id);

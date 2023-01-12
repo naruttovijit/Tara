@@ -162,23 +162,21 @@
 
     protected override async Task OnInitializedAsync()
     {
+        await base.OnInitializedAsync();
+        await GetDataAuthen();
         await Initial();
     }
 
-    private async Task Initial()
+    async Task Initial()
     {
         projectsub = await pj.GetProjectSubProjectTLbyID(id);
         projectra = await pj.GetProjectRATypeBySubProjectID(projectsub.Id);
         capability = await pj.GetAllCapability();
-
         subcapability = Newtonsoft.Json.JsonConvert.DeserializeObject<List<MasterCapabilityCatSub>>(projectra.MemberCapability);
-
         if (projectsub.ProjectSubStatus == "Job Complete" || projectsub.ProjectSubStatus == "Cancelled")
         {
             show = true;
         }
-
-        GetDataAuthen();
         StateHasChanged();
     }
 
@@ -202,7 +200,6 @@
             projectsub.ProjectSubStatus = progress;
             projectsub.ProjectSubProjectTlhistories.Add(new ProjectSubProjectTlhistory() { ProjectSubProjectTlid = projectsub.Id, Remark = projectsub.ProjectSubStatus, EditorId = userid });
             var result = await pj.SaveSubProject(projectsub);
-
             UpdateProjectHD();
             await Initial();
         }

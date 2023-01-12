@@ -433,14 +433,7 @@
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-
-        Initial();
-        GetDataAuthen();
-        StateHasChanged();
-    }
-
-    async Task Initial()
-    {
+        await GetDataAuthen();
         ratype = await pj.GetRATypeMaster();
         cap = await pj.GetAllCapability();
         subcap = await pj.GetAllSubCapability();
@@ -451,6 +444,7 @@
         formsub.PlanFinishDate = DateTime.Now;
         DialogService.OnOpen += Open;
         DialogService.OnClose += Close;
+        StateHasChanged();
     }
 
     async Task GetDataAuthen()
@@ -616,7 +610,6 @@
         formsub.ProjectSubName = formmain.ProjectName;
         subdesc = formmain.Description;
         subremark = formmain.Remark;
-        formsub.ProjectHd = formmain;
         formsub.Budget = formmain.Budget;
         formsub.PlanStartDate = formmain.PlanStartDate;
         formsub.PlanFinishDate = formmain.PlanFinishDate;

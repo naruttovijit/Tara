@@ -208,11 +208,8 @@
 
     protected override async Task OnInitializedAsync()
     {
-        await Initial();
-    }
-
-    private async Task Initial()
-    {
+        await base.OnInitializedAsync();
+        await GetDataAuthen();
         projectsub = await pj.GetProjectSubProjectTLbyID(id);
         projectratype = await pj.GetProjectRATypeBySubProjectID(projectsub.Id);
         projectdoc = await pj.GetProjectDocumentByProjectSubID(projectsub.Id);
@@ -220,7 +217,7 @@
         ratype = await pj.GetRATypeMaster();
 
         subcategory = Newtonsoft.Json.JsonConvert.DeserializeObject<List<MasterCapabilityCatSub>>(projectratype.MemberCapability);
-        GetDataAuthen();
+
         StateHasChanged();
     }
 

@@ -224,6 +224,8 @@
 
     protected override async Task OnInitializedAsync()
     {
+        await base.OnInitializedAsync();
+        await GetDataAuthen();
         projecthd = await pj.GetProjectHDbyID(id);
         customerinfo = Newtonsoft.Json.JsonConvert.DeserializeObject<List<CustomCustomer>>(projecthd.CustomerInfo);
         custname = customerinfo[0].Name;
@@ -234,7 +236,6 @@
         custfacebook = customerinfo[0].Facebook;
         custother = customerinfo[0].Other;
         listcontact = Newtonsoft.Json.JsonConvert.DeserializeObject<List<CustomContact>>(projecthd.ContactInfo);
-        GetDataAuthen();
         StateHasChanged();
     }
 

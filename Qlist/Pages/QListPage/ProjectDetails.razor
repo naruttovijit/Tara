@@ -230,6 +230,7 @@
 
     protected override async Task OnInitializedAsync()
     {
+        await base.OnInitializedAsync();
         projecthd = await pj.GetProjectHDbyID(id);
         customerinfo = Newtonsoft.Json.JsonConvert.DeserializeObject<List<CustomCustomer>>(projecthd.CustomerInfo);
         listcontact = Newtonsoft.Json.JsonConvert.DeserializeObject<List<CustomContact>>(projecthd.ContactInfo);
