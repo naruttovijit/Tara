@@ -12,6 +12,8 @@
 @using System.Security.Claims
 @using Microsoft.AspNetCore.Components.Authorization
 
+@attribute [Authorize(Roles = "1,2")]
+
 @inject ProjectData pj;
 @inject NavigationManager NavManager
 <ConcurrentComponent ModuleName="MemberAssign" ObjId="projectsub.Id" UserId="userid"></ConcurrentComponent>

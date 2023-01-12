@@ -8,16 +8,17 @@
 @using System.Globalization;
 @using Radzen;
 @using Radzen.Blazor;
+@*@using System.Security.Claims
+@using Microsoft.AspNetCore.Components.Authorization*@
 
 @inject ProjectData pj;
 @inject NavigationManager NavManager
 
+@attribute [Authorize(Roles = "1,2,3")]
+
 <br />
 <h3>Project Details</h3>
 <br />
-
-
-
 
 <div class="card">
     <div class="card-header">

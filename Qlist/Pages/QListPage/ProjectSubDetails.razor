@@ -12,23 +12,27 @@
 @inject ProjectData pj;
 @inject NavigationManager NavManager
 
+@attribute [Authorize(Roles = "1,2,3")]
+
 <br />
 <h3>Project Sub Details</h3>
 <br />
 
 <div class="card" >
     <div class="card-header">
-        <b>Running Number : </b>@projectsub.ProjectSubRunNo
+        <div class="row">
+            <div class="col-sm-8">
+                <b>Running Number : </b>@projectsub.ProjectSubRunNo
+            </div>
+            <div class="col-sm-4">
+                @if (projectsub.ProjectSubMemberAsgmts.Count == 0)
+                {
+                    <button type="submit" class="btn btn-primary" style="float:right" @onclick="()=>GoEdit()">Edit</button>
+                }
+            </div>
+        </div>
     </div>
     <div class="card-body">
-        <div class="row">
-            <div class="col-2"><p></p></div>
-            <div class="col"></div>
-            @if (projectsub.ProjectSubMemberAsgmts.Count == 0)
-            {
-                <div class="col-1"> <button type="submit" class="btn btn-primary" style="float:right" @onclick="()=>GoEdit()">Edit</button></div>
-            }
-        </div>
         <div class="row">
             <div class="col-2"><p><b>Project Sub Name</b></p></div>
             <div class="col">@projectsub.ProjectSubName</div>

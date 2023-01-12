@@ -1,6 +1,6 @@
 ﻿@page "/Data/Report"
 
-@implements IDisposable;
+@*@implements IDisposable;*@
 
 @using ModelM2s;
 @using ModelM4s;
@@ -16,8 +16,7 @@
 
 @attribute [Authorize(Roles = "1,2,3")]
 
-<br />
-<div class="container">
+<div class="card">
     <div class="row">
         <div class="col-sm-12 col-lg-6 offset-lg-3 my-5">
             <RadzenCard Class="w-100 mb-4">
@@ -42,77 +41,82 @@
 </div>
 
 <br />
-<div class="container">
-    <div class="row">
-        @if (project is null)
-        {
-            <p><em>Loading...</em></p>
-        }
-        else
-        {
-            <RadzenDataGrid @ref="grid" AllowFiltering="true" AllowPaging="true" PageSize="10" AllowSorting="true" RowRender="@RowRender" ExpandMode="DataGridExpandMode.Single"
-                        Data="@project" TItem="ProjectHd" RowExpand="RowExpand">
-                <Template Context="sub">
-                    <RadzenDataGrid AllowPaging="true" AllowSorting="true" Data="@sub.ProjectSubProjectTls" TItem="ProjectSubProjectTl">
-                        <Columns>
-                            <RadzenDataGridColumn TItem="ProjectSubProjectTl" Property="ProjectSubRunNo" Title="No" Width="150px">
-                                <Template Context="subp">
-                                    <a href="@($"/Data/ProjectSubDetail/{subp.Id}")">@subp.ProjectSubRunNo</a>
-                                </Template>
-                            </RadzenDataGridColumn>
-                            <RadzenDataGridColumn TItem="ProjectSubProjectTl" Property="ProjectSubName" Title="Project Sub Name" Width="270px" />
-                            <RadzenDataGridColumn TItem="ProjectSubProjectTl" Property="Budget" Title="Budget" Width="180px">
-                                <Template Context="budg">
-                                    @String.Format(new System.Globalization.CultureInfo("th-TH"), "{0:C}", budg.Budget)
-                                </Template>
-                            </RadzenDataGridColumn>
-                            <RadzenDataGridColumn TItem="ProjectSubProjectTl" Property="Id" Title="Sub Capability" Width="300px">
-                                <Template Context="cap">
-                                    <p style="white-space:pre-wrap">@Getcap(cap.Id)</p>
-                                </Template>
-                            </RadzenDataGridColumn>
-                            <RadzenDataGridColumn TItem="ProjectSubProjectTl" Property="ProjectSubStatus" Title="Status" Width="150px" />
-                            <RadzenDataGridColumn TItem="ProjectSubProjectTl" Property="CreateDated" Title="Create Date" FormatString="{0:dd/MM/yyyy}" TextAlign="TextAlign.Center" Width="170px" />
-                        </Columns>
-                    </RadzenDataGrid>
-                </Template>
-                <Columns>
-                    <RadzenDataGridColumn TItem="ProjectHd" Property="ProjectHdrunNo" Title="No" Width="130px">
-                        <Template Context="hd">
-                            <a href="@($"/Data/ProjectDetail/{hd.Id}")">@hd.ProjectHdrunNo</a>
-                        </Template>
-                    </RadzenDataGridColumn>
-                    <RadzenDataGridColumn TItem="ProjectHd" Property="ProjectName" Title="Project Main Name" Width="270px" />
-                    <RadzenDataGridColumn TItem="ProjectHd" Property="CustomerInfo" Title="Customer" Width="270px">
-                        <Template Context="cust">
-                            @if (!string.IsNullOrEmpty(cust.CustomerInfo))
-                            {
-                                customerinfo = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Customer>>(cust.CustomerInfo);
-                                <p>
-                                    @customerinfo[0].CompanyName
-                                </p>
-                            }
-                        </Template>
-                    </RadzenDataGridColumn>
-                    <RadzenDataGridColumn TItem="ProjectHd" Property="Budget" Title="Budget" Width="180px">
-                        <Template Context="budg">
-                            @String.Format(new System.Globalization.CultureInfo("th-TH"), "{0:C}", budg.Budget)
-                        </Template>
-                    </RadzenDataGridColumn>
-                    <RadzenDataGridColumn TItem="ProjectHd" Property="ProjectHdstatus" Title="Status" Width="200px" />
-                    <RadzenDataGridColumn TItem="ProjectHd" Property="CreateDated" Title="Create Date" FormatString="{0:dd/MM/yyyy}" TextAlign="TextAlign.Center" Width="170px" />
-                </Columns>
-            </RadzenDataGrid>
-        }
+<div class="card">
+    <div class="card-header"><h5>List Project</h5></div>
+    <div class="card-body">
+        <div class="row">
+            @if (project is null)
+            {
+                <p><em>Loading...</em></p>
+            }
+            else
+            {
+                <RadzenDataGrid @ref="grid" AllowFiltering="true" AllowPaging="true" PageSize="5" AllowSorting="true" RowRender="@RowRender" ExpandMode="DataGridExpandMode.Single"
+                            Data="@project" TItem="ProjectHd" RowExpand="RowExpand" GridLines="DataGridGridLines.Horizontal" class="border-0">
+                    <Template Context="sub">
+                        <RadzenDataGrid AllowPaging="true" AllowSorting="true" Data="@sub.ProjectSubProjectTls" TItem="ProjectSubProjectTl">
+                            <Columns>
+                                <RadzenDataGridColumn TItem="ProjectSubProjectTl" Property="ProjectSubRunNo" Title="No" Width="150px">
+                                    <Template Context="subp">
+                                        <a href="@($"/Data/ProjectSubDetail/{subp.Id}")">@subp.ProjectSubRunNo</a>
+                                    </Template>
+                                </RadzenDataGridColumn>
+                                <RadzenDataGridColumn TItem="ProjectSubProjectTl" Property="ProjectSubName" Title="Project Sub Name" Width="270px" />
+                                <RadzenDataGridColumn TItem="ProjectSubProjectTl" Property="Budget" Title="Budget" Width="180px">
+                                    <Template Context="budg">
+                                        @String.Format(new System.Globalization.CultureInfo("th-TH"), "{0:C}", budg.Budget)
+                                    </Template>
+                                </RadzenDataGridColumn>
+                                <RadzenDataGridColumn TItem="ProjectSubProjectTl" Property="Id" Title="Capability" Width="400px">
+                                    <Template Context="cap">
+                                        <p style="white-space:pre-wrap">@Getcap(cap.Id)</p>
+                                    </Template>
+                                </RadzenDataGridColumn>
+                                <RadzenDataGridColumn TItem="ProjectSubProjectTl" Property="ProjectSubStatus" Title="Status" Width="150px" />
+                                <RadzenDataGridColumn TItem="ProjectSubProjectTl" Property="CreateDated" Title="Create Date" FormatString="{0:dd/MM/yyyy}" TextAlign="TextAlign.Center" Width="170px" />
+                            </Columns>
+                        </RadzenDataGrid>
+                    </Template>
+                    <Columns>
+                        <RadzenDataGridColumn TItem="ProjectHd" Property="ProjectHdrunNo" Title="No" Width="130px">
+                            <Template Context="hd">
+                                <a href="@($"/Data/ProjectDetail/{hd.Id}")">@hd.ProjectHdrunNo</a>
+                            </Template>
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn TItem="ProjectHd" Property="ProjectName" Title="Project Main Name" Width="270px" />
+                        <RadzenDataGridColumn TItem="ProjectHd" Property="CustomerInfo" Title="Customer" Width="270px">
+                            <Template Context="cust">
+                                @if (!string.IsNullOrEmpty(cust.CustomerInfo))
+                                {
+                                    customerinfo = Newtonsoft.Json.JsonConvert.DeserializeObject<List<CustomCustomer>>(cust.CustomerInfo);
+                                    <p>
+                                        @customerinfo[0].Name
+                                    </p>
+                                }
+                            </Template>
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn TItem="ProjectHd" Property="Budget" Title="Budget" Width="180px">
+                            <Template Context="budg">
+                                @String.Format(new System.Globalization.CultureInfo("th-TH"), "{0:C}", budg.Budget)
+                            </Template>
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn TItem="ProjectHd" Property="ProjectHdstatus" Title="Status" Width="200px" />
+                        <RadzenDataGridColumn TItem="ProjectHd" Property="CreateDated" Title="Create Date" FormatString="{0:dd/MM/yyyy}" TextAlign="TextAlign.Center" Width="170px" />
+                    </Columns>
+                </RadzenDataGrid>
+            }
+        </div>
     </div>
 </div>
+<br />
 
 @code {
     private List<ProjectHd> project;
     private RadzenDataGrid<ProjectHd>? grid = new RadzenDataGrid<ProjectHd>();
-    private List<Customer>? customerinfo;
+    private List<CustomCustomer>? customerinfo;
     private List<ProjectRatypeTl> listra;
-    private List<ProjectRatypeTl> selectra;
+    //private List<ProjectRatypeTl> selectra;
+    private List<MasterCapabilityCat> capability;
     private List<MasterCapabilityCatSub> subcapability;
     private List<Graph> graph;
 
@@ -124,9 +128,9 @@
 
     private ClaimsPrincipal AuthenticationStateUser { get; set; }
 
-    int role;
-    string memberno;
-    int userid;
+    private int role;
+    private string memberno;
+    private int userid;
 
     protected override async Task OnInitializedAsync()
     {
@@ -135,6 +139,7 @@
         project = await pj.GetProjectHD();
         project = project.OrderByDescending(n => n.ProjectHdrunNo).ToList();
         listra = await pj.GetAllProjectRAType();
+        capability = await pj.GetAllCapability();
         CreateGraph();
         GetDataAuthen();
 
@@ -189,7 +194,7 @@
         {
             if (project is not null)
             {
-                await grid.ExpandRow(project.FirstOrDefault());
+                //await grid.ExpandRow(project.FirstOrDefault());
             }
         }
     }
@@ -207,22 +212,23 @@
         {
             var list = listra.Where(w => w.ProjectSubProjectTlid == id).FirstOrDefault();
             subcapability = Newtonsoft.Json.JsonConvert.DeserializeObject<List<MasterCapabilityCatSub>>(list.MemberCapability);
-            foreach (var cat in subcapability)
+            foreach (var sub in subcapability)
             {
-                cap = cap + cat.CategoryCatSub;
+                var main = capability.Where(w => w.Id == sub.CategoryCatId).FirstOrDefault();
+                cap = cap + main.CategoryCat + " - " + sub.CategoryCatSub + Environment.NewLine;
             }
         }
 
         return cap;
     }
 
-    public void Dispose()
-    {
-        if (project is not null) project.Clear();
-        if (customerinfo is not null) customerinfo.Clear();
-        if (listra is not null) listra.Clear();
-        if (selectra is not null) selectra.Clear();
-        if (subcapability is not null) subcapability.Clear();
-        Console.WriteLine("Disconnected");
-    }
+    //private void Dispose()
+    //{
+    //    if (project is not null) project.Clear();
+    //    if (customerinfo is not null) customerinfo.Clear();
+    //    if (listra is not null) listra.Clear();
+    //    if (capability is not null) capability.Clear();
+    //    if (subcapability is not null) subcapability.Clear();
+    //    Console.WriteLine("Disconnected");
+    //}
 }

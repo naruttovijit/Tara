@@ -15,6 +15,8 @@
 @inject NavigationManager NavManager
 @inject DialogService DialogService
 
+@attribute [Authorize(Roles = "1,2")]
+
 <br />
 <h3>Edit Project Sub</h3>
 
@@ -25,19 +27,19 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-2"><p><b>Project Sub Name</b></p></div>
-                <div class="col"><InputText style="width: 100%" id="SubName" @bind-Value="projectsub.ProjectSubName"></InputText></div>
+                <div class="col"><p><RadzenTextBox style="width: 100%" id="MainName" @bind-Value="projectsub.ProjectSubName" /></p></div>
             </div>
             <div class="row">
                 <div class="col-2"><p><b>Description</b></p></div>
-                <div class="col"><RadzenTextArea style="width: 100%" id="MainDesc" @bind-Value="projectsub.Description" Cols="30" Rows="3" /></div>
+                <div class="col"><p><RadzenTextArea style="width: 100%" id="MainDesc" @bind-Value="projectsub.Description" Cols="30" Rows="3" /></p></div>
             </div>
             <div class="row">
                 <div class="col-2"><p><b>Remark</b></p></div>
-                <div class="col"><RadzenTextArea style="width: 100%" id="MainRemark" @bind-Value="projectsub.Remark" Cols="30" Rows="3" /></div>
+                <div class="col"><p><RadzenTextArea style="width: 100%" id="MainRemark" @bind-Value="projectsub.Remark" Cols="30" Rows="3" /></p></div>
             </div>
             <div class="row">
                 <div class="col-2"><p><b>Budget</b></p></div>
-                <div class="col"><InputNumber style="width: 100%" id="MainBudget" @bind-Value="projectsub.Budget"></InputNumber></div>
+                <div class="col"><p><InputNumber style="width: 100%" id="MainBudget" @bind-Value="projectsub.Budget" class=""></InputNumber></p></div>
                 <div class="col-1">THB</div>
             </div>
             <div class="row">
@@ -102,7 +104,7 @@
                     var cate = capability.Where(w => w.Id == cat.CategoryCatId).FirstOrDefault();
                     <div class="row">
                         <div class="col">@cate.CategoryCat - @cat.CategoryCatSub</div>
-                        <div class="col-1"><RadzenButton Click=@(args => subcategory.Remove(cat)) Text="X" ButtonStyle="ButtonStyle.Danger" /></div>
+                        <div class="col-1"><p><RadzenButton Click=@(args => subcategory.Remove(cat)) Text="X" ButtonStyle="ButtonStyle.Danger" /></p></div>
                     </div>
                 }
             }
@@ -123,8 +125,8 @@
                             }
                         }
                     </InputSelect>
+                    <button @onclick="()=>SaveCategory(categoryid)">Add Category</button>
                 </div>
-                <div class="col"><button @onclick="()=>SaveCategory(categoryid)">Add Category</button></div>
             </div>
         </div>
     </div>
@@ -167,9 +169,12 @@
             </div>
         </div>
     </div>
+    <br />
 
-    <div class="container">
-        <RadzenButton Click=@(args => UpdateProjectSub()) Text="Update" ButtonStyle="ButtonStyle.Success" />
+    <div class="card border-0">
+         <div class="row">
+            <RadzenButton Click=@(args => UpdateProjectSub()) Text="Update" ButtonStyle="ButtonStyle.Success" />
+        </div>
     </div>
 </EditForm>
 

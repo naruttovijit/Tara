@@ -9,6 +9,7 @@
 @inject NotificationService NotificationService
 
 <RadzenLayout>
+    <Radzen.Blazor.RadzenDialog />
     <RadzenHeader>
         <div class="row justify-content-start align-items-center">
             <div class="col-6 d-flex align-items-center">
@@ -17,7 +18,7 @@
 
             </div>
             <div class="col-6 d-flex align-items-center justify-content-end">
-                <RadzenButton Click=@(args => OnClick("Warning button with text and icon")) Text="Logout" Icon="power_settings_new" ButtonStyle="ButtonStyle.Warning" />
+                <RadzenButton Click=@(args => Logout()) Text="Logout" Icon="power_settings_new" ButtonStyle="ButtonStyle.Warning" />
                
             </div>
         </div>
@@ -50,7 +51,7 @@
         await customAuthStateProvider.UpdateAuthenticationState(null);
         navManager.NavigateTo("/", true);
     }
-    void OnClick(string buttonName)
+    async Task OnClick(string buttonName)
     {
         
     }

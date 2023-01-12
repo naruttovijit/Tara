@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "3hMd5tGM9SXRCYtcyOcTVDgJzRw933R4+Kz6iNFhdFc=",
+  "Hash": "uFLUBeXis/mTcDtAC0KeQrffdDkjPeDWNXuBMJwyt1E=",
   "Source": "Qlist",
   "BasePath": "_content/Qlist",
   "Mode": "Default",
@@ -882,6 +882,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\PDFFiles\\_pincode.pdf"
+    },
+    {
+      "Identity": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\PDFFiles\\_test.pdf",
+      "SourceId": "Qlist",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\",
+      "BasePath": "_content/Qlist",
+      "RelativePath": "PDFFiles/_test.pdf",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\PDFFiles\\_test.pdf"
     },
     {
       "Identity": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\PDFFiles\\_TR.02_CartonBarcodeScanned.pdf",
