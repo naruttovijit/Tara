@@ -122,7 +122,7 @@
                 <th style="width:15%">Comfirm Date</th>
                 <th class="text-center" style="width:10%">Comfirm</th>
                 <th class="text-center" style="width:10%">Awarded</th>
-                <th class="text-center" style="width:10%">Delete</th>
+                <th class="text-center" style="width:10%"></th>
             </tr>
             @if (projectsub.ProjectSubMemberAsgmts is not null)
             {
@@ -171,37 +171,30 @@
             }
         </table>
     </div>
-</div>
-<br />
-<div class="card">
-   
     <div class="card-body">
         @if (!awarded)
         {
-            <div class="container">
-                <EditForm Model="memberassign">
-                    <div class="row">
-                        <div class="col-4">
-                            <p>
-                                <RadzenAutoComplete Placeholder="Select a Member..." Data=@custommember TextProperty="CompanyNameEn"
-                                                    LoadData=@OnLoadData Style="width: 100%;" Change=@(args => GetMemberID(args)) />
-                            </p>
-                        </div>
-                        <div class="col">
-                            <RadzenButton Click=@(args => AddMember(idMember)) Icon="add_circle_outline" ButtonStyle="ButtonStyle.Primary" Size="ButtonSize.Medium" />
-                        </div>
-                    </div>
-                    <div class="row">
+            <EditForm Model="memberassign">
+                <div class="row">
+                    <div class="col-4">
                         <p>
-                            <RadzenButton Click=@(args => UpdateMemberAssign()) Icon="update" Text="Update" ButtonStyle="ButtonStyle.Success" />
+                            <RadzenAutoComplete Placeholder="Select a Member..." Data=@custommember TextProperty="CompanyNameEn"
+                                            LoadData=@OnLoadData Style="width: 100%;" Change=@(args => GetMemberID(args)) />
                         </p>
                     </div>
-                </EditForm>
-            </div>
+                    <div class="col">
+                        <RadzenButton Click=@(args => AddMember(idMember)) Icon="add_circle_outline" ButtonStyle="ButtonStyle.Primary" Size="ButtonSize.Medium" />
+                    </div>
+                </div>
+                <div class="row">
+                    <p>
+                        <RadzenButton Click=@(args => UpdateMemberAssign()) Icon="update" Text="Update" ButtonStyle="ButtonStyle.Success" />
+                    </p>
+                </div>
+            </EditForm>
         }
     </div>
 </div>
-
 <br />
 
 
@@ -292,8 +285,7 @@
         }
 
         var result = membercate.Where(w => sub.Contains(w.CategorySubId.GetValueOrDefault())).Select(w => w.MemberNo).ToList();
-        var result2 = member.Where(w => result.Contains(w.MemberNo) && (w.RegisterCapital / projectsub.Budget) <= 10);
-        //var result2 = result.Where(w => ((w.MemberNoNavigation.RegisterCapital?? 0) / projectsub.Budget) <= 10).ToList();
+        var result2 = member.Where(w => result.Contains(w.MemberNo) && (projectsub.Budget / w.RegisterCapital) <= 10 && (projectsub.Budget / w.RegisterCapital) > 0);
         count = new List<CountAwarded>();
         foreach (var list in result2)
         {

@@ -29,7 +29,7 @@
             <div class="col-sm-4">
                 @if (!hideEdit)
                 {
-                    <button type="submit" class="btn btn-primary btn-sm" style="float:right" @onclick="()=>GoEdit()">Edit</button>
+                    <RadzenButton Click=@(args => GoEdit()) Icon="edit" ButtonStyle="ButtonStyle.Primary" Size="ButtonSize.Medium" Text="EDIT" style="float:right" />
                 }
             </div>
         </div>
@@ -234,11 +234,11 @@
         projecthd = await pj.GetProjectHDbyID(id);
         customerinfo = Newtonsoft.Json.JsonConvert.DeserializeObject<List<CustomCustomer>>(projecthd.CustomerInfo);
         listcontact = Newtonsoft.Json.JsonConvert.DeserializeObject<List<CustomContact>>(projecthd.ContactInfo);
-        checkEdit();
+        await checkEdit();
         StateHasChanged();
     }
 
-    private void checkEdit()
+    async Task checkEdit()
     {
         foreach (var list in projecthd.ProjectSubProjectTls)
         {

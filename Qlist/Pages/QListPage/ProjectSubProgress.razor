@@ -20,11 +20,11 @@
 <h3>Project Sub Update Progress</h3>
 <br />
 
-
 <EditForm Model="projectsub">
     <ConcurrentComponent ModuleName="ProjectSubProgress" ObjId="projectsub.Id" UserId="userid"></ConcurrentComponent>
-    <RadzenFieldset Text="Detail">
-        <div class="container">
+    <div class="card">
+        <div class="card-header">Detail</div>
+        <div class="card-body">
             <div class="row">
                 <div class="col-2"><p><b>Sub Running Number</b></p></div>
                 <div class="col">@projectsub.ProjectSubRunNo</div>
@@ -79,11 +79,12 @@
                 }
             </div>
         </div>
-    </RadzenFieldset>
+    </div>
     <br />
 
-    <RadzenFieldset Text="Project Category">
-        <div class="container">
+    <div class="card">
+        <div class="card-header">Project Category</div>
+        <div class="card-body">
             <div class="row">
                 @if (subcapability is null)
                 {
@@ -95,44 +96,31 @@
                     {
                         var cate = capability.Where(w => w.Id == cat.CategoryCatId).FirstOrDefault();
                         <div class="row">
-                            <div class="col">@cate.CategoryCat</div>
-                            <div class="col">@cat.CategoryCatSub</div>
+                            <div class="col">@cate.CategoryCat - @cat.CategoryCatSub</div>
                         </div>
                     }
                 }
             </div>
         </div>
-    </RadzenFieldset>
+    </div>
     <br />
 
-    <RadzenFieldset Text="Progress">
-        <div class="container">
-            <div class="row">
-                @if (!show)
-                {
-                    <div class="col-2"><p><b>Update Progress :</b></p></div>
-                    <div class="col-2">
-                        <InputSelect @bind-Value="progress">
-                            <option>Pre Sales</option>
-                            <option>Proposal</option>
-                            <option>Quoted</option>
-                            <option>Negociated</option>
-                            <option>Issued PO</option>
-                            <option>Working</option>
-                            <option>Finalizing</option>
-                            <option>Wait-Payment</option>
-                            <option>In-Warranty</option>
-                            <option>On-Hold</option>
-                            <option>Job Complete</option>
-                            <option>Cancelled</option>
-                        </InputSelect>
+    <div class="card">
+        <div class="card-header">Progress</div>
+        <div class="card-body">
+            @if (!show)
+            {
+                <div class="row">
+                    <div class="col-1"><p><b>Progress</b></p></div>
+                    <div class="col-3">
+                        <RadzenDropDown AllowClear="true" AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" @bind-Value=@progress Placeholder="Select..."
+                                    Data=@listprog TextProperty="Name" ValueProperty="Name" Class="w-100" />
                     </div>
-                    <div class="col-2"><RadzenButton Click=@(args => UpdateProjectSub()) Text="Update Progress" ButtonStyle="ButtonStyle.Success" /></div>
-                }
-
-            </div>
+                    <div class="col-2"><RadzenButton Click=@(args => UpdateProjectSub()) Icon="update" Text="Update" ButtonStyle="ButtonStyle.Success" /></div>
+                </div>
+            }
         </div>
-    </RadzenFieldset>
+    </div>
     <br />
 </EditForm>
 
@@ -147,6 +135,7 @@
 
     private List<MasterCapabilityCatSub> subcapability;
     private List<MasterCapabilityCat> capability;
+    private List<Progress> listprog;
 
     string progress = string.Empty;
     bool show = false;
@@ -164,6 +153,7 @@
     {
         await base.OnInitializedAsync();
         await GetDataAuthen();
+        await CreateListProgress();
         await Initial();
     }
 
@@ -203,6 +193,25 @@
             UpdateProjectHD();
             await Initial();
         }
+    }
+
+    async Task CreateListProgress()
+    {
+        listprog = new List<Progress>
+        {
+            new Progress {Name = "Pre Sales"},
+            new Progress {Name = "Proposal"},
+            new Progress {Name = "Quoted"},
+            new Progress {Name = "Negociated"},
+            new Progress {Name = "Issued PO"},
+            new Progress {Name = "Working"},
+            new Progress {Name = "Finalizing"},
+            new Progress {Name = "Wait-Payment"},
+            new Progress {Name = "In-Warranty"},
+            new Progress {Name = "On-Hold"},
+            new Progress {Name = "Job Complete"},
+            new Progress {Name = "Cancelled"}
+        };
     }
 
     async void UpdateProjectHD()

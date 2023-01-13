@@ -39,7 +39,7 @@
             </div>
             <div class="row">
                 <div class="col-2"><p><b>Budget</b></p></div>
-                <div class="col"><p><InputNumber style="width: 100%" id="MainBudget" @bind-Value="projectsub.Budget" class=""></InputNumber></p></div>
+                <div class="col"><p><RadzenNumeric TValue="double?" Placeholder="0.0" Step="0.5" @bind-Value=@projectsub.Budget Class="w-100" /></p></div>
                 <div class="col-1">THB</div>
             </div>
             <div class="row">
@@ -77,16 +77,13 @@
             <div class="row">
                 <div class="col-2"><p><b>New RA Type</b></p></div>
                 <div class="col">
-                    <InputSelect id="SubRAType" @bind-Value="ratypeid">
-                        <option value="0">------------Select RA Type------------</option>
-                        @if (ratype is not null)
-                        {
-                            foreach (var list in ratype)
-                            {
-                                <option value="@list.Id">@list.Name</option>
-                            }
-                        }
-                    </InputSelect>
+                    @if (ratype is not null)
+                    {
+                        <p>
+                            <RadzenDropDown AllowClear="true" AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" @bind-Value=@ratypeid Placeholder="Select..."
+                                        Data=@ratype TextProperty="Name" ValueProperty="Id" Class="w-100" />
+                        </p>
+                    }
                 </div>
             </div>
         </div>
@@ -101,31 +98,31 @@
             {
                 foreach (var cat in subcategory)
                 {
-                    var cate = capability.Where(w => w.Id == cat.CategoryCatId).FirstOrDefault();
+                    var cate = cap.Where(w => w.Id == cat.CategoryCatId).FirstOrDefault();
                     <div class="row">
                         <div class="col">@cate.CategoryCat - @cat.CategoryCatSub</div>
-                        <div class="col-1"><p><RadzenButton Click=@(args => subcategory.Remove(cat)) Text="X" ButtonStyle="ButtonStyle.Danger" /></p></div>
+                        <div class="col-1"><RadzenButton Click=@(args => subcategory.Remove(cat)) Text="X" ButtonStyle="ButtonStyle.Danger" /></div>
                     </div>
                 }
             }
-            <br />
-
+        </div>
+        <div class="card-body">
             <div class="row">
-                <div class="col-6">
-                    <InputSelect id="SubCategory" @bind-Value="categoryid">
-                        <option value="0">------------Select Category------------</option>
-                        @if (capability is not null)
+                <div class="col-5">
+                    <p>
+                        @if (subcap is not null)
                         {
-                            foreach (var list in capability)
-                            {
-                                foreach (var sub in list.MasterCapabilityCatSubs)
-                                {
-                                    <option value="@sub.Id">@list.CategoryCat - @sub.CategoryCatSub</option>
-                                }
-                            }
+                            <RadzenDropDown AllowClear="true" AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" @bind-Value=@categoryid Placeholder="Select..."
+                                Data=@subcap TextProperty="CategoryCatSub" ValueProperty="Id" Class="w-100">
+                                <Template Context="sub">
+                                    @getcap(sub.CategoryCatId) - @(sub.CategoryCatSub)
+                                </Template>
+                            </RadzenDropDown>
                         }
-                    </InputSelect>
-                    <button @onclick="()=>SaveCategory(categoryid)">Add Category</button>
+                    </p>
+                </div>
+                <div class="col-1">
+                    <RadzenButton Click=@(args => SaveCategory(categoryid)) Icon="add" ButtonStyle="ButtonStyle.Primary" Size="ButtonSize.Medium" />
                 </div>
             </div>
         </div>
@@ -157,6 +154,7 @@
                 }
             }
 
+            <br />
             <div class="row">
                 <div class="col-5"><p><InputFile OnChange="OnInputFileChange" /></p></div>
             </div>
@@ -186,7 +184,8 @@
     public ProjectRatypeTl projectratype { get; set; } = new ProjectRatypeTl();
 
     private List<ProjectDocument> projectdoc;
-    private List<MasterCapabilityCat> capability;
+    private List<MasterCapabilityCat> cap;
+    private List<MasterCapabilityCatSub> subcap;
     private List<MasterCapabilityCatSub>? subcategory;
     private List<RatypeMaster> ratype;
 
@@ -213,11 +212,11 @@
         projectsub = await pj.GetProjectSubProjectTLbyID(id);
         projectratype = await pj.GetProjectRATypeBySubProjectID(projectsub.Id);
         projectdoc = await pj.GetProjectDocumentByProjectSubID(projectsub.Id);
-        capability = await pj.GetAllCapability();
+        cap = await pj.GetAllCapability();
+        subcap = await pj.GetAllSubCapability();
+        subcap = subcap.OrderBy(w => w.CategoryCatId).ToList();
         ratype = await pj.GetRATypeMaster();
-
         subcategory = Newtonsoft.Json.JsonConvert.DeserializeObject<List<MasterCapabilityCatSub>>(projectratype.MemberCapability);
-
         StateHasChanged();
     }
 
@@ -238,19 +237,8 @@
     {
         if (id > 0)
         {
-            foreach (var cate in capability)
-            {
-                var sorted = cate.MasterCapabilityCatSubs.Where(w => w.Id == id).FirstOrDefault();
-                if (sorted is not null)
-                {
-                    var list = subcategory.Where(w => w.Id == sorted.Id).ToList();
-                    if (list.Count() == 0)
-                    {
-                        subcategory.Add(new MasterCapabilityCatSub() { Id = sorted.Id, CategoryCatId = sorted.CategoryCatId, CategoryCatSub = sorted.CategoryCatSub });
-                        return;
-                    }
-                }
-            }
+            var sub = subcap.Where(w => w.Id == id).FirstOrDefault();
+            subcategory.Add(new MasterCapabilityCatSub() { Id = sub.Id, CategoryCatId = sub.CategoryCatId, CategoryCatSub = sub.CategoryCatSub, CategoryCat = sub.CategoryCat });
         }
     }
 
@@ -327,6 +315,14 @@
         projectsub.PlanFinishDate = DateTime.Now;
     }
 
+    private string getcap(int? id)
+    {
+        string get = string.Empty;
+        var main = cap.Where(w => w.Id == id).FirstOrDefault();
+        get = main.CategoryCat;
+        return get;
+    }
+
     async Task ErrorMessage(string message)
     {
         await DialogService.OpenAsync("Warning", ds =>
@@ -339,7 +335,8 @@
     public void Dispose()
     {
         if (projectdoc is not null) projectdoc.Clear();
-        if (capability is not null) capability.Clear();
+        if (cap is not null) cap.Clear();
+        if (subcap is not null) subcap.Clear();
         if (subcategory is not null) subcategory.Clear();
         if (ratype is not null) ratype.Clear();
         Console.WriteLine("Disconnected");

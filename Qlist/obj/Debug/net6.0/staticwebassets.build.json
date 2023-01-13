@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "D5hd3DCPpf1flg4VHVB8A5feccEdSQbGqMPE63JOtTE=",
+  "Hash": "fyr2C/7EzXnqkD7wRu6bjCbRLVNcBuH9D2zwzlRI09A=",
   "Source": "Qlist",
   "BasePath": "_content/Qlist",
   "Mode": "Default",
@@ -1069,6 +1069,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\PicFiles\\23010001-001_10-medical-industry.jpg"
+    },
+    {
+      "Identity": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\PicFiles\\23010008-001_12_Interface_Cable_terminal.jpg",
+      "SourceId": "Qlist",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\",
+      "BasePath": "_content/Qlist",
+      "RelativePath": "PicFiles/23010008-001_12_Interface_Cable_terminal.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\PicFiles\\23010008-001_12_Interface_Cable_terminal.jpg"
     }
   ]
 }

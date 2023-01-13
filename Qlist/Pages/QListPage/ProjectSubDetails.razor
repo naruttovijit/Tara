@@ -27,7 +27,7 @@
             <div class="col-sm-4">
                 @if (projectsub.ProjectSubMemberAsgmts.Count == 0)
                 {
-                    <button type="submit" class="btn btn-primary" style="float:right" @onclick="()=>GoEdit()">Edit</button>
+                    <RadzenButton Click=@(args => GoEdit()) Icon="edit" ButtonStyle="ButtonStyle.Primary" Size="ButtonSize.Medium" Text="EDIT" style="float:right" />
                 }
             </div>
         </div>
@@ -59,6 +59,12 @@
         <div class="row">
             <div class="col-2"><p><b>Status</b></p></div>
             <div class="col">@projectsub.ProjectSubStatus</div>
+            <div class="col-3">
+                @if (hide)
+                {
+                    <div class="col-10"><RadzenButton Shade="Shade.Light" Click=@(args => UpdateProgress()) Icon="update" Text="Update Progress" ButtonStyle="ButtonStyle.Primary" style="float:right" /></div>
+                }
+            </div>
         </div>
         <div class="row">
             <div class="col-2"><p><b>Started Date</b></p></div>
@@ -152,101 +158,79 @@
 
          @if (projectsub.ProjectSubMemberAsgmts is not null)
          {
-             if (projectsub.ProjectSubMemberAsgmts.Count > 0)
+             if (projectsub.ProjectSubMemberAsgmts.Count == 0)
              {
-                 int no = 0;
-                 foreach (var list in projectsub.ProjectSubMemberAsgmts)
-                 {
-                     var member = selectmember.Where(w => w.Id == list.Id).FirstOrDefault();
-                     if (member is not null)
-                     {
-                         @*                        no++;*@
-                         if (list.Awarded == "Y")
-                         {
-                             <RadzenCard class="rz-background-color-success-light">
-                                 @*<div class="row">
-                                    <div class="col-2"><p>No.</p></div>
-                                    <div class="col">@no</div>
-                                </div>*@
-                                 <div class="row">
-                                     <div class="col-2"><p>Thai Name :</p></div>
-                                     <div class="col">@member.CompanyNameTh</div>
-                                 </div>
-                                 <div class="row">
-                                     <div class="col-2"><p>English Name :</p></div>
-                                     <div class="col">@member.CompanyNameEn</div>
-                                 </div>
-                                 <div class="row">
-                                     <div class="col-2"><p>Telephone :</p></div>
-                                     <div class="col">@member.Telephone</div>
-                                 </div>
-                                 <div class="row">
-                                     <div class="col-2"><p>Date Confirmed :</p></div>
-                                     <div class="col">@list.DateConfirm</div>
-                                 </div>
-                                 <div class="row">
-                                     <div class="col-2"><p>Awarded :</p></div>
-                                     <div class="col">Yes</div>
-                                 </div>
-                             </RadzenCard>
-                             <br />
-                         }
-                         else
-                         {
-                             <RadzenCard class="rz-background-color-base-100">
-                                 @*<div class="row">
-                                    <div class="col-2"><p>No.</p></div>
-                                    <div class="col">@no</div>
-                                </div>*@
-                                 <div class="row">
-                                     <div class="col-2"><p>Thai Name :</p></div>
-                                     <div class="col">@member.CompanyNameTh</div>
-                                 </div>
-                                 <div class="row">
-                                     <div class="col-2"><p>English Name :</p></div>
-                                     <div class="col">@member.CompanyNameEn</div>
-                                 </div>
-                                 <div class="row">
-                                     <div class="col-2"><p>Telephone :</p></div>
-                                     <div class="col">@member.Telephone</div>
-                                 </div>
-                                 <div class="row">
-                                     <div class="col-2"><p>Date Confirmed :</p></div>
-                                     <div class="col">@list.DateConfirm</div>
-                                 </div>
-                             </RadzenCard>
-                             <br />
-                         }
-                     }
-                 }
+                 <div class="row">
+                    <p><em>No Membership Assignments</em></p>
+                 </div>
              }
              else
              {
-                 <div class="row">
-                     <p><em>No Membership Assignments</em></p>
-                 </div>
+                 foreach (var list in projectsub.ProjectSubMemberAsgmts)
+                 {
+                    var member = selectmember.Where(w => w.Id == list.Id).FirstOrDefault();
+                    if (list.Awarded == "Y")
+                    {
+                        <RadzenCard class="rz-background-color-success-light">
+                            <div class="row">
+                                <div class="col-2"><p>Thai Name :</p></div>
+                                <div class="col">@member.CompanyNameTh</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-2"><p>English Name :</p></div>
+                                <div class="col">@member.CompanyNameEn</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-2"><p>Telephone :</p></div>
+                                <div class="col">@member.Telephone</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-2"><p>Date Confirmed :</p></div>
+                                <div class="col">@list.DateConfirm</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-2"><p>Awarded :</p></div>
+                                <div class="col">Yes</div>
+                            </div>
+                        </RadzenCard>
+                        <br />
+                    }
+                    else
+                    {
+                        <RadzenCard class="rz-background-color-base-100">
+                            <div class="row">
+                                <div class="col-2"><p>Thai Name :</p></div>
+                                <div class="col">@member.CompanyNameTh</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-2"><p>English Name :</p></div>
+                                <div class="col">@member.CompanyNameEn</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-2"><p>Telephone :</p></div>
+                                <div class="col">@member.Telephone</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-2"><p>Date Confirmed :</p></div>
+                                <div class="col">@list.DateConfirm</div>
+                            </div>
+                        </RadzenCard>
+                        <br />
+                    }
+
+                }
              }
 
-             if (!show)
+             if (!hide)
              {
-                 <br />
-                 <div class="col-3"><RadzenButton Shade="Shade.Light" Click=@(args => UpdateAssignment()) Text="Update Member Assignments" ButtonStyle="ButtonStyle.Primary" /></div>
+                 <div class="row-cols-4">
+                    <RadzenButton Click=@(args => UpdateAssignment()) Icon="add" ButtonStyle="ButtonStyle.Primary" Size="ButtonSize.Medium" Text="ADD MEMBER ASSIGNMENTS" />
+                </div>
              }
          }
      </div>
  </div>
-
-
-
-    <div class="container">
-        <div class="row">
-            @if (show)
-            {
-                <div class="col-3"><RadzenButton Shade="Shade.Light" Click=@(args => UpdateProgress()) Text="Update Progress" ButtonStyle="ButtonStyle.Primary" /></div>
-            }
-        </div>
-    </div>
-    <br />
+ <br />
 
 
     @code {
@@ -262,14 +246,14 @@
         private List<RatypeMaster> ratype;
         private List<MemberMaster> selectmember;
 
-        bool show = false;
+        bool hide = false;
         private string Selectratype;
 
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
             projectsub = await pj.GetProjectSubProjectTLbyID(id);
-            GetMemberData();
+            await GetMemberData();
             projectdoc = await pj.GetProjectDocumentByProjectSubID(projectsub.Id);
             ratype = await pj.GetRATypeMaster();
             projectra = await pj.GetProjectRATypeBySubProjectID(projectsub.Id);
@@ -282,7 +266,7 @@
             capability = await pj.GetAllCapability();
             subcapability = Newtonsoft.Json.JsonConvert.DeserializeObject<List<MasterCapabilityCatSub>>(projectra.MemberCapability);
 
-            checkProgress();
+            await checkProgress();
             StateHasChanged();
         }
 
@@ -318,13 +302,13 @@
             }
         }
 
-        private void checkProgress()
+        async Task checkProgress()
         {
             foreach (var list in projectsub.ProjectSubMemberAsgmts)
             {
                 if (list.Awarded == "Y")
                 {
-                    show = true;
+                hide = true;
                     return;
                 }
             }
@@ -363,4 +347,3 @@
             Console.WriteLine("Disconnected");
         }
     }
-

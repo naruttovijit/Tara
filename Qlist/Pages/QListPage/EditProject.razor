@@ -39,7 +39,7 @@
             </div>
             <div class="row">
                 <div class="col-2"><p><b>Budget</b></p></div>
-                <div class="col"><p><InputNumber style="width: 100%" id="MainBudget" @bind-Value="projecthd.Budget"></InputNumber></p></div>
+                <div class="col"><p><RadzenNumeric TValue="double?" Placeholder="0.0" Step="0.5" @bind-Value=@projecthd.Budget Class="w-100" /></p></div>
                 <div class="col-1">THB</div>
             </div>
             <div class="row">

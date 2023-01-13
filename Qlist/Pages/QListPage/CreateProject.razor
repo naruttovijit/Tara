@@ -76,7 +76,7 @@
                 <div class="card-header">Customer</div>
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-2"><p><b>Customer Name</b></p></div>
+                        <div class="col-2"><p><b>Name</b></p></div>
                         <div class="col"><p><RadzenTextBox style="width: 100%" @bind-Value="custname" /></p></div>
                     </div>
                     <div class="row">
@@ -142,6 +142,7 @@
                                     <div class="col" style="white-space: pre-wrap;">@list.Other</div>
                                 </div>
                             </div>
+                            <br />
                         }
                     </div>
                 }
@@ -286,6 +287,7 @@
                 </div>
             </div>
 
+            <br>
             <div class="row">
                 <RadzenButton Click=@(args => SaveProjectSub()) Text="Add Project Sub" Icon="add_circle_outline" ButtonStyle="ButtonStyle.Primary" />
             </div>
@@ -371,7 +373,7 @@
 
         <br />
         <div class="card">
-            <div class="row"><RadzenButton style="width: 160px" Icon="save" BusyText="Saving ..." IsBusy=@busy Click=@SaveAll Text="Save All" /></div>
+            <div class="row"><RadzenButton Icon="save" BusyText="Saving ..." IsBusy=@busy Click=@SaveAll Text="Save All" Style="width:100%"/></div>
         </div>
     }
 }
