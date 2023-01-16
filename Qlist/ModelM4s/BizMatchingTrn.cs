@@ -13,7 +13,6 @@ namespace Qlist.ModelM4s
         public string Remark { get; set; }
 
         public virtual Customer Customer { get; set; }
-        public virtual MemberMasterJan12023 MemberNoNavigation { get; set; }
         public virtual MemberProductService Product { get; set; }
     }
 }

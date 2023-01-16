@@ -8,7 +8,6 @@ namespace Qlist.ModelM4s
         public int Id { get; set; }
         public string MemberNo { get; set; }
         public byte[] Logoimage { get; set; }
-
-        public virtual MemberMasterJan12023 MemberNoNavigation { get; set; }
+        public string Base64String { get; set; }
     }
 }

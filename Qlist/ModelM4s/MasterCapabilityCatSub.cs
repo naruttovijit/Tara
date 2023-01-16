@@ -5,6 +5,11 @@ namespace Qlist.ModelM4s
 {
     public partial class MasterCapabilityCatSub
     {
+        public MasterCapabilityCatSub()
+        {
+            MemberCategories = new HashSet<MemberCategory>();
+        }
+
         public int Id { get; set; }
         public string CategoryCatSub { get; set; }
         public string Description { get; set; }
@@ -13,5 +18,6 @@ namespace Qlist.ModelM4s
         public DateTime? LastUpd { get; set; }
 
         public virtual MasterCapabilityCat CategoryCat { get; set; }
+        public virtual ICollection<MemberCategory> MemberCategories { get; set; }
     }
 }

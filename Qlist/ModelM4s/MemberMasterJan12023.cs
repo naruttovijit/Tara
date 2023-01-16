@@ -11,7 +11,6 @@ namespace Qlist.ModelM4s
             CompanyImages = new HashSet<CompanyImage>();
             MemberBizTypes = new HashSet<MemberBizType>();
             MemberContactPeople = new HashSet<MemberContactPerson>();
-            MemberProductServices = new HashSet<MemberProductService>();
         }
 
         public int Id { get; set; }
@@ -41,6 +40,5 @@ namespace Qlist.ModelM4s
         public virtual ICollection<CompanyImage> CompanyImages { get; set; }
         public virtual ICollection<MemberBizType> MemberBizTypes { get; set; }
         public virtual ICollection<MemberContactPerson> MemberContactPeople { get; set; }
-        public virtual ICollection<MemberProductService> MemberProductServices { get; set; }
     }
 }

@@ -19,7 +19,6 @@ namespace Qlist.ModelM4s
         public decimal? Price { get; set; }
         public int? MemberDiscountPercent { get; set; }
 
-        public virtual MemberMasterJan12023 MemberNoNavigation { get; set; }
         public virtual ICollection<BizMatchingTrn> BizMatchingTrns { get; set; }
     }
 }

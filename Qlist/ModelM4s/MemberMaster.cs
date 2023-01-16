@@ -5,6 +5,11 @@ namespace Qlist.ModelM4s
 {
     public partial class MemberMaster
     {
+        public MemberMaster()
+        {
+            MemberCategories = new HashSet<MemberCategory>();
+        }
+
         public int Id { get; set; }
         public DateTime CreateDate { get; set; }
         public string MemberNo { get; set; }
@@ -27,5 +32,7 @@ namespace Qlist.ModelM4s
         public int? IsCoreMemeber { get; set; }
         public int? IsEnable { get; set; }
         public DateTime? ExpiredDate { get; set; }
+
+        public virtual ICollection<MemberCategory> MemberCategories { get; set; }
     }
 }

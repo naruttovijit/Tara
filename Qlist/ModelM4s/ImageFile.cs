@@ -10,5 +10,6 @@ namespace Qlist.ModelM4s
         public string ContentType { get; set; }
         public int? FileSize { get; set; }
         public string Base64data { get; set; }
+        public byte[] Imgage1 { get; set; }
     }
 }

@@ -32,6 +32,7 @@ namespace Qlist.ModelM4s
         public virtual DbSet<MasterCapabilityCatSub> MasterCapabilityCatSubs { get; set; }
         public virtual DbSet<MasterCountry> MasterCountries { get; set; }
         public virtual DbSet<MasterDistrict> MasterDistricts { get; set; }
+        public virtual DbSet<MasterPieceProject> MasterPieceProjects { get; set; }
         public virtual DbSet<MasterProvince> MasterProvinces { get; set; }
         public virtual DbSet<MasterRole> MasterRoles { get; set; }
         public virtual DbSet<MasterTambon> MasterTambons { get; set; }
@@ -42,7 +43,6 @@ namespace Qlist.ModelM4s
         public virtual DbSet<MemberContactPerson> MemberContactPeople { get; set; }
         public virtual DbSet<MemberDebt> MemberDebts { get; set; }
         public virtual DbSet<MemberMaster> MemberMasters { get; set; }
-        public virtual DbSet<MemberMasterJan12023> MemberMasterJan12023s { get; set; }
         public virtual DbSet<MemberPaymentTrn> MemberPaymentTrns { get; set; }
         public virtual DbSet<MemberProduct> MemberProducts { get; set; }
         public virtual DbSet<MemberProductService> MemberProductServices { get; set; }
@@ -127,11 +127,6 @@ namespace Qlist.ModelM4s
                     .HasForeignKey(d => d.CustomerId)
                     .HasConstraintName("FK_Tara_Biz_Matching_Trans_Tara_Customer");
 
-                entity.HasOne(d => d.MemberNoNavigation)
-                    .WithMany(p => p.BizMatchingTrns)
-                    .HasForeignKey(d => d.MemberNo)
-                    .HasConstraintName("FK_Tara_Biz_Matching_Trans_Tara_Member");
-
                 entity.HasOne(d => d.Product)
                     .WithMany(p => p.BizMatchingTrns)
                     .HasForeignKey(d => d.ProductId)
@@ -177,11 +172,6 @@ namespace Qlist.ModelM4s
                 entity.Property(e => e.Logoimage).HasColumnType("image");
 
                 entity.Property(e => e.MemberNo).HasMaxLength(10);
-
-                entity.HasOne(d => d.MemberNoNavigation)
-                    .WithMany(p => p.CompanyImages)
-                    .HasForeignKey(d => d.MemberNo)
-                    .HasConstraintName("FK_Tara_Company_Image_Tara_Member");
             });
 
             modelBuilder.Entity<CompanyProfile>(entity =>
@@ -266,6 +256,8 @@ namespace Qlist.ModelM4s
                 entity.Property(e => e.Id)
                     .ValueGeneratedOnAdd()
                     .HasColumnName("id");
+
+                entity.Property(e => e.Imgage1).HasColumnType("image");
             });
 
             modelBuilder.Entity<Industry>(entity =>
@@ -302,7 +294,9 @@ namespace Qlist.ModelM4s
 
                 entity.Property(e => e.Description).HasMaxLength(100);
 
-                entity.Property(e => e.LastUpd).HasColumnType("datetime");
+                entity.Property(e => e.LastUpd)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
             });
 
             modelBuilder.Entity<MasterCapabilityCatSub>(entity =>
@@ -319,12 +313,14 @@ namespace Qlist.ModelM4s
 
                 entity.Property(e => e.Description).HasMaxLength(100);
 
-                entity.Property(e => e.LastUpd).HasColumnType("datetime");
+                entity.Property(e => e.LastUpd)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
 
                 entity.HasOne(d => d.CategoryCat)
                     .WithMany(p => p.MasterCapabilityCatSubs)
                     .HasForeignKey(d => d.CategoryCatId)
-                    .HasConstraintName("FK_MasterCapabilityCatSub_MasterCapabilityCat");
+                    .HasConstraintName("FK_MasterCapabilityCatSub_MasterCapabilityCat1");
             });
 
             modelBuilder.Entity<MasterCountry>(entity =>
@@ -369,6 +365,19 @@ namespace Qlist.ModelM4s
                     .WithMany(p => p.MasterDistricts)
                     .HasForeignKey(d => d.ProvinceId)
                     .HasConstraintName("FK_MasterDistrict_MasterProvince");
+            });
+
+            modelBuilder.Entity<MasterPieceProject>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToTable("MasterPieceProject");
+
+                entity.Property(e => e.Id)
+                    .ValueGeneratedOnAdd()
+                    .HasColumnName("id");
+
+                entity.Property(e => e.MemberNo).HasMaxLength(50);
             });
 
             modelBuilder.Entity<MasterProvince>(entity =>
@@ -517,37 +526,27 @@ namespace Qlist.ModelM4s
                     .HasForeignKey(d => d.MemberBizTypeId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Tara_Member_Type_tb_Member_Type_Master");
-
-                entity.HasOne(d => d.MemberNoNavigation)
-                    .WithMany(p => p.MemberBizTypes)
-                    .HasForeignKey(d => d.MemberNo)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_MemberBizType_MemberMaster");
             });
 
             modelBuilder.Entity<MemberCategory>(entity =>
             {
-                entity.HasNoKey();
-
                 entity.ToTable("MemberCategory");
+
+                entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.CategoryId).HasColumnName("CategoryID");
 
                 entity.Property(e => e.CategorySubId).HasColumnName("CategorySubID");
 
-                entity.Property(e => e.Id)
-                    .ValueGeneratedOnAdd()
-                    .HasColumnName("id");
-
                 entity.Property(e => e.MemberNo).HasMaxLength(10);
 
                 entity.HasOne(d => d.CategorySub)
-                    .WithMany()
+                    .WithMany(p => p.MemberCategories)
                     .HasForeignKey(d => d.CategorySubId)
-                    .HasConstraintName("FK_MemberCategory_MasterCapabilityCatSub1");
+                    .HasConstraintName("FK_MemberCategory_MasterCapabilityCatSub");
 
                 entity.HasOne(d => d.MemberNoNavigation)
-                    .WithMany()
+                    .WithMany(p => p.MemberCategories)
                     .HasForeignKey(d => d.MemberNo)
                     .HasConstraintName("FK_MemberCategory_MemberMaster");
             });
@@ -597,12 +596,6 @@ namespace Qlist.ModelM4s
                 entity.Property(e => e.Position).HasMaxLength(50);
 
                 entity.Property(e => e.Title).HasMaxLength(50);
-
-                entity.HasOne(d => d.MemberNoNavigation)
-                    .WithMany(p => p.MemberContactPeople)
-                    .HasForeignKey(d => d.MemberNo)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Tara_Contact_Person_Tara_Member");
             });
 
             modelBuilder.Entity<MemberDebt>(entity =>
@@ -638,53 +631,6 @@ namespace Qlist.ModelM4s
                     .HasColumnName("CompanyNameTH");
 
                 entity.Property(e => e.CompanyRegistrationNo).HasMaxLength(20);
-
-                entity.Property(e => e.CreateDate)
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.Email).HasMaxLength(50);
-
-                entity.Property(e => e.EstablishYear).HasMaxLength(10);
-
-                entity.Property(e => e.ExpiredDate).HasColumnType("datetime");
-
-                entity.Property(e => e.Facebook).HasMaxLength(100);
-
-                entity.Property(e => e.Id)
-                    .ValueGeneratedOnAdd()
-                    .HasColumnName("id");
-
-                entity.Property(e => e.IsBoi).HasColumnName("IsBOI");
-
-                entity.Property(e => e.MemberStartDate)
-                    .HasColumnType("datetime")
-                    .HasColumnName("Member_StartDate");
-
-                entity.Property(e => e.Telephone).HasMaxLength(50);
-
-                entity.Property(e => e.WebSite).HasMaxLength(100);
-            });
-
-            modelBuilder.Entity<MemberMasterJan12023>(entity =>
-            {
-                entity.HasKey(e => e.MemberNo)
-                    .HasName("PK_Tara_Member");
-
-                entity.ToTable("MemberMaster_Jan1_2023");
-
-                entity.Property(e => e.MemberNo).HasMaxLength(10);
-
-                entity.Property(e => e.CompanyNameEn)
-                    .HasMaxLength(100)
-                    .HasColumnName("CompanyNameEN");
-
-                entity.Property(e => e.CompanyNameTh)
-                    .IsRequired()
-                    .HasMaxLength(100)
-                    .HasColumnName("CompanyNameTH");
-
-                entity.Property(e => e.CompanyRegistrationNo).HasMaxLength(13);
 
                 entity.Property(e => e.CreateDate)
                     .HasColumnType("datetime")
@@ -772,11 +718,6 @@ namespace Qlist.ModelM4s
                 entity.Property(e => e.ProductName).HasMaxLength(50);
 
                 entity.Property(e => e.ProuductDescription).HasMaxLength(200);
-
-                entity.HasOne(d => d.MemberNoNavigation)
-                    .WithMany(p => p.MemberProductServices)
-                    .HasForeignKey(d => d.MemberNo)
-                    .HasConstraintName("FK_MemberProductService_MemberMaster");
             });
 
             modelBuilder.Entity<Mou>(entity =>
@@ -921,7 +862,7 @@ namespace Qlist.ModelM4s
                     .WithMany(p => p.Users)
                     .HasForeignKey(d => d.RoleId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_USERS_MasterRole1");
+                    .HasConstraintName("FK_USERS_MasterRole");
             });
 
             OnModelCreatingPartial(modelBuilder);

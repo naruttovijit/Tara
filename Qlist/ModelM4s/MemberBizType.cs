@@ -10,6 +10,5 @@ namespace Qlist.ModelM4s
         public int MemberBizTypeId { get; set; }
 
         public virtual MasterBizType MemberBizTypeNavigation { get; set; }
-        public virtual MemberMasterJan12023 MemberNoNavigation { get; set; }
     }
 }
