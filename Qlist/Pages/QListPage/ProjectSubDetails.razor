@@ -1,16 +1,20 @@
 ﻿@page "/Data/ProjectSubDetail/{id:int}"
 
-@implements IDisposable;
-
 @using Data;
 @using ModelM2s;
 @using ModelM4s;
 @using System.Globalization;
 @using Radzen;
 @using Radzen.Blazor;
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Components.Authorization
 
 @inject ProjectData pj;
 @inject NavigationManager NavManager
+@inject DialogService DialogService
+@inject BlazorSpinner.SpinnerService spin
+@implements IDisposable
+
 
 @attribute [Authorize(Roles = "1,2,3")]
 
@@ -25,7 +29,7 @@
                 <b>Running Number : </b>@projectsub.ProjectSubRunNo
             </div>
             <div class="col-sm-4">
-                @if (projectsub.ProjectSubMemberAsgmts.Count == 0)
+                @if (projectsub.ProjectSubMemberAsgmts.Count == 0 && userrole < 3)
                 {
                     <RadzenButton Click=@(args => GoEdit()) Icon="edit" ButtonStyle="ButtonStyle.Primary" Size="ButtonSize.Medium" Text="EDIT" style="float:right" />
                 }
@@ -60,10 +64,7 @@
             <div class="col-2"><p><b>Status</b></p></div>
             <div class="col">@projectsub.ProjectSubStatus</div>
             <div class="col-3">
-                @if (hide)
-                {
-                    <div class="col-10"><RadzenButton Shade="Shade.Light" Click=@(args => UpdateProgress()) Icon="update" Text="Update Progress" ButtonStyle="ButtonStyle.Primary" style="float:right" /></div>
-                }
+                
             </div>
         </div>
         <div class="row">
@@ -112,7 +113,7 @@
             {
                 var cate = capability.Where(w => w.Id == cat.CategoryCatId).FirstOrDefault();
                 <div class="row">
-                    <div class="col">@cate.CategoryCat - @cat.CategoryCatSub</div>
+                    <div class="col"><li>@cate.CategoryCat - @cat.CategoryCatSub</li></div>
                 </div>
             }
         }
@@ -152,7 +153,18 @@
 <br />
  <div class="card">
      <div class="card-header">
-         Membership Assignments
+         <div class="row">
+             <div class="col">
+                 Membership Assignments
+             </div>
+            @if (hide && userrole < 3 && !listevent)
+            {
+                <div class="col-sm-auto">
+                    <RadzenButton Text="Cancel Awarded" Icon="cancel" ButtonStyle="ButtonStyle.Danger" Click=@(args => DialogService.Confirm("Do you want to cancel Member Awarded?", "Cancel Member Awarded", new ConfirmOptions() { OkButtonText = "Yes", CancelButtonText = "No" })) />
+                </div>
+            }
+         </div>
+        
      </div>
      <div class="card-body">
 
@@ -168,10 +180,10 @@
              {
                  foreach (var list in projectsub.ProjectSubMemberAsgmts)
                  {
-                    var member = selectmember.Where(w => w.Id == list.Id).FirstOrDefault();
+                    var member = selectmember.Where(w => w.Id == list.MemberId).FirstOrDefault();
                     if (list.Awarded == "Y")
                     {
-                        <RadzenCard class="rz-background-color-success-light">
+                        <RadzenCard class="rz-background-color-success-lighter">
                             <div class="row">
                                 <div class="col-2"><p>Thai Name :</p></div>
                                 <div class="col">@member.CompanyNameTh</div>
@@ -221,62 +233,115 @@
                 }
              }
 
-             if (!hide)
+             if (!hide && userrole < 3)
              {
-                 <div class="row-cols-4">
-                    <RadzenButton Click=@(args => UpdateAssignment()) Icon="add" ButtonStyle="ButtonStyle.Primary" Size="ButtonSize.Medium" Text="ADD MEMBER ASSIGNMENTS" />
+                 <div class="row-cols-sm-auto">
+                    <RadzenButton Click=@(args => UpdateAssignment()) Icon="add" ButtonStyle="ButtonStyle.Primary" Size="ButtonSize.Medium" Text="ADD MEMBER" />
                 </div>
              }
          }
      </div>
  </div>
  <br />
+ <div class="card">
+     <div class="card-header">Event</div>
+     <div class="card-body">
+        <div class="row">
+            <p>
+                <RadzenDataGrid PageSize="5" AllowPaging="true" AllowSorting="true" Data="@eve" TItem="Event" ColumnWidth="20%" GridLines="DataGridGridLines.Horizontal" class="border-0">
+                    <Columns>
+                        <RadzenDataGridColumn TItem="Event" Property="TargetDate" Title="Target Date" FormatString="{0:dd/MM/yyyy}" Width="15%" />
+                        <RadzenDataGridColumn TItem="Event" Property="Description" Title="Description" Width="65%">
+                            <Template Context="desc">
+                                <a style="white-space: pre-wrap;">@desc.Description</a>
+                            </Template>
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn TItem="Event" Property="Status" Title="Status" Width="20%" />
+                    </Columns>
+                </RadzenDataGrid>
+            </p>
+        </div>
+        <div class="row">
+            @if (hide && userrole < 3)
+                {
+                    <div class="col-10"><RadzenButton Shade="Shade.Light" Click=@(args => UpdateProgress()) Icon="update" Text="Update Event" ButtonStyle="ButtonStyle.Primary" style="float:center" /></div>
+                }
+        </div>
+    </div>
+ </div>
+ <br />
 
+@code {
+    [Parameter]
+    public int id { get; set; }
 
-    @code {
-        [Parameter]
-        public int id { get; set; }
+    public ProjectSubProjectTl projectsub { get; set; } = new ProjectSubProjectTl();
+    public ProjectRatypeTl projectra { get; set; } = new ProjectRatypeTl();
 
-        public ProjectSubProjectTl projectsub { get; set; } = new ProjectSubProjectTl();
-        public ProjectRatypeTl projectra { get; set; } = new ProjectRatypeTl();
+    private List<MasterCapabilityCatSub> subcapability;
+    private List<MasterCapabilityCat> capability;
+    private List<ProjectDocument> projectdoc;
+    private List<RatypeMaster> ratype;
+    private List<MemberMaster> selectmember;
+    private List<Event> eve;
 
-        private List<MasterCapabilityCatSub> subcapability;
-        private List<MasterCapabilityCat> capability;
-        private List<ProjectDocument> projectdoc;
-        private List<RatypeMaster> ratype;
-        private List<MemberMaster> selectmember;
+    bool hide = false;
+    bool listevent = false;
+    private string Selectratype;
 
-        bool hide = false;
-        private string Selectratype;
+    [CascadingParameter]
+    private Task<AuthenticationState> authenticationStateTask { get; set; }
 
-        protected override async Task OnInitializedAsync()
+    private ClaimsPrincipal AuthenticationStateUser { get; set; }
+
+    int userrole;
+    string usermemberno;
+    int userid;
+
+    protected override async Task OnInitializedAsync()
+    {
+        spin.Show();
+        await base.OnInitializedAsync();
+        await Initial();
+        DialogService.OnOpen +=  Open;
+        DialogService.OnClose += Close;
+        StateHasChanged();
+        spin.Hide();
+    }
+
+    async Task Initial()
+    {
+        projectsub = await pj.GetProjectSubProjectTLbyID(id);
+        await GetMemberData();
+        projectdoc = await pj.GetProjectDocumentByProjectSubID(projectsub.Id);
+        ratype = await pj.GetRATypeMaster();
+        projectra = await pj.GetProjectRATypeBySubProjectID(projectsub.Id);
+        eve = await pj.GetEventbySubProjectID(projectsub.Id);
+
+        if (eve != null && eve.Count() > 0)
         {
-            await base.OnInitializedAsync();
-            projectsub = await pj.GetProjectSubProjectTLbyID(id);
-            await GetMemberData();
-            projectdoc = await pj.GetProjectDocumentByProjectSubID(projectsub.Id);
-            ratype = await pj.GetRATypeMaster();
-            projectra = await pj.GetProjectRATypeBySubProjectID(projectsub.Id);
-            if (projectra is not null)
-            {
-                var list = ratype.Where(w => w.Id == projectra.RatypeMasterId).FirstOrDefault();
-                Selectratype = list.Name;
-            }
-
-            capability = await pj.GetAllCapability();
-            subcapability = Newtonsoft.Json.JsonConvert.DeserializeObject<List<MasterCapabilityCatSub>>(projectra.MemberCapability);
-
-            await checkProgress();
-            StateHasChanged();
+            listevent = true;
         }
 
-        async Task GetMemberData()
+        if (projectra is not null)
         {
-            selectmember = new List<MemberMaster>();
-            foreach (var list in projectsub.ProjectSubMemberAsgmts)
-            {
-                var select = await pj.GetMemberByID(list.Id);
-                selectmember.Add(new MemberMaster()
+            var list = ratype.Where(w => w.Id == projectra.RatypeMasterId).FirstOrDefault();
+            Selectratype = list.Name;
+        }
+
+        capability = await pj.GetAllCapability();
+        subcapability = Newtonsoft.Json.JsonConvert.DeserializeObject<List<MasterCapabilityCatSub>>(projectra.MemberCapability);
+
+        await checkProgress();
+    }
+
+    async Task GetMemberData()
+    {
+        selectmember = new List<MemberMaster>();
+        foreach (var list in projectsub.ProjectSubMemberAsgmts)
+        {
+            var select = await pj.GetMemberByID(list.MemberId);
+            selectmember.Add(new MemberMaster()
                 {
                     Id = select.Id,
                     CreateDate = select.CreateDate,
@@ -295,55 +360,118 @@
                     WebSite = select.WebSite,
                     Facebook = select.Facebook,
                     IsBoi = select.IsBoi,
-                    IsCoreMemeber = select.IsCoreMemeber,
+                    IsCoreMember = select.IsCoreMember,
                     IsEnable = select.IsEnable,
                     ExpiredDate = select.ExpiredDate
                 });
-            }
-        }
-
-        async Task checkProgress()
-        {
-            foreach (var list in projectsub.ProjectSubMemberAsgmts)
-            {
-                if (list.Awarded == "Y")
-                {
-                hide = true;
-                    return;
-                }
-            }
-        }
-
-        private void UpdateAssignment()
-        {
-            NavManager.NavigateTo("/Data/MemberAssign/" + id.ToString());
-        }
-
-        private void UpdateProgress()
-        {
-            NavManager.NavigateTo("/Data/ProjectSubProgress/" + id.ToString());
-        }
-
-        private void GoEdit()
-        {
-            NavManager.NavigateTo("/Data/ProjectSubEdit/" + id.ToString());
-        }
-
-        private void Goback()
-        {
-            NavManager.NavigateTo("/Data/ProjectDetail/" + projectsub.ProjectHdid.ToString());
-        }
-
-        private void Gomain()
-        {
-            NavManager.NavigateTo("/Data/Project");
-        }
-
-        public void Dispose()
-        {
-            if (subcapability is not null) subcapability.Clear();
-            if (capability is not null) capability.Clear();
-            if (projectdoc is not null) projectdoc.Clear();
-            Console.WriteLine("Disconnected");
         }
     }
+
+    async Task GetDataAuthen()
+    {
+        usermemberno = string.Empty;
+
+        AuthenticationState authenticationState;
+        authenticationState = await authenticationStateTask;
+        this.AuthenticationStateUser = authenticationState.User;
+        var claim = this.AuthenticationStateUser.Claims.ToList();
+        userrole = int.Parse(claim[1].Value);
+        usermemberno = claim[2].Value;
+        userid = int.Parse(claim[3].Value);
+    }
+
+    async Task checkProgress()
+    {
+        var list = projectsub.ProjectSubMemberAsgmts.Where(w => w.Awarded == "Y").FirstOrDefault();
+        if (list is not null)
+        {
+            hide = true;
+        }
+    }
+
+    private void UpdateAssignment()
+    {
+        NavManager.NavigateTo("/Data/MemberAssign/" + id.ToString());
+    }
+
+    private void UpdateProgress()
+    {
+        NavManager.NavigateTo("/Data/ProjectSubEvent/" + id.ToString());
+    }
+
+    private void GoEdit()
+    {
+        NavManager.NavigateTo("/Data/ProjectSubEdit/" + id.ToString());
+    }
+
+    private void Goback()
+    {
+        NavManager.NavigateTo("/Data/ProjectDetail/" + projectsub.ProjectHdid.ToString());
+    }
+
+    private void Gomain()
+    {
+        NavManager.NavigateTo("/Data/Project");
+    }
+
+    async void Open(string title, Type type, Dictionary<string, object> parameters, DialogOptions options)
+    {
+    }
+
+    void Close(dynamic result)
+    {
+        if(result)
+        {
+            InvokeAsync(async () =>
+            {
+                var member = projectsub.ProjectSubMemberAsgmts.Where(w => w.Awarded == "Y").FirstOrDefault();
+                var list = member.MemberAsgmtawardedHistories.FirstOrDefault();
+                if (list is not null)
+                {
+                    var res = pj.DeleteAwarded(list.Id);
+                    member.MemberAsgmtawardedHistories.Remove(list);
+                }
+
+                member.Awarded = null;
+                projectsub.ProjectSubProjectTlhistories.Add(new ProjectSubProjectTlhistory() { ProjectSubProjectTlid = projectsub.Id, Remark = "Cancel Member Awarded", EditorId = userid });
+                projectsub.ProjectSubStatus = "Cancel Member Awarded";
+                var res2 = pj.SaveSubProject(projectsub);
+                hide = false;
+                await BusyDialog("Working ...");
+                await Task.Delay(2000);
+
+                // Close the dialog
+                DialogService.Close();
+                await Initial();
+            });
+        }
+    }
+
+    async Task BusyDialog(string message)
+    {
+        await DialogService.OpenAsync("", ds =>
+        {
+            RenderFragment content = b =>
+            {
+                b.OpenElement(0, "div");
+                b.AddAttribute(1, "class", "row");
+
+                b.OpenElement(2, "div");
+                b.AddAttribute(3, "class", "col-md-12");
+
+                b.AddContent(4, message);
+
+                b.CloseElement();
+                b.CloseElement();
+            };
+            return content;
+        }, new DialogOptions() { ShowTitle = false, Style = "min-height:auto;min-width:auto;width:auto", CloseDialogOnEsc = false });
+    }
+
+    public void Dispose()
+    {
+        // The DialogService is a singleton so it is advisable to unsubscribe.
+        DialogService.OnOpen -= Open;
+        DialogService.OnClose -= Close;
+    }
+}    

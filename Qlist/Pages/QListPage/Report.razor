@@ -13,10 +13,11 @@
 
 @inject ProjectData pj;
 @inject NavigationManager NavManager
+@inject BlazorSpinner.SpinnerService spin
 
 @attribute [Authorize(Roles = "1,2,3")]
 
-<div class="card">
+@*<div class="card">
     <div class="row">
         <div class="col-sm-12 col-lg-6 offset-lg-3 my-5">
             <RadzenCard Class="w-100 mb-4">
@@ -40,7 +41,7 @@
     </div>
 </div>
 
-<br />
+<br />*@
 <div class="card">
     <div class="card-header"><h5>List Project</h5></div>
     <div class="card-body">
@@ -51,7 +52,7 @@
             }
             else
             {
-                <RadzenDataGrid @ref="grid" AllowFiltering="true" AllowPaging="true" PageSize="5" AllowSorting="true" RowRender="@RowRender" ExpandMode="DataGridExpandMode.Single"
+                <RadzenDataGrid @ref="grid" AllowFiltering="true" AllowPaging="true" PageSize="10" AllowSorting="true" RowRender="@RowRender" ExpandMode="DataGridExpandMode.Single"
                             Data="@project" TItem="ProjectHd" RowExpand="RowExpand" GridLines="DataGridGridLines.Horizontal" class="border-0">
                     <Template Context="sub">
                         <RadzenDataGrid AllowPaging="true" AllowSorting="true" Data="@sub.ProjectSubProjectTls" TItem="ProjectSubProjectTl">
@@ -62,7 +63,7 @@
                                     </Template>
                                 </RadzenDataGridColumn>
                                 <RadzenDataGridColumn TItem="ProjectSubProjectTl" Property="ProjectSubName" Title="Project Sub Name" Width="270px" />
-                                <RadzenDataGridColumn TItem="ProjectSubProjectTl" Property="Budget" Title="Budget" Width="180px">
+                                <RadzenDataGridColumn TItem="ProjectSubProjectTl" Property="Budget" Title="Budget" Width="180px" TextAlign="TextAlign.Right">
                                     <Template Context="budg">
                                         @String.Format(new System.Globalization.CultureInfo("th-TH"), "{0:C}", budg.Budget)
                                     </Template>
@@ -95,7 +96,7 @@
                                 }
                             </Template>
                         </RadzenDataGridColumn>
-                        <RadzenDataGridColumn TItem="ProjectHd" Property="Budget" Title="Budget" Width="180px">
+                        <RadzenDataGridColumn TItem="ProjectHd" Property="Budget" Title="Budget" Width="180px" TextAlign="TextAlign.Right">
                             <Template Context="budg">
                                 @String.Format(new System.Globalization.CultureInfo("th-TH"), "{0:C}", budg.Budget)
                             </Template>
@@ -134,14 +135,22 @@
 
     protected override async Task OnInitializedAsync()
     {
+        spin.Show();
         await base.OnInitializedAsync();
         await GetDataAuthen();
+        await Initial();
+        await CreateGraph();
+        StateHasChanged();
+        spin.Hide();
+    }
+
+    async Task Initial()
+    {
         project = await pj.GetProjectHD();
+        project = project.Where(w => w.Active == "Y").ToList();
         project = project.OrderByDescending(n => n.ProjectHdrunNo).ToList();
         listra = await pj.GetAllProjectRAType();
         capability = await pj.GetAllCapability();
-        CreateGraph();
-        StateHasChanged();
     }
 
     async Task GetDataAuthen()
@@ -157,17 +166,19 @@
         userid = int.Parse(claim[3].Value);
     }
 
-    private void CreateGraph()
+    async Task CreateGraph()
     {
         total = project.Count;
         var open = project.Where(w => w.ProjectHdstatus == "Open").ToList();
-        var closed = project.Where(w => w.ProjectHdstatus == "Closed").ToList();
-        var cancel = project.Where(w => w.ProjectHdstatus == "Closed with Cancelled").ToList();
+        var complate = project.Where(w => w.ProjectHdstatus == "Completed").ToList();
+        var cancel = project.Where(w => w.ProjectHdstatus == "Cancelled").ToList();
+        var completewcancel = project.Where(w => w.ProjectHdstatus == "Completed with Cancelled").ToList();
 
         graph = new List<Graph>();
         graph.Add(new Graph() { Status = "Open", Count = open.Count() });
-        graph.Add(new Graph() { Status = "Closed", Count = closed.Count() });
-        graph.Add(new Graph() { Status = "Closed with Cancelled", Count = cancel.Count() });
+        graph.Add(new Graph() { Status = "Completed", Count = complate.Count() });
+        graph.Add(new Graph() { Status = "Cancelled", Count = cancel.Count() });
+        graph.Add(new Graph() { Status = "Completed with Cancelled", Count = completewcancel.Count() });
     }
 
     void RowRender(RowRenderEventArgs<ProjectHd> args)
@@ -213,7 +224,7 @@
             foreach (var sub in subcapability)
             {
                 var main = capability.Where(w => w.Id == sub.CategoryCatId).FirstOrDefault();
-                cap = cap + main.CategoryCat + " - " + sub.CategoryCatSub + Environment.NewLine;
+                cap = cap + "\u2022 " + main.CategoryCat + " - " + sub.CategoryCatSub + Environment.NewLine;
             }
         }
 
@@ -227,6 +238,7 @@
         if (listra is not null) listra.Clear();
         if (capability is not null) capability.Clear();
         if (subcapability is not null) subcapability.Clear();
+        if (graph is not null) graph.Clear();
         Console.WriteLine("Disconnected");
     }
 }

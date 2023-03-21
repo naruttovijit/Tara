@@ -8,9 +8,12 @@
 @using System.Globalization;
 @using Radzen;
 @using Radzen.Blazor;
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Components.Authorization
 
 @inject ProjectData pj;
 @inject NavigationManager NavManager
+@inject BlazorSpinner.SpinnerService spin
 
 @attribute [Authorize(Roles = "1,2,3")]
 
@@ -25,7 +28,7 @@
                 <b>Running Number : </b>@projecthd.ProjectHdrunNo
             </div>
             <div class="col-sm-4">
-                @if (!hideEdit)
+                @if (!hideEdit && userrole < 3)
                 {
                     <RadzenButton Click=@(args => GoEdit()) Icon="edit" ButtonStyle="ButtonStyle.Primary" Size="ButtonSize.Medium" Text="EDIT" style="float:right" />
                 }
@@ -188,7 +191,7 @@
     <div class="card-body">
         <div class="row">
             <p>
-                <RadzenDataGrid PageSize="5" AllowPaging="true" AllowSorting="true" Data="@projecthd.ProjectSubProjectTls" TItem="ProjectSubProjectTl" ColumnWidth="400px">
+                <RadzenDataGrid PageSize="5" AllowPaging="true" AllowSorting="true" Data="@projecthd.ProjectSubProjectTls" TItem="ProjectSubProjectTl" ColumnWidth="100px" GridLines="DataGridGridLines.Horizontal" class="border-0">
                     <Columns>
                         <RadzenDataGridColumn TItem="ProjectSubProjectTl" Property="ProjectSubRunNo" Title="Running Number" Width="150px">
                             <Template Context="sub">
@@ -224,16 +227,41 @@
     private List<CustomContact> listcontact;
     private List<MasterTambon> tambon;
 
+    [CascadingParameter]
+    private Task<AuthenticationState> authenticationStateTask { get; set; }
+
+    private ClaimsPrincipal AuthenticationStateUser { get; set; }
+
+    int userrole;
+    string usermemberno;
+    int userid;
+
     bool hideEdit = false;
 
     protected override async Task OnInitializedAsync()
     {
+        spin.Show();
         await base.OnInitializedAsync();
+        await GetDataAuthen();
         projecthd = await pj.GetProjectHDbyID(id);
         customerinfo = Newtonsoft.Json.JsonConvert.DeserializeObject<List<CustomCustomer>>(projecthd.CustomerInfo);
         listcontact = Newtonsoft.Json.JsonConvert.DeserializeObject<List<CustomContact>>(projecthd.ContactInfo);
         await checkEdit();
         StateHasChanged();
+        spin.Hide();
+    }
+
+    async Task GetDataAuthen()
+    {
+        usermemberno = string.Empty;
+
+        AuthenticationState authenticationState;
+        authenticationState = await authenticationStateTask;
+        this.AuthenticationStateUser = authenticationState.User;
+        var claim = this.AuthenticationStateUser.Claims.ToList();
+        userrole = int.Parse(claim[1].Value);
+        usermemberno = claim[2].Value;
+        userid = int.Parse(claim[3].Value);
     }
 
     async Task checkEdit()
@@ -262,7 +290,6 @@
     {
         if (customerinfo is not null) customerinfo.Clear();
         if (listcontact is not null) listcontact.Clear();
-        //if (address is not null) address.Clear();
         if (tambon is not null) tambon.Clear();
         Console.WriteLine("Disconnected");
     }

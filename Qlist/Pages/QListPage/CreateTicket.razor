@@ -1,0 +1,191 @@
+﻿@page "/Data/TicketCreate"
+
+@implements IDisposable;
+
+@using ModelM2s;
+@using Data;
+@using Radzen;
+@using Radzen.Blazor;
+@using System.Globalization;
+@using System.Security.Claims;
+@using Microsoft.AspNetCore.Components.Authorization;
+@using System.IO;
+
+@inject ProjectData pj;
+@inject NavigationManager NavManager
+@inject IWebHostEnvironment env
+@inject DialogService DialogService
+@inject BlazorSpinner.SpinnerService spin
+
+@attribute [Authorize(Roles = "1,2,3")]
+
+<br />
+<h3>New Ticket</h3>
+<br />
+
+<EditForm Model="ticket">
+    <div class="card">
+        <div class="card-header">Create Ticket</div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-2"><p><b>Description</b> <a style="font-size:medium; color:red">*</a></p></div>
+                <div class="col"><p><RadzenTextArea class="rz-border-danger" style="width: 100%" @bind-Value="desc" Cols="30" Rows="5" /></p></div>
+            </div>
+
+            <div class="row">
+                <div class="col-2"><p><b>Target Date</b> <a style="font-size:medium; color:red">*</a></p></div>
+                <div class="col">
+                    <p>
+                        <RadzenDatePicker @bind-Value=@ticket.TargetDate DateFormat="dd/MM/yyyy" Class="w-100">
+                            <FooterTemplate>
+                                <RadzenButton Click=@OnTodayDate Text="Today" Class="my-3 w-100" />
+                            </FooterTemplate>
+                        </RadzenDatePicker>
+                    </p>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-auto"><p><InputFile OnChange="OnInputFileChange" /> <a style="font-size:medium; color:red">* Prefered file types : PDF, BMP, JPG, JPEG, PNG</a></p></div>
+            </div>
+
+            
+            <div class="row-cols-sm-auto">
+                <RadzenButton Click=@(args => OnSubmit()) Icon="save" Text="Save" ButtonStyle="ButtonStyle.Info" />
+            </div>
+        </div>
+    </div> 
+</EditForm>
+<br />
+
+@code {
+    [CascadingParameter]
+    private Task<AuthenticationState> authenticationStateTask { get; set; }
+
+    private ClaimsPrincipal AuthenticationStateUser { get; set; }
+
+    public Tickets ticket { get; set; } = new Tickets();
+
+    string desc;
+    int role;
+    string memberno;
+    int userid;
+
+    string Message = "No file(s) selected";
+    string DocDesc;
+    IBrowserFile selectedFile;
+    string[] stringArray = { "PDF", "BMP", "JPG", "JPEG", "PNG" };
+
+    protected override async Task OnInitializedAsync()
+    {
+        spin.Show();
+        await base.OnInitializedAsync();
+        await GetDataAuthen();
+        OnTodayDate();
+        StateHasChanged();
+        spin.Hide();
+    }
+
+    async Task GetDataAuthen()
+    {
+        memberno = string.Empty;
+
+        AuthenticationState authenticationState;
+        authenticationState = await authenticationStateTask;
+        this.AuthenticationStateUser = authenticationState.User;
+        var claim = this.AuthenticationStateUser.Claims.ToList();
+        role = int.Parse(claim[1].Value);
+        memberno = claim[2].Value;
+        userid = int.Parse(claim[3].Value);
+    }
+
+    void OnTodayDate()
+    {
+        ticket.TargetDate = DateTime.Now;
+    }
+
+    private void OnInputFileChange(InputFileChangeEventArgs e)
+    {
+        selectedFile = e.GetMultipleFiles()[0];
+        Message = $"{selectedFile.Name} ({selectedFile.Size} bytes) file selected";
+        this.StateHasChanged();
+    }
+
+    private async Task OnSubmit() //Upload file (image,pdf) to local folders
+    {
+        if (string.IsNullOrEmpty(desc))
+        {
+            await ErrorMessage("Description cannot Empty !");
+            return;
+        }
+        if (selectedFile == null)
+        {
+            await ErrorMessage("Please select image !");
+            return;
+        }
+
+        string path = string.Empty;
+        string filepath = string.Empty;
+        string filetype = string.Empty;
+        if (!stringArray.Any(selectedFile.Name.ToUpper().Contains))
+        {
+            await ErrorMessage("Upload files support files type (PDF, BMP, JPG, JPEG, PNG)");
+            return;
+        }
+
+        if (selectedFile != null)
+        {
+            string filename = selectedFile.Name;
+            filetype = string.Empty;
+            filepath = string.Empty;
+            if (selectedFile.Name.ToUpper().Contains("PDF"))
+            {
+                filetype = "\\PDFFiles\\" + filename;
+                filepath = "/PDFFiles/" + filename;
+            }
+            else
+            {
+                filetype = "\\PicFiles\\" + filename;
+                filepath = "/PicFiles/" + filename;
+            }
+            path = $"{env.WebRootPath}{filetype}";
+        }
+
+        if (!string.IsNullOrEmpty(path) && File.Exists(path))
+        {
+            await ErrorMessage("File name already exit !");
+            return;
+        }
+
+        ticket.Description = desc.Replace("\r\n", "" + ((char)13).ToString() + (char)10).ToString();
+        ticket.DocumentPath = filepath;
+        ticket.Status = "Open";
+        ticket.Active = "Y";
+        ticket.EditorId = userid;
+
+        var result = await pj.SaveTicket(ticket);
+
+        Stream stream = selectedFile.OpenReadStream(maxAllowedSize: 1024 * 1024 * 100);
+        FileStream fs = File.Create(path);
+        await stream.CopyToAsync(fs);
+        stream.Close();
+        fs.Close();
+
+        NavManager.NavigateTo("/Data/Ticket", true);
+    }
+
+    async Task ErrorMessage(string message)
+    {
+        await DialogService.OpenAsync("Warning", ds =>
+    @<div>
+        @message
+    </div>
+        , new DialogOptions() { CloseDialogOnOverlayClick = true });
+    }
+
+    public void Dispose()
+    {
+        Console.WriteLine("Disconnected");
+    }
+
+}

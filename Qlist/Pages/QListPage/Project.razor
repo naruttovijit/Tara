@@ -13,6 +13,7 @@
 
 @inject ProjectData pj;
 @inject NavigationManager NavManager
+@inject BlazorSpinner.SpinnerService spin
 
 @attribute [Authorize(Roles = "1,2,3")]
 
@@ -45,7 +46,7 @@
                                     </Template>
                                 </RadzenDataGridColumn>
                                 <RadzenDataGridColumn TItem="ProjectSubProjectTl" Property="ProjectSubName" Title="Project Sub Name" Width="270px" />
-                                <RadzenDataGridColumn TItem="ProjectSubProjectTl" Property="Budget" Title="Budget" Width="180px">
+                                <RadzenDataGridColumn TItem="ProjectSubProjectTl" Property="Budget" Title="Budget" Width="180px" TextAlign="TextAlign.Right">
                                     <Template Context="budg">
                                         @String.Format(new System.Globalization.CultureInfo("th-TH"), "{0:C}", budg.Budget)
                                     </Template>
@@ -57,7 +58,7 @@
                                 </RadzenDataGridColumn>
                                 <RadzenDataGridColumn TItem="ProjectSubProjectTl" Property="ProjectSubStatus" Title="Status" Width="150px" />
                                 <RadzenDataGridColumn TItem="ProjectSubProjectTl" Property="CreateDated" Title="Create Date" FormatString="{0:dd/MM/yyyy}" TextAlign="TextAlign.Center" Width="170px" />
-                                @if (role == 1)
+                                @if (userrole == 1)
                                 {
                                     <RadzenDataGridColumn TItem="ProjectSubProjectTl" Property="Id" Width="70px">
                                         <Template Context="sube">
@@ -86,18 +87,23 @@
                                 }
                             </Template>
                         </RadzenDataGridColumn>
-                        <RadzenDataGridColumn TItem="ProjectHd" Property="Budget" Title="Budget" Width="180px">
+                        <RadzenDataGridColumn TItem="ProjectHd" Property="Budget" Title="Budget" Width="180px" TextAlign="TextAlign.Right">
                             <Template Context="budg">
                                 @String.Format(new System.Globalization.CultureInfo("th-TH"), "{0:C}", budg.Budget)
                             </Template>
                         </RadzenDataGridColumn>
                         <RadzenDataGridColumn TItem="ProjectHd" Property="ProjectHdstatus" Title="Status" Width="200px" />
                         <RadzenDataGridColumn TItem="ProjectHd" Property="CreateDated" Title="Create Date" FormatString="{0:dd/MM/yyyy}" TextAlign="TextAlign.Center" Width="170px" />
-                        @if (role == 1)
+                        @if (userrole == 1)
                         {
                             <RadzenDataGridColumn TItem="ProjectHd" Property="ProjectHdrunNo" Width="70px" >
                                 <Template Context="hd">
                                     <a><RadzenButton Click=@(args => MainEdit(hd.Id)) Icon="edit" ButtonStyle="ButtonStyle.Primary" Size="ButtonSize.Medium" /></a>
+                                </Template>
+                            </RadzenDataGridColumn>
+                            <RadzenDataGridColumn TItem="ProjectHd" Property="ProjectHdrunNo" Width="70px">
+                                <Template Context="hd">
+                                    <a><RadzenButton Click=@(args => MainDelete(hd.Id)) Icon="delete" ButtonStyle="ButtonStyle.Danger" Size="ButtonSize.Medium" /></a>
                                 </Template>
                             </RadzenDataGridColumn>
                         }
@@ -114,7 +120,6 @@
     private RadzenDataGrid<ProjectHd>? grid;
     private List<CustomCustomer>? customerinfo;
     private List<ProjectRatypeTl> listra;
-    //private List<ProjectRatypeTl> selectra;
     private List<MasterCapabilityCat> capability;
     private List<MasterCapabilityCatSub> subcapability;
 
@@ -123,31 +128,39 @@
 
     private ClaimsPrincipal AuthenticationStateUser { get; set; }
 
-    int role;
-    string memberno;
+    int userrole;
+    string usermemberno;
     int userid;
 
     protected override async Task OnInitializedAsync()
     {
+        spin.Show();
         await base.OnInitializedAsync();
         await GetDataAuthen();
+        await Initial();
+        StateHasChanged();
+        spin.Hide();
+    }
+
+    async Task Initial()
+    {
         project = await pj.GetProjectHD();
+        project = project.Where(w => w.Active == "Y").ToList();
         project = project.OrderByDescending(n => n.ProjectHdrunNo).ToList();
         listra = await pj.GetAllProjectRAType();
         capability = await pj.GetAllCapability();
-        StateHasChanged();
     }
 
     async Task GetDataAuthen()
     {
-        memberno = string.Empty;
+        usermemberno = string.Empty;
 
         AuthenticationState authenticationState;
         authenticationState = await authenticationStateTask;
         this.AuthenticationStateUser = authenticationState.User;
         var claim = this.AuthenticationStateUser.Claims.ToList();
-        role = int.Parse(claim[1].Value);
-        memberno = claim[2].Value;
+        userrole = int.Parse(claim[1].Value);
+        usermemberno = claim[2].Value;
         userid = int.Parse(claim[3].Value);
     }
 
@@ -155,9 +168,7 @@
     {
         args.Expandable = true;
         //args.Attributes.Add("style", "background-color: var(--rz-success-light)");
-        //args.Attributes.Add("style", "background-color: rz-background-color-success-light");
-
-
+        //args.Attributes.Add("style", "background-color: var(--rz-success-light)");
     }
 
     void RowExpand(ProjectHd hd)
@@ -197,6 +208,30 @@
         NavManager.NavigateTo("/Data/ProjectSubEdit/" + id.ToString(), true);
     }
 
+    async Task MainDelete(int id)
+    {
+        var pro = project.Where(w => w.Id == id).FirstOrDefault();
+        pro.Active = "N";
+
+        foreach (var sub in pro.ProjectSubProjectTls)
+        {
+            sub.Active = "N";
+            //foreach (var mem in sub.ProjectSubMemberAsgmts)
+            //{
+            //    mem.Active = "N";
+            //    foreach (var awa in mem.MemberAsgmtawardedHistories)
+            //    {
+            //        awa.Active = "N";
+            //    }
+            //}
+        }
+
+        var update = await pj.SaveProjectHD(pro);
+
+        await Initial();
+        StateHasChanged();
+    }
+
     private string Getcap(int id)
     {
         string cap = string.Empty;
@@ -208,7 +243,7 @@
             foreach (var sub in subcapability)
             {
                 var cat = capability.Where(w => w.Id == sub.CategoryCatId).FirstOrDefault();
-                cap = cap + cat.CategoryCat + " - " + sub.CategoryCatSub + Environment.NewLine;
+                cap = cap + "\u2022 " + cat.CategoryCat + " - " + sub.CategoryCatSub + Environment.NewLine;
             }
         }
 
@@ -220,9 +255,9 @@
         if (project is not null) project.Clear();
         if (customerinfo is not null) customerinfo.Clear();
         if (listra is not null) listra.Clear();
-        //if (selectra is not null) selectra.Clear();
         if (capability is not null) capability.Clear();
         if (subcapability is not null) subcapability.Clear();
         Console.WriteLine("Disconnected");
     }
+
 }

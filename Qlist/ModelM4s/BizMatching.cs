@@ -10,6 +10,7 @@ namespace Qlist.ModelM4s
         public string Name { get; set; }
         public string Telephone { get; set; }
         public string LineId { get; set; }
+        public string Email { get; set; }
         public string Product { get; set; }
         public string MemberNo { get; set; }
         public string MemberName { get; set; }

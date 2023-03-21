@@ -29,7 +29,7 @@ namespace Qlist.ModelM4s
         public string WebSite { get; set; }
         public string Facebook { get; set; }
         public int? IsBoi { get; set; }
-        public int? IsCoreMemeber { get; set; }
+        public int? IsCoreMember { get; set; }
         public int? IsEnable { get; set; }
         public DateTime? ExpiredDate { get; set; }
 

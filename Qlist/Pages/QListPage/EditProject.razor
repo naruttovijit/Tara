@@ -15,6 +15,7 @@
 @inject ProjectData pj;
 @inject NavigationManager NavManager
 @inject DialogService DialogService
+@inject BlazorSpinner.SpinnerService spin
 
 @attribute [Authorize(Roles = "1,2")]
 
@@ -26,8 +27,8 @@
         <div class="card-header">Project Main</div>
         <div class="card-body">
             <div class="row">
-                <div class="col-2"><p><b>Main Project Name</b></p></div>
-                <div class="col"><p><RadzenTextBox style="width: 100%" id="MainName" @bind-Value="projecthd.ProjectName" /></p></div>
+                <div class="col-2"><p><b>Main Project Name</b> <a style="font-size:medium; color:red">*</a></p></div>
+                <div class="col"><p><RadzenTextBox class="rz-border-danger" style="width: 100%" id="MainName" @bind-Value="projecthd.ProjectName" /></p></div>
             </div>
             <div class="row">
                 <div class="col-2"><p><b>Description</b></p></div>
@@ -75,33 +76,33 @@
         <div class="card-header">Customer</div>
         <div class="card-body">
             <div class="row">
-                    <div class="col-2"><p><b>Name</b></p></div>
-                    <div class="col"><p><RadzenTextBox style="width: 100%" @bind-Value="custname" /></p></div>
-                </div>
-                <div class="row">
-                    <div class="col-2"><p><b>Address</b></p></div>
-                    <div class="col"><p><RadzenTextArea style="width: 100%" @bind-Value="custaddress" Cols="30" Rows="3" /></p></div>
-                </div>
-                <div class="row">
-                    <div class="col-2"><p><b>Telephone</b></p></div>
-                    <div class="col"><p><RadzenTextBox style="width: 100%" @bind-Value="custtelephone" /></p></div>
-                </div>
-                <div class="row">
-                    <div class="col-2"><p><b>Email</b></p></div>
-                    <div class="col"><p><RadzenTextBox style="width: 100%" @bind-Value="custemail" /></p></div>
-                </div>
-                <div class="row">
-                    <div class="col-2"><p><b>Website</b></p></div>
-                    <div class="col"><p><RadzenTextBox style="width: 100%" @bind-Value="custwebsite" /></p></div>
-                </div>
-                <div class="row">
-                    <div class="col-2"><p><b>Facebook</b></p></div>
-                    <div class="col"><p><RadzenTextBox style="width: 100%" @bind-Value="custfacebook" /></p></div>
-                </div>
-                <div class="row">
-                    <div class="col-2"><p><b>Other</b></p></div>
-                    <div class="col"><p><RadzenTextArea style="width: 100%" @bind-Value="custother" Cols="30" Rows="3" /></p></div>
-                </div>
+                <div class="col-2"><p><b>Name</b> <a style="font-size:medium; color:red">*</a></p></div>
+                <div class="col"><p><RadzenTextBox class="rz-border-danger" style="width: 100%" @bind-Value="custname" /></p></div>
+            </div>
+            <div class="row">
+                <div class="col-2"><p><b>Address</b> <a style="font-size:medium; color:red">*</a></p></div>
+                <div class="col"><p><RadzenTextArea class="rz-border-danger" style="width: 100%" @bind-Value="custaddress" Cols="30" Rows="3" /></p></div>
+             </div>
+            <div class="row">
+                <div class="col-2"><p><b>Telephone</b> <a style="font-size:medium; color:red">*</a></p></div>
+                <div class="col"><p><RadzenTextBox class="rz-border-danger" style="width: 100%" @bind-Value="custtelephone" /></p></div>
+            </div>
+            <div class="row">
+                <div class="col-2"><p><b>Email</b> <a style="font-size:medium; color:red">*</a></p></div>
+                <div class="col"><p><RadzenTextBox class="rz-border-danger" style="width: 100%" @bind-Value="custemail" /></p></div>
+            </div>
+            <div class="row">
+                <div class="col-2"><p><b>Website</b></p></div>
+                <div class="col"><p><RadzenTextBox style="width: 100%" @bind-Value="custwebsite" /></p></div>
+            </div>
+            <div class="row">
+                <div class="col-2"><p><b>Facebook</b></p></div>
+                <div class="col"><p><RadzenTextBox style="width: 100%" @bind-Value="custfacebook" /></p></div>
+            </div>
+            <div class="row">
+                <div class="col-2"><p><b>Other</b></p></div>
+                <div class="col"><p><RadzenTextArea style="width: 100%" @bind-Value="custother" Cols="30" Rows="3" /></p></div>
+            </div>
         </div>
     </div>
 
@@ -118,7 +119,7 @@
                         <div class="row">
                             <div class="col-2"><b>Name</b></div>
                             <div class="col">@list.Name</div>
-                            <div class="col-1"><RadzenButton Click=@(args => listcontact.Remove(list)) Text="X" ButtonStyle="ButtonStyle.Danger" /></div>
+                            <div class="col-1"><RadzenButton Click=@(args => listcontact.Remove(list)) Icon="delete" ButtonStyle="ButtonStyle.Danger" /></div>
                         </div>
                         <div class="row">
                             <div class="col-2"><b>Position</b></div>
@@ -141,13 +142,14 @@
                             <div class="col"><a style="white-space: pre-wrap;">@list.Other</a></div>
                         </div>
                     </div>
+                    <br />
                 }
             }
         </div>
         <div class="card-body">
             <div class="row">
-                <div class="col-2"><p><b>Name</b></p></div>
-                <div class="col"><p><RadzenTextBox style="width: 100%" id="MainName" @bind-Value="contactname" /></p></div>
+                <div class="col-2"><p><b>Name</b> <a style="font-size:medium; color:red">*</a></p></div>
+                <div class="col"><p><RadzenTextBox class="rz-border-danger" style="width: 100%" id="MainName" @bind-Value="contactname" /></p></div>
             </div>
             <div class="row">
                 <div class="col-2"><p><b>Position</b></p></div>
@@ -158,12 +160,12 @@
                 <div class="col"><p><RadzenTextArea style="width: 100%" @bind-Value="contactaddr" Cols="30" Rows="3" /></p></div>
             </div>
             <div class="row">
-                <div class="col-2"><p><b>Email</b></p></div>
-                <div class="col"><p><RadzenTextBox style="width: 100%" id="MainName" @bind-Value="contactemail" /></p></div>
+                <div class="col-2"><p><b>Email</b> <a style="font-size:medium; color:red">*</a></p></div>
+                <div class="col"><p><RadzenTextBox class="rz-border-danger" style="width: 100%" id="MainName" @bind-Value="contactemail" /></p></div>
             </div>
             <div class="row">
-                <div class="col-2"><p><b>MobileNo</b></p></div>
-                <div class="col"><p><RadzenTextBox style="width: 100%" id="MainName" @bind-Value="contactmobile" /></p></div>
+                <div class="col-2"><p><b>MobileNo</b> <a style="font-size:medium; color:red">*</a></p></div>
+                <div class="col"><p><RadzenTextBox class="rz-border-danger" style="width: 100%" id="MainName" @bind-Value="contactmobile" /></p></div>
             </div>
             <div class="row">
                 <div class="col-2"><p><b>Other</b></p></div>
@@ -177,7 +179,7 @@
     <br />
 
     <div class="card border-0">
-        <div class="row">
+        <div class="row-cols-sm-auto">
             <RadzenButton Click=@(args => UpdateProjectHD()) Icon="update" Text="Update" ButtonStyle="ButtonStyle.Success" />
         </div>
     </div>
@@ -224,6 +226,7 @@
 
     protected override async Task OnInitializedAsync()
     {
+        spin.Show();
         await base.OnInitializedAsync();
         await GetDataAuthen();
         projecthd = await pj.GetProjectHDbyID(id);
@@ -237,6 +240,7 @@
         custother = customerinfo[0].Other;
         listcontact = Newtonsoft.Json.JsonConvert.DeserializeObject<List<CustomContact>>(projecthd.ContactInfo);
         StateHasChanged();
+        spin.Hide();
     }
 
     async Task GetDataAuthen()

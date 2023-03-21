@@ -1,4 +1,4 @@
-﻿@page "/Data/ProjectSubProgress/{id:int}"
+﻿@page "/Data/ProjectSubEvent/{id:int}"
 
 @implements IDisposable;
 
@@ -13,11 +13,13 @@
 
 @inject ProjectData pj;
 @inject NavigationManager NavManager
+@inject DialogService DialogService
+@inject BlazorSpinner.SpinnerService spin
 
 @attribute [Authorize(Roles = "1,2")]
 
 <br />
-<h3>Project Sub Update Progress</h3>
+<h3>Project Sub Event</h3>
 <br />
 
 <EditForm Model="projectsub">
@@ -85,40 +87,70 @@
     <div class="card">
         <div class="card-header">Project Category</div>
         <div class="card-body">
-            <div class="row">
-                @if (subcapability is null)
+            @if (subcapability is null || subcapability.Count == 0)
+            {
+                <div class="row"><p><em>No Capability</em></p></div>
+            }
+            else
+            {
+                @foreach (var cat in subcapability)
                 {
-                    <div class="col"><p><em>No Capability</em></p></div>
+                    var cate = capability.Where(w => w.Id == cat.CategoryCatId).FirstOrDefault();
+                    <div class="row">
+                        <div class="col"><li>@cate.CategoryCat - @cat.CategoryCatSub</li></div>
+                    </div>
                 }
-                else
-                {
-                    @foreach (var cat in subcapability)
-                    {
-                        var cate = capability.Where(w => w.Id == cat.CategoryCatId).FirstOrDefault();
-                        <div class="row">
-                            <div class="col">@cate.CategoryCat - @cat.CategoryCatSub</div>
-                        </div>
-                    }
-                }
-            </div>
+            }
         </div>
     </div>
     <br />
 
     <div class="card">
-        <div class="card-header">Progress</div>
+        <div class="card-header">Event</div>
         <div class="card-body">
-            @if (!show)
-            {
-                <div class="row">
-                    <div class="col-1"><p><b>Progress</b></p></div>
-                    <div class="col-3">
-                        <RadzenDropDown AllowClear="true" AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" @bind-Value=@progress Placeholder="Select..."
-                                    Data=@listprog TextProperty="Name" ValueProperty="Name" Class="w-100" />
-                    </div>
-                    <div class="col-2"><RadzenButton Click=@(args => UpdateProjectSub()) Icon="update" Text="Update" ButtonStyle="ButtonStyle.Success" /></div>
+            <div class="row">
+                <p>
+                    <RadzenDataGrid PageSize="5" AllowPaging="true" AllowSorting="true" Data="@eve" TItem="Event" ColumnWidth="20%" GridLines="DataGridGridLines.Horizontal" class="border-0">
+                        <Columns>
+                            <RadzenDataGridColumn TItem="Event" Property="TargetDate" Title="Target Date" FormatString="{0:dd/MM/yyyy}" Width="15%" />
+                            <RadzenDataGridColumn TItem="Event" Property="Description" Title="Description" Width="65%">
+                                <Template Context="desc">
+                                    <a style="white-space: pre-wrap;">@desc.Description</a>
+                                </Template>
+                            </RadzenDataGridColumn>
+                            <RadzenDataGridColumn TItem="Event" Property="Status" Title="Status" Width="20%" />
+                        </Columns>
+                    </RadzenDataGrid>
+                </p>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-2"><p><b>Target Date</b></p></div>
+                <div class="col-3">
+                    <p>
+                    <RadzenDatePicker @bind-Value=@target DateFormat="dd/MM/yyyy" Class="w-100">
+                        <FooterTemplate>
+                            <RadzenButton Click=@OnTodayDate Text="Today" Class="my-3 w-100" />
+                        </FooterTemplate>
+                    </RadzenDatePicker>
+                    </p>
                 </div>
-            }
+            </div>
+            <div class="row">
+                <div class="col-2"><p><b>Description</b></p></div>
+                <div class="col"><p><RadzenTextArea style="width: 100%" @bind-Value="desc" Cols="30" Rows="5" /></p></div>
+            </div>
+            <div class="row">
+                <div class="col-2"><p><b>Progress</b></p></div>
+                <div class="col-3">
+                    <RadzenDropDown AllowClear="true" AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" @bind-Value=@progress Placeholder="Select..."
+                        Data=@listprog TextProperty="Name" ValueProperty="Name" Class="w-100" />
+                </div>
+            </div>
+            <br />
+            <div class="row-cols-sm-auto">
+                <RadzenButton Click=@(args => UpdateProjectSub()) Text="Save" Icon="save" ButtonStyle="ButtonStyle.Primary" Size="ButtonSize.Medium" />
+            </div>
         </div>
     </div>
     <br />
@@ -132,13 +164,17 @@
     public ProjectSubProjectTl projectsub { get; set; } = new ProjectSubProjectTl();
     public ProjectRatypeTl projectra { get; set; } = new ProjectRatypeTl();
     public ProjectHd projecthd { get; set; } = new ProjectHd();
+    public Event eventcreate { get; set; } = new Event();
 
     private List<MasterCapabilityCatSub> subcapability;
     private List<MasterCapabilityCat> capability;
     private List<Progress> listprog;
+    private List<Event> eve;
 
     string progress = string.Empty;
     bool show = false;
+    string desc = string.Empty;
+    DateTime target;
 
     [CascadingParameter]
     private Task<AuthenticationState> authenticationStateTask { get; set; }
@@ -151,22 +187,29 @@
 
     protected override async Task OnInitializedAsync()
     {
+        spin.Show();
         await base.OnInitializedAsync();
         await GetDataAuthen();
         await CreateListProgress();
         await Initial();
+        StateHasChanged();
+        spin.Hide();
     }
 
     async Task Initial()
     {
+        desc = string.Empty;
+        progress = string.Empty;
         projectsub = await pj.GetProjectSubProjectTLbyID(id);
         projectra = await pj.GetProjectRATypeBySubProjectID(projectsub.Id);
         capability = await pj.GetAllCapability();
+        eve = await pj.GetEventbySubProjectID(projectsub.Id);
         subcapability = Newtonsoft.Json.JsonConvert.DeserializeObject<List<MasterCapabilityCatSub>>(projectra.MemberCapability);
         if (projectsub.ProjectSubStatus == "Job Complete" || projectsub.ProjectSubStatus == "Cancelled")
         {
             show = true;
         }
+        OnTodayDate();
         StateHasChanged();
     }
 
@@ -185,14 +228,31 @@
 
     async void UpdateProjectSub()
     {
-        if (projectsub.ProjectSubStatus != string.Empty)
+        if (string.IsNullOrEmpty(desc))
         {
-            projectsub.ProjectSubStatus = progress;
-            projectsub.ProjectSubProjectTlhistories.Add(new ProjectSubProjectTlhistory() { ProjectSubProjectTlid = projectsub.Id, Remark = projectsub.ProjectSubStatus, EditorId = userid });
-            var result = await pj.SaveSubProject(projectsub);
-            UpdateProjectHD();
-            await Initial();
+            await ErrorMessage("Description cannot Empty !");
+            return;
         }
+        if (string.IsNullOrEmpty(progress))
+        {
+            await ErrorMessage("Please select Progress");
+            return;
+        }
+
+        eventcreate.ProjectSubProjectTlid = projectsub.Id;
+        eventcreate.TargetDate = target;
+        eventcreate.Description = desc.Replace("\r\n", "" + ((char)13).ToString() + (char)10).ToString();
+        eventcreate.Status = progress;
+        eventcreate.Active = "Y";
+        eventcreate.EditorId = userid;
+        var result1 = await pj.SaveEvent(eventcreate);
+        eventcreate = new Event();
+ 
+        projectsub.ProjectSubStatus = progress;
+        projectsub.ProjectSubProjectTlhistories.Add(new ProjectSubProjectTlhistory() { ProjectSubProjectTlid = projectsub.Id, Remark = projectsub.ProjectSubStatus, EditorId = userid });
+        var result2 = await pj.SaveSubProject(projectsub);
+        UpdateProjectHD();
+        await Initial();
     }
 
     async Task CreateListProgress()
@@ -230,18 +290,36 @@
         if (subcount == complete + cancel)
         {
             string message = string.Empty;
-            if (cancel > 0)
+            if (complete == 0 && cancel > 0)
             {
-                message = "Closed with Cancelled";
+                message = "Cancelled";
+            }
+            else if (complete > 0 && cancel > 0)
+            {
+                message = "Completed with Cancelled";
             }
             else
             {
-                message = "Closed";
+                message = "Completed";
             }
             projecthd.ProjectHdhistories.Add(new ProjectHdhistory() { ProjectHdid = projecthd.Id, Remark = message, TimeStamp = DateTime.Now, EditorId = userid });
             projecthd.ProjectHdstatus = message;
             var result = await pj.SaveProjectHD(projecthd);
         }
+    }
+
+    void OnTodayDate()
+    {
+        target = DateTime.Now;
+    }
+
+    async Task ErrorMessage(string message)
+    {
+        await DialogService.OpenAsync("Warning", ds =>
+    @<div>
+        @message
+    </div>
+        , new DialogOptions() { CloseDialogOnOverlayClick = true });
     }
 
     private void GoMain()
@@ -263,6 +341,8 @@
     {
         if (subcapability is not null) subcapability.Clear();
         if (capability is not null) capability.Clear();
+        if (listprog is not null) listprog.Clear();
+        if (eve is not null) eve.Clear();
         Console.WriteLine("Disconnected");
     }
 }

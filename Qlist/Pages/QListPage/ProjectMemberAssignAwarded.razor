@@ -13,6 +13,7 @@
 
 @inject ProjectData pj;
 @inject NavigationManager NavManager
+@inject BlazorSpinner.SpinnerService spin
 
 @attribute [Authorize(Roles = "1,2")]
 
@@ -161,11 +162,13 @@ else
 
     protected override async Task OnInitializedAsync()
     {
+        spin.Show();
         await base.OnInitializedAsync();
         await GetDataAuthen();
         awarded = await pj.GetMemberAssign(id);
         member = await pj.GetMemberByID(awarded.MemberId);
         StateHasChanged();
+        spin.Hide();
     }
 
     async Task GetDataAuthen()

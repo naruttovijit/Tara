@@ -16,6 +16,8 @@
 @inject ProjectData pj;
 @inject NavigationManager NavManager
 @inject DialogService DialogService
+@inject IJSRuntime js
+@inject BlazorSpinner.SpinnerService spin
 
 @attribute [Authorize(Roles = "1,2")]
 
@@ -28,8 +30,8 @@
         <div class="card-header">Create Project Main</div>
         <div class="card-body">
             <div class="row">
-                <div class="col-2"><p><b>Main Project Name</b></p></div>
-                <div class="col"><p><RadzenTextBox style="width: 100%" id="MainName" @bind-Value="formmain.ProjectName" /></p></div>
+                <div class="col-2"><p><b>Project Name</b> <a style="font-size:medium; color:red">*</a></p></div>
+                <div class="col"><p><RadzenTextBox class="rz-border-danger" style="width: 100%" id="MainName" @bind-Value="formmain.ProjectName" /></p></div>
             </div>
 
             <div class="row">
@@ -76,20 +78,20 @@
                 <div class="card-header">Customer</div>
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-2"><p><b>Name</b></p></div>
-                        <div class="col"><p><RadzenTextBox style="width: 100%" @bind-Value="custname" /></p></div>
+                        <div class="col-2"><p><b>Name</b> <a style="font-size:medium; color:red">*</a></p></div>
+                        <div class="col"><p><RadzenTextBox class="rz-border-danger" style="width: 100%" @bind-Value="custname" /></p></div>
                     </div>
                     <div class="row">
-                        <div class="col-2"><p><b>Address</b></p></div>
-                        <div class="col"><p><RadzenTextArea style="width: 100%" @bind-Value="custaddress" Cols="30" Rows="3" /></p></div>
+                        <div class="col-2"><p><b>Address</b> <a style="font-size:medium; color:red">*</a></p></div>
+                        <div class="col"><p><RadzenTextArea class="rz-border-danger" style="width: 100%" @bind-Value="custaddress" Cols="30" Rows="3" /></p></div>
                     </div>
                     <div class="row">
-                        <div class="col-2"><p><b>Telephone</b></p></div>
-                        <div class="col"><p><RadzenTextBox style="width: 100%" @bind-Value="custtelephone" /></p></div>
+                        <div class="col-2"><p><b>Telephone</b> <a style="font-size:medium; color:red">*</a></p></div>
+                        <div class="col"><p><RadzenTextBox class="rz-border-danger" style="width: 100%" @bind-Value="custtelephone" /></p></div>
                     </div>
                     <div class="row">
-                        <div class="col-2"><p><b>Email</b></p></div>
-                        <div class="col"><p><RadzenTextBox style="width: 100%" @bind-Value="custemail" /></p></div>
+                        <div class="col-2"><p><b>Email</b> <a style="font-size:medium; color:red">*</a></p></div>
+                        <div class="col"><p><RadzenTextBox class="rz-border-danger" style="width: 100%" @bind-Value="custemail" /></p></div>
                     </div>
                     <div class="row">
                         <div class="col-2"><p><b>Website</b></p></div>
@@ -119,7 +121,7 @@
                                 <div class="row">
                                     <div class="col-1"><p><b>Name</b></p></div>
                                     <div class="col">@list.Name</div>
-                                    <div class="col-1"><RadzenButton Click=@(args => ListContact.Remove(list)) Text="X" ButtonStyle="ButtonStyle.Danger" /></div>
+                                    <div class="col-1"><RadzenButton Click=@(args => ListContact.Remove(list)) Icon="delete" ButtonStyle="ButtonStyle.Danger" /></div>
                                 </div>
                                 <div class="row">
                                     <div class="col-1"><p><b>Position</b></p></div>
@@ -148,8 +150,8 @@
                 }
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-2"><p><b>Name</b></p></div>
-                        <div class="col"><p><RadzenTextBox style="width: 100%" id="MainName" @bind-Value="contactname" /></p></div>
+                        <div class="col-2"><p><b>Name</b> <a style="font-size:medium; color:red">*</a></p></div>
+                        <div class="col"><p><RadzenTextBox class="rz-border-danger"style="width: 100%" id="MainName" @bind-Value="contactname" /></p></div>
                     </div>
                     <div class="row">
                         <div class="col-2"><p><b>Position</b></p></div>
@@ -160,12 +162,12 @@
                         <div class="col"><p><RadzenTextArea style="width: 100%" @bind-Value="contactaddr" Cols="30" Rows="3" /></p></div>
                     </div>
                     <div class="row">
-                        <div class="col-2"><p><b>Email</b></p></div>
-                        <div class="col"><p><RadzenTextBox style="width: 100%" @bind-Value="contactemail" /></p></div>
+                        <div class="col-2"><p><b>Email</b> <a style="font-size:medium; color:red">*</a></p></div>
+                        <div class="col"><p><RadzenTextBox class="rz-border-danger" style="width: 100%" @bind-Value="contactemail" /></p></div>
                     </div>
                     <div class="row">
-                        <div class="col-2"><p><b>Mobile No.</b></p></div>
-                        <div class="col"><p><RadzenTextBox style="width: 100%" @bind-Value="contactmobile" /></p></div>
+                        <div class="col-2"><p><b>Mobile No.</b> <a style="font-size:medium; color:red">*</a></p></div>
+                        <div class="col"><p><RadzenTextBox class="rz-border-danger" style="width: 100%" @bind-Value="contactmobile" /></p></div>
                     </div>
                     <div class="row">
                         <div class="col-2"><p><b>Other</b></p></div>
@@ -197,8 +199,8 @@
         <div class="card-header">Create Project Sub</div>
         <div class="card-body">
             <div class="row">
-                <div class="col-2"><p><b>Project Sub Name</b></p></div>
-                <div class="col"><p><RadzenTextBox style="width: 100%" id="SubName" @bind-Value="formsub.ProjectSubName" /></p></div>
+                <div class="col-2"><p><b>Project Sub Name</b> <a style="font-size:medium; color:red">*</a></p></div>
+                <div class="col"><p><RadzenTextBox class="rz-border-danger" style="width: 100%" id="SubName" @bind-Value="formsub.ProjectSubName" /></p></div>
             </div>
             <div class="row">
                 <div class="col-2"><p><b>Description</b></p></div>
@@ -236,60 +238,38 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-2"><p><b>RA Type</b></p></div>
+                <div class="col-2"><p><b>RA Type</b> <a style="font-size:medium; color:red">*</a></p></div>
                 <div class="col">
                     @if (ratype is not null)
                     {
                         <p>
                             <RadzenDropDown AllowClear="true" AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" @bind-Value=@formRAType.RatypeMasterId Placeholder="Select..."
-                                    Data=@ratype TextProperty="Name" ValueProperty="Id" Class="w-100" />
+                                    Data=@ratype TextProperty="Name" ValueProperty="Id" class="rz-border-danger; w-100" />
+                        </p>
+                    }
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-2"><p><b>Capability</b> <a style="font-size:medium; color:red">*</a></p></div>
+                <div class="col">
+                    @if (subcap is not null)
+                    {
+                        <p>
+                            <RadzenDropDown AllowClear="true" AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                            @bind-Value=@multipleValues Multiple="true" Placeholder="Select..." Data=@subcap TextProperty="CategoryCatSub" ValueProperty="Id"
+                                    Change=@(args => OnChange(args, "DropDown with multiple selection")) class="rz-border-danger; w-100">
+                                            <Template>
+                                                @getcap(((context as MasterCapabilityCatSub).CategoryCatId)) - @((context as MasterCapabilityCatSub).CategoryCatSub)
+                                            </Template>
+                                    </RadzenDropDown>
                         </p>
                     }
                 </div>
             </div>
 
             <br>
-
-            <div class="card">
-                <div class="card-header">Project Capability</div>
-                <div class="card-body">
-                    @if (ListCategory is not null)
-                        {
-                            foreach (var list in ListCategory)
-                            {
-                            var main = cap.Where(w => w.Id == list.CategoryCatId).FirstOrDefault();
-                            <div class="row">
-                                    <div class="col">@main.CategoryCat - @list.CategoryCatSub</div>
-                                    <div class="col-1"><RadzenButton Click=@(args => ListCategory.Remove(list)) Text="X" ButtonStyle="ButtonStyle.Danger" /></div>
-                                </div>
-                            }
-                        }
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-5">
-                            <p>
-                                @if (subcap is not null)
-                                {
-                                    <RadzenDropDown AllowClear="true" AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" @bind-Value=@categoryid Placeholder="Select..."
-                                            Data=@subcap TextProperty="CategoryCatSub" ValueProperty="Id" Class="w-100">
-                                        <Template>
-                                            @getcap(((context as MasterCapabilityCatSub).CategoryCatId)) - @((context as MasterCapabilityCatSub).CategoryCatSub)
-                                        </Template>
-                                    </RadzenDropDown>
-                                }
-                            </p>
-                        </div>
-                        <div class="col-1">
-                            <RadzenButton Click=@(args => SaveCategory(categoryid)) Icon="add" ButtonStyle="ButtonStyle.Primary" Size="ButtonSize.Medium" />
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <br>
-            <div class="row">
-                <RadzenButton Click=@(args => SaveProjectSub()) Text="Add Project Sub" Icon="add_circle_outline" ButtonStyle="ButtonStyle.Primary" />
+            <div class="row-cols-sm-auto">
+                <RadzenButton Click=@(args => SaveProjectSub()) Text="Add Project Sub" Icon="add" ButtonStyle="ButtonStyle.Primary" />
             </div>
         </div>
     </div>
@@ -306,7 +286,7 @@
                          <div class="row">
                             <div class="col-2"><p><b>Project Sub Name</b></p></div>
                             <div class="col"><p>@sub.ProjectSubName</p></div>
-                            <div class="col-1"><div class="col-1"><RadzenButton Click=@(args => formmain.ProjectSubProjectTls.Remove(sub)) Text="X" ButtonStyle="ButtonStyle.Danger" /></div></div>
+                            <div class="col-1"><div class="col-1"><RadzenButton Click=@(args => formmain.ProjectSubProjectTls.Remove(sub)) Icon="delete" ButtonStyle="ButtonStyle.Danger" /></div></div>
                         </div>
 
                         <div class="row">
@@ -340,7 +320,7 @@
                             </div>
 
                             <div class="row">
-                                <div class="col-2"><p>Capability</p></div>
+                                <div class="col-2"><p><b>Capability</b></p></div>
                                 <div class="col">
                                     <p>
                                         @if (list.MemberCapability is not null)
@@ -354,7 +334,7 @@
                                                         {
                                                             var main = cap.Where(w => w.Id == categorylist.CategoryCatId).FirstOrDefault();
                                                             <tr>
-                                                                <td>@main.CategoryCat - @categorylist.CategoryCatSub</td>
+                                                            <td><li>@main.CategoryCat - @categorylist.CategoryCatSub</li></td>
                                                             </tr>
                                                         }
                                                     </table>
@@ -367,14 +347,13 @@
                             </div>
                         }
                      </div>
+                     <br />
                  }
             </div>
         </div>
 
         <br />
-        <div class="card">
-            <div class="row"><RadzenButton Icon="save" BusyText="Saving ..." IsBusy=@busy Click=@SaveAll Text="Save All" Style="width:100%"/></div>
-        </div>
+        <div class="row-cols-sm-auto"><RadzenButton Icon="save" BusyText="Saving ..." IsBusy=@busy Click=@SaveAll Text="Save" /></div>
     }
 }
 <br />
@@ -436,9 +415,18 @@
     string usermemberno;
     int userid;
 
+    IEnumerable<int> multipleValues = new int[] { };
+
     protected override async Task OnInitializedAsync()
     {
-        await base.OnInitializedAsync();
+        spin.Show();
+        await Initial();
+        StateHasChanged();
+        spin.Hide();
+    }
+
+    async Task Initial()
+    {
         await GetDataAuthen();
         ratype = await pj.GetRATypeMaster();
         cap = await pj.GetAllCapability();
@@ -450,7 +438,7 @@
         formsub.PlanFinishDate = DateTime.Now;
         DialogService.OnOpen += Open;
         DialogService.OnClose += Close;
-        StateHasChanged();
+        NavManager.LocationChanged += OnLocationChanged;
     }
 
     async Task GetDataAuthen()
@@ -511,17 +499,6 @@
         contactother = string.Empty;
     }
 
-    void SaveCategory(int id) //Add category to Project Sub
-    {
-        if (id > 0)
-        {
-            var sub = subcap.Where(w => w.Id == id).FirstOrDefault();
-            ListCategory.Add(new MasterCapabilityCatSub() { Id = sub.Id, CategoryCatId = sub.CategoryCatId, CategoryCatSub = sub.CategoryCatSub, CategoryCat = sub.CategoryCat });
-        }
-    }
-
-
-
     async void SaveProjectMain() //Add data to Project HD List<>
     {
         if (string.IsNullOrEmpty(formmain.ProjectName))
@@ -558,7 +535,7 @@
         var list = await pj.GetProjectHDbyProjectName(formmain.ProjectName);
         if (list is not null && list.Count() > 0)
         {
-            await ErrorMessage("This Main Project name already exit!");
+            await ErrorMessage("This Project Name has already existed!");
             return;
         }
 
@@ -572,24 +549,6 @@
         }
 
         MainSaveshow = false;
-        //CustomerData = new List<Customer>();
-        //var result = custommember.Where(c => c.Id == customerid).FirstOrDefault();
-        //if (result is not null)
-        //{
-        //    CustomerData.Add(new Customer()
-        //        {
-        //            Id = result.Id,
-        //            CreateDate = result.CreateDate,
-        //            CustomerId = result.CustomerId,
-        //            Name = result.Name,
-        //            MemberNo = result.MemberNo,
-        //            CompanyName = result.CompanyName,
-        //            Telephone = result.Telephone,
-        //            Email = result.Email,
-        //            LineId = result.LineId
-        //        });
-        //    formmain.CustomerId = result.Id;
-        //}
 
         if (!string.IsNullOrEmpty(custother))
         {
@@ -644,7 +603,7 @@
         var list = await pj.GetProjectSubbySubName(formsub.ProjectSubName);
         if (list is not null && list.Count() > 0)
         {
-            await ErrorMessage("This Project Sub name already exit!");
+            await ErrorMessage("This Sub Project Name has already existed!");
             return;
         }
 
@@ -670,6 +629,7 @@
         formsub = new ProjectSubProjectTl();
         formsub.ProjectHdid = formmain.Id;
         ListCategory = new List<MasterCapabilityCatSub>();
+        multipleValues = new int[] { };
 
         subdesc = string.Empty;
         subremark = string.Empty;
@@ -700,8 +660,6 @@
         this.StateHasChanged();
     }
 
-    
-    
     private async void OnSubmit() //Upload file (image,pdf) to local folders
     {
         if (selectedFile != null)
@@ -733,81 +691,41 @@
         this.StateHasChanged();
     } 
 
-    
-    
     void OnTodayPlanStart()
     {
         formmain.PlanStartDate = DateTime.Now;
     }
 
-    
-    
     void OnTodayPlanFinish()
     {
         formmain.PlanFinishDate = DateTime.Now;
     }
 
-    
-    
     void OnTodaySubStart()
     {
         formsub.PlanStartDate = DateTime.Now;
     }
 
-    
-    
     void OnTodaySubFinish()
     {
         formsub.PlanFinishDate = DateTime.Now;
     }
 
-    
-    
-    //async Task OnLoadData(LoadDataArgs args)
-    //{
-    //    if (args.Filter.Length <= 2)
-    //    {
-    //        if (custommember is not null)
-    //        {
-    //            custommember.Clear();
-    //        }
-    //    }
-    //    if (args.Filter.Length > 2)
-    //    {
-    //        custommember = await pj.GetCustomerByContain(args.Filter.ToUpper().ToString());
-    //        InvokeAsync(StateHasChanged);
-    //    }
-    //}
-
-    //async void GetCustomerID(object value)
-    //{
-    //    if (custommember is not null)
-    //    {
-    //        var select = custommember.Where(c => c.CompanyName.ToUpper() == value.ToString().ToUpper()).ToList();
-    //        if (select.Count == 1)
-    //        {
-    //            customerid = select[0].Id;
-    //        }
-    //    }
-    //}
-
     void Open(string title, Type type, Dictionary<string, object> parameters, DialogOptions options)
     {
+
     }
 
-    
-    
     void Close(dynamic result)
     {
+
     }
 
-    
-    
     async Task ErrorMessage(string message)
     {
         await DialogService.OpenAsync("Warning", ds =>
-            @<div>
-                @message
+    @<div>
+                    @message
         </div>
     , new DialogOptions() { CloseDialogOnOverlayClick = true });
     }
@@ -820,10 +738,36 @@
         return get;
     }
 
+    void OnChange(object value, string name)
+    {
+        ListCategory = new List<MasterCapabilityCatSub>();
+        var str = value is IEnumerable<object> ? string.Join(", ", (IEnumerable<object>)value) : value;
+        foreach (var item in multipleValues)
+        {
+            var sub = subcap.Where(w => w.Id == item).FirstOrDefault();
+            ListCategory.Add(new MasterCapabilityCatSub() { Id = sub.Id, CategoryCatId = sub.CategoryCatId, CategoryCatSub = sub.CategoryCatSub, CategoryCat = sub.CategoryCat });
+        }
+
+    }
+
+    async void OnLocationChanged(object sender, LocationChangedEventArgs args)
+    {
+        js.InvokeVoidAsync("alert", "All datas in this page will be clear!");
+    }
+
     public void Dispose()
     {
-         //The DialogService is a singleton so it is advisable to unsubscribe.
+        if (ListContact is not null) ListContact.Clear();
+        if (ListCategory is not null) ListCategory.Clear();
+        if (HDhis is not null) HDhis.Clear();
+        if (Subhis is not null) Subhis.Clear();
+        if (CustomerData is not null) CustomerData.Clear();
+        if (cap is not null) cap.Clear();
+        if (subcap is not null) subcap.Clear();
+        if (ratype is not null) ratype.Clear();
+        if (showcate is not null) showcate.Clear();
         DialogService.OnOpen -= Open;
         DialogService.OnClose -= Close;
+        NavManager.LocationChanged -= OnLocationChanged;
     }
 }

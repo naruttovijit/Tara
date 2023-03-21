@@ -1,0 +1,76 @@
+﻿@page "/Data/TicketDetail/{no:int}"
+
+@implements IDisposable;
+
+@using Data;
+@using ModelM2s;
+@using ModelM4s;
+@using System.Globalization;
+@using Radzen;
+@using Radzen.Blazor;
+
+@inject ProjectData pj;
+@inject NavigationManager NavManager
+
+@attribute [Authorize(Roles = "1,2,3")]
+
+<div class="card">
+    <div class="card-header">Ticket Detail</div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-2"><p><b>No</b></p></div>
+            <div class="col">@ticket.No</div>
+        </div>
+        <div class="row">
+            <div class="col-2"><p><b>Create Date</b></p></div>
+            <div class="col">@ticket.TimeStamp.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)</div>
+        </div>
+        <div class="row">
+            <div class="col-2"><p><b>Description</b></p></div>
+            <div class="col"><p><a style="white-space: pre-wrap;">@ticket.Description</a></p></div>
+        </div>
+        <div class="row">
+            <div class="col-2"><p><b>Status</b></p></div>
+            <div class="col">@ticket.Status</div>
+        </div>
+        <div class="row">
+            <div class="col-2"><p><b>Target Date</b></p></div>
+            <div class="col">@ticket.TargetDate.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)</div>
+        </div>
+        <div class="row">
+            <div class="col-2"><p><b>Image</b></p></div>
+            @if (ticket.DocumentPath is not null)
+            {
+                if (ticket.DocumentPath.ToUpper().Contains("PDFFILES"))
+                {
+                    string filename = Path.GetFileName(ticket.DocumentPath);
+                    <div class="col"><a href="@ticket.DocumentPath">@filename</a></div>
+                }
+                else
+                {
+                    <div class="col"><img src="@ticket.DocumentPath" width="400px" /></div>
+                }
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public int no { get; set; }
+
+    public Tickets ticket { get; set; } = new Tickets();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        ticket = await pj.GetTicketByNO(no);
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        Console.WriteLine("Disconnected");
+    }
+
+}

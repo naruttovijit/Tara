@@ -254,3 +254,10 @@ C:\Users\tovij\source\repos\Backup\Qlist_20230112\Qlist\Qlist\obj\Debug\net6.0\r
 C:\Users\tovij\source\repos\Backup\Qlist_20230112\Qlist\Qlist\obj\Debug\net6.0\Qlist.pdb
 C:\Users\tovij\source\repos\Backup\Qlist_20230112\Qlist\Qlist\obj\Debug\net6.0\Qlist.genruntimeconfig.cache
 C:\Users\tovij\source\repos\Backup\Qlist_20230112\Qlist\Qlist\obj\Debug\net6.0\ref\Qlist.dll
+C:\Users\tovij\source\repos\QList\Qlist\bin\Debug\net6.0\BlazorSpinner.dll
+C:\Users\tovij\source\repos\QList\Qlist\bin\Debug\net6.0\Microsoft.AspNetCore.Authorization.dll
+C:\Users\tovij\source\repos\QList\Qlist\bin\Debug\net6.0\Microsoft.AspNetCore.Components.dll
+C:\Users\tovij\source\repos\QList\Qlist\bin\Debug\net6.0\Microsoft.AspNetCore.Components.Forms.dll
+C:\Users\tovij\source\repos\QList\Qlist\bin\Debug\net6.0\Microsoft.AspNetCore.Components.Web.dll
+C:\Users\tovij\source\repos\QList\Qlist\bin\Debug\net6.0\Microsoft.AspNetCore.Metadata.dll
+C:\Users\tovij\source\repos\QList\Qlist\bin\Debug\net6.0\Microsoft.JSInterop.dll

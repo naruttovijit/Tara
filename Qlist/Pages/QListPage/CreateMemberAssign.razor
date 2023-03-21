@@ -16,6 +16,20 @@
 
 @inject ProjectData pj;
 @inject NavigationManager NavManager
+@inject BlazorSpinner.SpinnerService spin
+
+<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+<style>
+    .sort-th {
+        cursor: pointer;
+    }
+
+    .fa {
+        float: right;
+    }
+</style>
+
 <ConcurrentComponent ModuleName="MemberAssign" ObjId="projectsub.Id" UserId="userid"></ConcurrentComponent>
 
 <br />
@@ -102,7 +116,7 @@
             {
                  var cate = capability.Where(w => w.Id == cat.CategoryCatId).FirstOrDefault();
                 <div class="row">
-                    <div class="col">@cate.CategoryCat - @cat.CategoryCatSub</div>
+                    <div class="col"><li>@cate.CategoryCat - @cat.CategoryCatSub</li></div>
                 </div>
             }
         }
@@ -111,32 +125,65 @@
 <br />
 
 
+
 <div class="card">
     <div class="card-header">Member Assignment</div>
     <div class="card-body">
-        <table class="table table-bordered" style="width:100%">
+        <div class="form-group">
+            <input class="form-control" type="text" placeholder="Filter..."
+                   @bind="Filter"
+                   @bind:event="oninput">
+        </div>
+        <br />
+        <table class="table table-bordered table-hover" style="width:100%" >
             <tr>
-                <th style="width:10%">No.</th>
-                <th style="width:30%">Company Name TH</th>
-                <th style="width:15%">Telephone</th>
-                <th style="width:15%">Comfirm Date</th>
-                <th class="text-center" style="width:10%">Comfirm</th>
-                <th class="text-center" style="width:10%">Awarded</th>
+                <th class="sort-th" @onclick="@(() => SortTable("No"))" style="width:5%">
+                    No.
+                    <span class="fa @(SetSortIcon("No"))"></span>
+                </th>
+                <th class="sort-th" @onclick="@(() => SortTable("Name"))" style="width:25%">
+                    Company Name En
+                    <span class="fa @(SetSortIcon("Name"))"></span>
+                </th>
+                <th class="sort-th" @onclick="@(() => SortTable("Telephone"))" style="width:10%">
+                    Telephone
+                    <span class="fa @(SetSortIcon("Telephone"))"></span>
+                </th>
+                <th class="sort-th; text-center" @onclick="@(() => SortTable("Capital"))" style="width:10%">
+                    Registor Capital
+                    <span class="fa @(SetSortIcon("Capital"))"></span>
+                </th>
+                <th class="sort-th; text-center" @onclick="@(() => SortTable("CountAward"))" style="width:10%">
+                    Total Awarded
+                    <span class="fa @(SetSortIcon("CountAward"))"></span>
+                </th>
+                <th class="sort-th; text-center" @onclick="@(() => SortTable("DateConfirm"))" style="width:10%">
+                    Comfirm Date
+                    <span class="fa @(SetSortIcon("DateConfirm"))"></span>
+                </th>
+                <th class="text-center" style="width:10%">
+                    Comfirm
+                </th>
+                <th class="sort-th; text-center" @onclick="@(() => SortTable("Link"))" style="width:10%">
+                    Awarded
+                    <span class="fa @(SetSortIcon("Link"))"></span>
+                </th>
                 <th class="text-center" style="width:10%"></th>
             </tr>
-            @if (projectsub.ProjectSubMemberAsgmts is not null)
+            @if (customasgmt is not null)
             {
-                int no = 0;
-                foreach (var list in projectsub.ProjectSubMemberAsgmts)
+                foreach (var list in customasgmt)
                 {
-                    no++;
-                    var select = member.Where(w => w.Id == list.MemberId).FirstOrDefault();
-                    var date = allassign.Where(w => w.Id == list.Id).FirstOrDefault();
+                    if (!IsVisible(list))
+                        continue;
+
                     <tr>
-                        <td>@no</td>
-                        <td>@select.CompanyNameTh</td>
-                        <td>@select.Telephone</td>
-                        <td>@list.DateConfirm?.ToString("dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture)</td>
+                        <td>@list.No</td>
+                        <td>@list.Name</td>
+                        <td>@list.Telephone</td>
+                        <td class="text-end">@String.Format(new System.Globalization.CultureInfo("th-TH"), "{0:C}", list.Capital)</td>
+                        <td class="text-center">@list.CountAward</td>
+                        <td class="text-center">@list.DateConfirm?.ToString("dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture)</td>
                         @if (list.DateConfirm is not null)
                         {
                             <td></td>
@@ -146,18 +193,28 @@
                             }
                             else
                             {
-                                if (list.Id > 0 && !string.IsNullOrEmpty(date.DateConfirm.ToString()))
+                                if (list.ID > 0 && !string.IsNullOrEmpty(list.DateConfirm.ToString()))
                                 {
-                                    <td class="text-center"><a href="/Data/ProjectMemberAssignAwarded/@list.Id">Link</a></td>
+                                    <td class="text-center"><a href="/Data/ProjectMemberAssignAwarded/@list.ID">Link</a></td>
                                 }
                             }
                             <td></td>
                         }
                         else
                         {
-                            <td class="text-center"><input type="checkbox" @onchange="EventArgs => { CheckboxClicked(list,EventArgs.Value);}" /></td>
-                            <td></td>
-                            <td class="text-center"><RadzenButton Click=@(args => projectsub.ProjectSubMemberAsgmts.Remove(list)) Text="X" ButtonStyle="ButtonStyle.Danger" /></td>
+                            @if(awarded)
+                            {
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            }
+                            else
+                            {
+                                <td class="text-center"><input type="checkbox" @onchange="EventArgs => { CheckboxClicked(list,EventArgs.Value);}" /></td>
+                                <td></td>
+                                <td class="text-center"><RadzenButton Click=@(args => RenoveMember(list.Subid, list.Memberid)) Icon="delete" ButtonStyle="ButtonStyle.Danger" /></td>
+                            }
+                            
                         }
                     </tr>
                 }
@@ -183,7 +240,7 @@
                         </p>
                     </div>
                     <div class="col">
-                        <RadzenButton Click=@(args => AddMember(idMember)) Icon="add_circle_outline" ButtonStyle="ButtonStyle.Primary" Size="ButtonSize.Medium" />
+                        <RadzenButton Click=@(args => AddMember(idMember)) Icon="add" ButtonStyle="ButtonStyle.Primary" Size="ButtonSize.Medium" />
                     </div>
                 </div>
                 <div class="row">
@@ -217,6 +274,7 @@
     private List<ProjectSubMemberAsgmt> allassign;
     private List<CountAwarded> count;
     private List<MemberCategory> membercate;
+    private List<CustomMemberAsgmt> customasgmt;
 
     [CascadingParameter]
     private Task<AuthenticationState> authenticationStateTask { get; set; }
@@ -226,18 +284,29 @@
     int userrole;
     string usermemberno;
     int userid;
-
     string JsonCat;
     int idMember;
     bool awarded = false;
+    public string Filter { get; set; }
+
+    private bool isSortedAscending;
+    private string activeSortColumn;
 
     protected override async Task OnInitializedAsync()
     {
+        spin.Show();
         await base.OnInitializedAsync();
         await GetDataAuthen();
+        await Initial();
+        StateHasChanged();
+        spin.Hide();
+    }
+
+    async Task Initial()
+    {
         projectsub = await pj.GetProjectSubProjectTLbyID(id);
         projectra = await pj.GetProjectRATypeBySubProjectID(projectsub.Id);
-        allassign = await pj.GetMemberAssignmentBySubID(projectsub.Id);
+        allassign = await pj.GetAllMemberAssignment();
         member = await pj.GetAllMember();
         membercate = await pj.GetAllMemberCategory();
         capability = await pj.GetAllCapability();
@@ -259,7 +328,60 @@
             AutoAssignment();
         }
 
-        StateHasChanged();
+        AddtoCustom();
+    }
+
+    void AddtoCustom()
+    {
+        if (projectsub.ProjectSubMemberAsgmts is not null)
+        {
+            customasgmt = new List<CustomMemberAsgmt>();
+            int no = 0;
+
+            foreach (var list in projectsub.ProjectSubMemberAsgmts)
+            {
+                no++;
+                var select = member.Where(w => w.Id == list.MemberId).FirstOrDefault();
+                var date = allassign.Where(w => w.Id == list.Id).FirstOrDefault();
+                var award = allassign.Where(w => (w.Awarded == "Y") && (w.MemberId == list.MemberId)).ToList();
+                int count = award.Count();
+
+                if (date == null)
+                {
+                    customasgmt.Add(new CustomMemberAsgmt()
+                        {
+                            ID = list.Id,
+                            No = no,
+                            Subid = list.ProjectSubProjectTlid,
+                            Memberid = list.MemberId,
+                            Name = select.CompanyNameEn,
+                            Telephone = select.Telephone,
+                            Capital = select.RegisterCapital,
+                            CountAward = count,
+                            Awarded = list.Awarded,
+                            Link = "/Data/ProjectMemberAssignAwarded/" + list.Id.ToString()
+                        });
+                }
+                else
+                {
+                    customasgmt.Add(new CustomMemberAsgmt()
+                        {
+                            ID = list.Id,
+                            No = no,
+                            Subid = list.ProjectSubProjectTlid,
+                            Memberid = list.MemberId,
+                            Name = select.CompanyNameEn,
+                            Telephone = select.Telephone,
+                            Capital = select.RegisterCapital,
+                            CountAward = count,
+                            DateConfirm = date.DateConfirm,
+                            Awarded = list.Awarded,
+                            Link = "/Data/ProjectMemberAssignAwarded/" + list.Id.ToString()
+                        });
+                }
+
+            }
+        }
     }
 
     async Task GetDataAuthen()
@@ -285,7 +407,9 @@
         }
 
         var result = membercate.Where(w => sub.Contains(w.CategorySubId.GetValueOrDefault())).Select(w => w.MemberNo).ToList();
-        var result2 = member.Where(w => result.Contains(w.MemberNo) && (projectsub.Budget / w.RegisterCapital) <= 10 && (projectsub.Budget / w.RegisterCapital) > 0);
+        var result2 = member.Where(w => result.Contains(w.MemberNo) && ((projectsub.Budget / w.RegisterCapital) <= 10) && ((projectsub.Budget / w.RegisterCapital) > 0));
+        //var result2 = member.Where(w => result.Contains(w.MemberNo)).ToList();
+        //var result3 = result2.Where(w => (projectsub.Budget / w.RegisterCapital) <= 10 && (projectsub.Budget / w.RegisterCapital) > 0).ToList();
         count = new List<CountAwarded>();
         foreach (var list in result2)
         {
@@ -339,6 +463,7 @@
                 memberassign = new ProjectSubMemberAsgmt();
             }
         }
+        AddtoCustom();
     }
 
     async void UpdateMemberAssign() //Update member assignment in table
@@ -350,12 +475,29 @@
         await OnInitializedAsync();
     }
 
-    void CheckboxClicked(ProjectSubMemberAsgmt assignmember, object checkedValue)
+    void CheckboxClicked(CustomMemberAsgmt assignmember, object checkedValue)
     {
         if ((bool)checkedValue)
         {
-            assignmember.DateConfirm = DateTime.Now;
+            var assign = projectsub.ProjectSubMemberAsgmts.Where(w => (w.ProjectSubProjectTlid == assignmember.Subid) && (w.MemberId == assignmember.Memberid)).FirstOrDefault();
+            assign.DateConfirm = DateTime.Now;
         }
+        if (!(bool)checkedValue)
+        {
+            var assign = projectsub.ProjectSubMemberAsgmts.Where(w => (w.ProjectSubProjectTlid == assignmember.Subid) && (w.MemberId == assignmember.Memberid)).FirstOrDefault();
+            assign.DateConfirm = null;
+        }
+    }
+
+    void RenoveMember(int subid, int memberid)
+    {
+        var aa = projectsub.ProjectSubMemberAsgmts.Where(w => (w.ProjectSubProjectTlid == subid) && (w.MemberId == memberid)).FirstOrDefault();
+        if (aa.Id > 0)
+        {
+            var result = pj.DeleteAssign(aa.Id);
+        }
+        projectsub.ProjectSubMemberAsgmts.Remove(aa);
+        AddtoCustom();
     }
 
     private void GoBack()
@@ -391,18 +533,97 @@
         }
     }
 
+    public bool IsVisible(CustomMemberAsgmt list)
+    {
+        if (string.IsNullOrEmpty(Filter))
+            return true;
+
+        if (list.Name.Contains(Filter, StringComparison.OrdinalIgnoreCase))
+        {
+            return true;
+        }
+
+        if (list.Telephone != null)
+        {
+            if (list.Telephone.ToString().Contains(Filter, StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+        }
+
+        if (list.Capital != null)
+        {
+            if (list.Capital.ToString().Contains(Filter, StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+        }
+
+        if (list.DateConfirm != null)
+        {
+            string date = list.DateConfirm?.ToString("dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture);
+            if (date.Contains(Filter, StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private void SortTable(string columnName)
+    {
+        if (columnName != activeSortColumn)
+        {
+            customasgmt = customasgmt.OrderBy(x => x.GetType().GetProperty(columnName).GetValue(x, null)).ToList();
+            isSortedAscending = true;
+            activeSortColumn = columnName;
+
+        }
+        else
+        {
+            if (isSortedAscending)
+            {
+                customasgmt = customasgmt.OrderByDescending(x => x.GetType().GetProperty(columnName).GetValue(x, null)).ToList();
+            }
+            else
+            {
+                customasgmt = customasgmt.OrderBy(x => x.GetType().GetProperty(columnName).GetValue(x, null)).ToList();
+            }
+
+            isSortedAscending = !isSortedAscending;
+        }
+    }
+
+    private string SetSortIcon(string columnName)
+    {
+        if (activeSortColumn != columnName)
+        {
+            return string.Empty;
+        }
+        if (isSortedAscending)
+        {
+            return "fa-sort-up";
+        }
+        else
+        {
+            return "fa-sort-down";
+        }
+    }
+
     public void Dispose()
     {
         if (CheckBox is not null) CheckBox.Clear();
         if (capability is not null) capability.Clear();
         if (subcapability is not null) subcapability.Clear();
-        if (member is not null) member.Clear();
-        if (allassign is not null) allassign.Clear();
-        if (count is not null) count.Clear();
         if (contact is not null) contact.Clear();
+        if (member is not null) member.Clear();
+        if (custommember is not null) custommember.Clear();
         if (assign is not null) assign.Clear();
         if (membercap is not null) membercap.Clear();
-
+        if (allassign is not null) allassign.Clear();
+        if (count is not null) count.Clear();
+        if (membercate is not null) membercate.Clear();
         Console.WriteLine("Disconnected");
     }
 }

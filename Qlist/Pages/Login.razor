@@ -19,14 +19,20 @@
     <div class="row">
         <div class="col">
             <RadzenCard class="d-flex m-5 p-0 rz-border-radius-4 rz-shadow-10" Style="width: 100%; flex-direction: column; overflow: hidden; align-items: stretch;">
-                <RadzenCard Class="rz-shadow-0 rz-border-radius-0 rz-background-color-base-300 p-3" style="text-align: left;">
-                    <div class="col-1">
-                        <img src="/images/logo.png" height="70">
+                <RadzenCard Class="rz-shadow-0 rz-border-radius-0 rz-background-color-base-300 p-3">
+                    <div class="row">
+                        <div class="col-6">
+                            <p><img src="/images/logo.png" height="70"></p>
+                        </div>
+                        <div class="col-6" style="text-align:left;">
+                            <br />
+                            <RadzenText TextStyle="TextStyle.H4" class="rz-color-info-darker"><b>Queue List</b></RadzenText>
+                        </div>
                     </div>
                 </RadzenCard>
                 <RadzenCard Class="rz-shadow-0 p-5">
                     <RadzenTemplateForm Data=@("Login") >
-                        <RadzenLogin AllowRegister="false" AllowResetPassword="true" Login=@(args => OnLogin(args)) />
+                        <RadzenLogin AllowRegister="false" AllowResetPassword="false" Login=@(args => OnLogin(args)) />
                     </RadzenTemplateForm>
                 </RadzenCard>
             </RadzenCard>
@@ -38,6 +44,12 @@
     string userName = string.Empty;
     string password = string.Empty;
     bool rememberMe = true;
+    private List<User> user;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await userAccountService.LoadUser();
+    }
 
     private async Task OnLogin(LoginArgs args)
     {
@@ -62,6 +74,7 @@
                     UserID = userAccount.Id,
                     UserLongName = userAccount.NameLastName
                 });
+
 
             NavManager.NavigateTo("/Data/Project",true);
         }

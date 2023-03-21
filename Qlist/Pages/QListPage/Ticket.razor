@@ -1,0 +1,101 @@
+﻿@page "/Data/Ticket"
+
+@implements IDisposable;
+
+@using ModelM2s;
+@using Data;
+@using Radzen;
+@using Radzen.Blazor;
+@using System.Globalization;
+@using System.Security.Claims;
+@using Microsoft.AspNetCore.Components.Authorization;
+
+@inject ProjectData pj;
+@inject NavigationManager NavManager
+@inject BlazorSpinner.SpinnerService spin
+
+@attribute [Authorize(Roles = "1,2,3")]
+
+<br />
+<div class="row">
+    <div class="col"><h3>Tickets</h3></div>
+    <div class="col">
+        <RadzenButton Click=@(args => GoCreate()) Icon="add" ButtonStyle="ButtonStyle.Primary" Size="ButtonSize.Medium" Text="Create Ticket" style="float:right" />
+    </div>
+</div>
+<br />
+
+<div class="card border-0">
+    <div class="card-body border-0">
+        <div class="row">
+            <RadzenDataGrid PageSize="5" AllowPaging="true" AllowSorting="true" Data="@ticket" TItem="Tickets" >
+                <Columns>
+                    <RadzenDataGridColumn TItem="Tickets" Property="No" Title="No" Width="15%">
+                        <Template Context="tic">
+                            <a href="@($"/Data/TicketDetail/{tic.No}")">@tic.No</a>
+                        </Template>
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="Tickets" Property="TimeStamp" Title="Create Date" FormatString="{0:dd/MM/yyyy}" Width="15%" />
+                    <RadzenDataGridColumn TItem="Tickets" Property="Description" Title="Description" Width="40%">
+                        <Template Context="desc">
+                            <a style="white-space: pre-wrap;">@desc.Description</a>
+                        </Template>
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="Tickets" Property="Status" Title="Status" Width="15%" />
+                    <RadzenDataGridColumn TItem="Tickets" Property="TargetDate" Title="Target Date" FormatString="{0:dd/MM/yyyy}" Width="15%" />
+                </Columns>
+            </RadzenDataGrid>
+        </div>
+    </div>
+
+</div>
+
+@code {
+    private List<Tickets> ticket;
+
+    [CascadingParameter]
+    private Task<AuthenticationState> authenticationStateTask { get; set; }
+
+    private ClaimsPrincipal AuthenticationStateUser { get; set; }
+
+
+    int role;
+    string memberno;
+    int userid;
+
+    protected override async Task OnInitializedAsync()
+    {
+        spin.Show();
+        await base.OnInitializedAsync();
+        await GetDataAuthen();
+        ticket = await pj.GetAllTicket();
+        ticket = ticket.OrderByDescending(w => w.No).ToList();
+        StateHasChanged();
+        spin.Hide();
+    }
+
+    async Task GetDataAuthen()
+    {
+        memberno = string.Empty;
+
+        AuthenticationState authenticationState;
+        authenticationState = await authenticationStateTask;
+        this.AuthenticationStateUser = authenticationState.User;
+        var claim = this.AuthenticationStateUser.Claims.ToList();
+        role = int.Parse(claim[1].Value);
+        memberno = claim[2].Value;
+        userid = int.Parse(claim[3].Value);
+    }
+
+    private void GoCreate()
+    {
+        NavManager.NavigateTo("/Data/TicketCreate", true);
+    }
+
+    public void Dispose()
+    {
+        if (ticket is not null) ticket.Clear();
+        Console.WriteLine("Disconnected");
+    }
+
+}

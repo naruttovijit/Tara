@@ -5,9 +5,15 @@ C:\Users\tovij\source\repos\QList\Qlist\obj\Release\net6.0\PubTmp\Out\Qlist.dll
 C:\Users\tovij\source\repos\QList\Qlist\obj\Release\net6.0\PubTmp\Out\Qlist.deps.json
 C:\Users\tovij\source\repos\QList\Qlist\obj\Release\net6.0\PubTmp\Out\Qlist.runtimeconfig.json
 C:\Users\tovij\source\repos\QList\Qlist\obj\Release\net6.0\PubTmp\Out\Qlist.pdb
+C:\Users\tovij\source\repos\QList\Qlist\obj\Release\net6.0\PubTmp\Out\BlazorSpinner.dll
+C:\Users\tovij\source\repos\QList\Qlist\obj\Release\net6.0\PubTmp\Out\Microsoft.AspNetCore.Authorization.dll
+C:\Users\tovij\source\repos\QList\Qlist\obj\Release\net6.0\PubTmp\Out\Microsoft.AspNetCore.Components.dll
+C:\Users\tovij\source\repos\QList\Qlist\obj\Release\net6.0\PubTmp\Out\Microsoft.AspNetCore.Components.Forms.dll
+C:\Users\tovij\source\repos\QList\Qlist\obj\Release\net6.0\PubTmp\Out\Microsoft.AspNetCore.Components.Web.dll
 C:\Users\tovij\source\repos\QList\Qlist\obj\Release\net6.0\PubTmp\Out\Microsoft.AspNetCore.Connections.Abstractions.dll
 C:\Users\tovij\source\repos\QList\Qlist\obj\Release\net6.0\PubTmp\Out\Microsoft.AspNetCore.Http.Connections.Client.dll
 C:\Users\tovij\source\repos\QList\Qlist\obj\Release\net6.0\PubTmp\Out\Microsoft.AspNetCore.Http.Connections.Common.dll
+C:\Users\tovij\source\repos\QList\Qlist\obj\Release\net6.0\PubTmp\Out\Microsoft.AspNetCore.Metadata.dll
 C:\Users\tovij\source\repos\QList\Qlist\obj\Release\net6.0\PubTmp\Out\Microsoft.AspNetCore.SignalR.Client.dll
 C:\Users\tovij\source\repos\QList\Qlist\obj\Release\net6.0\PubTmp\Out\Microsoft.AspNetCore.SignalR.Client.Core.dll
 C:\Users\tovij\source\repos\QList\Qlist\obj\Release\net6.0\PubTmp\Out\Microsoft.AspNetCore.SignalR.Common.dll
@@ -31,6 +37,7 @@ C:\Users\tovij\source\repos\QList\Qlist\obj\Release\net6.0\PubTmp\Out\Microsoft.
 C:\Users\tovij\source\repos\QList\Qlist\obj\Release\net6.0\PubTmp\Out\Microsoft.IdentityModel.Protocols.dll
 C:\Users\tovij\source\repos\QList\Qlist\obj\Release\net6.0\PubTmp\Out\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 C:\Users\tovij\source\repos\QList\Qlist\obj\Release\net6.0\PubTmp\Out\Microsoft.IdentityModel.Tokens.dll
+C:\Users\tovij\source\repos\QList\Qlist\obj\Release\net6.0\PubTmp\Out\Microsoft.JSInterop.dll
 C:\Users\tovij\source\repos\QList\Qlist\obj\Release\net6.0\PubTmp\Out\Microsoft.Win32.SystemEvents.dll
 C:\Users\tovij\source\repos\QList\Qlist\obj\Release\net6.0\PubTmp\Out\Newtonsoft.Json.dll
 C:\Users\tovij\source\repos\QList\Qlist\obj\Release\net6.0\PubTmp\Out\Radzen.Blazor.dll

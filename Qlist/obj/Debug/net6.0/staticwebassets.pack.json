@@ -5,6 +5,14 @@
       "PackagePath": "staticwebassets\\Qlist.bundle.scp.css"
     },
     {
+      "Id": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\PDFFiles\\23010008-001_test.pdf",
+      "PackagePath": "staticwebassets\\PDFFiles\\23010008-001_test.pdf"
+    },
+    {
+      "Id": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\PDFFiles\\23020001-001_test.pdf",
+      "PackagePath": "staticwebassets\\PDFFiles\\23020001-001_test.pdf"
+    },
+    {
       "Id": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\PDFFiles\\_TR.02_CartonBarcodeScanned.pdf",
       "PackagePath": "staticwebassets\\PDFFiles\\_TR.02_CartonBarcodeScanned.pdf"
     },
@@ -33,6 +41,10 @@
       "PackagePath": "staticwebassets\\PicFiles\\23010008-001_12_Interface_Cable_terminal.jpg"
     },
     {
+      "Id": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\PicFiles\\23020001-001_Screenshot 2022-03-22 152836.png",
+      "PackagePath": "staticwebassets\\PicFiles\\23020001-001_Screenshot 2022-03-22 152836.png"
+    },
+    {
       "Id": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\PicFiles\\_10-medical-industry.jpg",
       "PackagePath": "staticwebassets\\PicFiles\\_10-medical-industry.jpg"
     },
@@ -55,6 +67,10 @@
     {
       "Id": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\PicFiles\\_Screenshot 2022-03-22 153854.png",
       "PackagePath": "staticwebassets\\PicFiles\\_Screenshot 2022-03-22 153854.png"
+    },
+    {
+      "Id": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\TicketImages\\webclip.png",
+      "PackagePath": "staticwebassets\\TicketImages\\webclip.png"
     },
     {
       "Id": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\css\\.DS_Store",

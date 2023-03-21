@@ -14,6 +14,7 @@
 @inject IWebHostEnvironment env
 @inject NavigationManager NavManager
 @inject DialogService DialogService
+@inject BlazorSpinner.SpinnerService spin
 
 @attribute [Authorize(Roles = "1,2")]
 
@@ -26,8 +27,8 @@
         <div class="card-header">Detail</div>
         <div class="card-body">
             <div class="row">
-                <div class="col-2"><p><b>Project Sub Name</b></p></div>
-                <div class="col"><p><RadzenTextBox style="width: 100%" id="MainName" @bind-Value="projectsub.ProjectSubName" /></p></div>
+                <div class="col-2"><p><b>Project Sub Name</b> <a style="font-size:medium; color:red">*</a></p></div>
+                <div class="col"><p><RadzenTextBox class="rz-border-danger" style="width: 100%" id="MainName" @bind-Value="projectsub.ProjectSubName" /></p></div>
             </div>
             <div class="row">
                 <div class="col-2"><p><b>Description</b></p></div>
@@ -76,7 +77,7 @@
             }
             <div class="row">
                 <div class="col-2"><p><b>New RA Type</b></p></div>
-                <div class="col">
+                <div class="col-6">
                     @if (ratype is not null)
                     {
                         <p>
@@ -86,48 +87,25 @@
                     }
                 </div>
             </div>
-        </div>
-    </div>
-
-    <br />
-
-    <div class="card">
-        <div class="card-header">Project Capability</div>
-        <div class="card-body">
-            @if (subcategory is not null)
-            {
-                foreach (var cat in subcategory)
-                {
-                    var cate = cap.Where(w => w.Id == cat.CategoryCatId).FirstOrDefault();
-                    <div class="row">
-                        <div class="col">@cate.CategoryCat - @cat.CategoryCatSub</div>
-                        <div class="col-1"><RadzenButton Click=@(args => subcategory.Remove(cat)) Text="X" ButtonStyle="ButtonStyle.Danger" /></div>
-                    </div>
-                }
-            }
-        </div>
-        <div class="card-body">
             <div class="row">
-                <div class="col-5">
-                    <p>
-                        @if (subcap is not null)
-                        {
-                            <RadzenDropDown AllowClear="true" AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" @bind-Value=@categoryid Placeholder="Select..."
-                                Data=@subcap TextProperty="CategoryCatSub" ValueProperty="Id" Class="w-100">
-                                <Template Context="sub">
-                                    @getcap(sub.CategoryCatId) - @(sub.CategoryCatSub)
-                                </Template>
-                            </RadzenDropDown>
-                        }
-                    </p>
-                </div>
-                <div class="col-1">
-                    <RadzenButton Click=@(args => SaveCategory(categoryid)) Icon="add" ButtonStyle="ButtonStyle.Primary" Size="ButtonSize.Medium" />
+                <div class="col-2"><p><b>Capability</b> <a style="font-size:medium; color:red">*</a></p></div>
+                <div class="col-6">
+                    @if (subcap is not null)
+                    {
+                        <p>
+                            <RadzenDropDown AllowClear="true" AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                            @bind-Value=@multipleValues Multiple="true" Placeholder="Select..." Data=@subcap TextProperty="CategoryCatSub" ValueProperty="Id"
+                                            Change=@(args => OnChange(args, "DropDown with multiple selection")) Class="w-100">
+                                            <Template Context="cap">
+                                                @getcap((cap.CategoryCatId)) - @(cap.CategoryCatSub)
+                                            </Template>
+                                    </RadzenDropDown>
+                        </p>
+                    }
                 </div>
             </div>
         </div>
     </div>
-  
     <br />
 
     <div class="card">
@@ -149,20 +127,20 @@
                             <div class="col"><img src="@doc.DocumentPath" width="300px" /></div>
                         }
                         <div class="col"><a style="white-space: pre-wrap;">@doc.Description</a></div>
-                        <div class="col-1"><RadzenButton Click=@(args => projectdoc.Remove(doc)) Text="X" ButtonStyle="ButtonStyle.Danger" /></div>
+                        <div class="col-1"><RadzenButton Click=@(args => projectdoc.Remove(doc)) Icon="delete" ButtonStyle="ButtonStyle.Danger" /></div>
                     </div>
                 }
             }
 
             <br />
             <div class="row">
-                <div class="col-5"><p><InputFile OnChange="OnInputFileChange" /></p></div>
+                <div class="col-5"><p><InputFile OnChange="OnInputFileChange" /><a style="color:red">Prefered file types : PDF, BMP, JPG, JPEG, PNG</a></p></div>
             </div>
             <div class="row">
                 <div class="col-2"><p>Document Description</p></div>
                 <div class="col"><InputText style="width: 100%" id="docdesc" @bind-Value="DocDesc"></InputText></div>
             </div>
-            <div class="row">
+            <div class="row-cols-sm-auto">
                 <p><RadzenButton Click=@(args => OnSubmit()) Text="Upload Selected File" ButtonStyle="ButtonStyle.Primary" /></p>
             </div>
         </div>
@@ -170,8 +148,8 @@
     <br />
 
     <div class="card border-0">
-         <div class="row">
-            <RadzenButton Click=@(args => UpdateProjectSub()) Text="Update" ButtonStyle="ButtonStyle.Success" />
+        <div class="row-cols-sm-auto">
+            <RadzenButton Click=@(args => UpdateProjectSub()) Icon="update" Text="Update" ButtonStyle="ButtonStyle.Success" />
         </div>
     </div>
 </EditForm>
@@ -196,6 +174,9 @@
     string DocDesc;
     IBrowserFile selectedFile;
 
+    string[] stringArray = { "PDF", "BMP", "JPG", "JPEG", "PNG" };
+    IEnumerable<int> multipleValues = new int[] { };
+
     [CascadingParameter]
     private Task<AuthenticationState> authenticationStateTask { get; set; }
 
@@ -207,6 +188,7 @@
 
     protected override async Task OnInitializedAsync()
     {
+        spin.Show();
         await base.OnInitializedAsync();
         await GetDataAuthen();
         projectsub = await pj.GetProjectSubProjectTLbyID(id);
@@ -217,7 +199,12 @@
         subcap = subcap.OrderBy(w => w.CategoryCatId).ToList();
         ratype = await pj.GetRATypeMaster();
         subcategory = Newtonsoft.Json.JsonConvert.DeserializeObject<List<MasterCapabilityCatSub>>(projectratype.MemberCapability);
+        foreach(var list in subcategory)
+        {
+            multipleValues = multipleValues.Append(list.Id);
+        }
         StateHasChanged();
+        spin.Hide();
     }
 
     async Task GetDataAuthen()
@@ -233,15 +220,6 @@
         userid = int.Parse(claim[3].Value);
     }
 
-    void SaveCategory(int id) //Add category to Project Sub
-    {
-        if (id > 0)
-        {
-            var sub = subcap.Where(w => w.Id == id).FirstOrDefault();
-            subcategory.Add(new MasterCapabilityCatSub() { Id = sub.Id, CategoryCatId = sub.CategoryCatId, CategoryCatSub = sub.CategoryCatSub, CategoryCat = sub.CategoryCat });
-        }
-    }
-
     private void OnInputFileChange(InputFileChangeEventArgs e)
     {
         selectedFile = e.GetMultipleFiles()[0];
@@ -251,12 +229,27 @@
 
     private async void OnSubmit() //Upload file (image,pdf) to local folders
     {
+        if (selectedFile == null)
+        {
+            await ErrorMessage("Please select image");
+            return;
+        }
+
+        string path = string.Empty;
+        string filepath = string.Empty;
+        string filetype = string.Empty;
+
+        if (!stringArray.Any(selectedFile.Name.ToUpper().Contains))
+        {
+            await ErrorMessage("Upload files support files type (PDF, BMP, JPG, JPEG, PNG)");
+            return;
+        }
+
         if (selectedFile != null)
         {
-            Stream stream = selectedFile.OpenReadStream(maxAllowedSize: 1024 * 1024 * 100);
             string filename = projectsub.ProjectSubRunNo + "_" + selectedFile.Name;
-            string filetype = string.Empty;
-            string filepath = string.Empty;
+            filetype = string.Empty;
+            filepath = string.Empty;
             if (selectedFile.Name.ToUpper().Contains("PDF"))
             {
                 filetype = "\\PDFFiles\\" + filename;
@@ -267,7 +260,17 @@
                 filetype = "\\PicFiles\\" + filename;
                 filepath = "/PicFiles/" + filename;
             }
-            var path = $"{env.WebRootPath}{filetype}";
+            path = $"{env.WebRootPath}{filetype}";
+        }
+
+        if (!string.IsNullOrEmpty(path) && File.Exists(path))
+        {
+            await ErrorMessage("File name already exit !");
+            return;
+        }
+        else
+        {
+            Stream stream = selectedFile.OpenReadStream(maxAllowedSize: 1024 * 1024 * 100);
             FileStream fs = File.Create(path);
             await stream.CopyToAsync(fs);
             stream.Close();
@@ -330,6 +333,17 @@
             @message
         </div>
         , new DialogOptions() { CloseDialogOnOverlayClick = true });
+    }
+
+    void OnChange(object value, string name)
+    {
+        subcategory = new List<MasterCapabilityCatSub>();
+        foreach (var item in multipleValues)
+        {
+            var sub = subcap.Where(w => w.Id == item).FirstOrDefault();
+            subcategory.Add(new MasterCapabilityCatSub() { Id = sub.Id, CategoryCatId = sub.CategoryCatId, CategoryCatSub = sub.CategoryCatSub, CategoryCat = sub.CategoryCat });
+        }
+
     }
 
     public void Dispose()

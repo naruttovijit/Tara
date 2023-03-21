@@ -1,4 +1,5 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.IdentityModel.Tokens;
 using Qlist.Data;
 using Qlist.ModelM4s;
 
@@ -11,12 +12,22 @@ namespace Qlist.Authentication
 
         public UserAccountService()
         {
-            GetUser();
+            //GetUser();
 
-            _users = new List<User>
+            //_users = new List<User>
+            //{
+            //    new User{ Id = 0, LoginName = "admin", Password = "YWRtaW4=", RoleId = 1, MemberNo = "", NameLastName = "Administrator"}
+            //};
+        }
+
+        public async Task LoadUser()
+        {
+            if (_usersserver == null)
             {
-                new User{ Id = 0, LoginName = "admin", Password = "YWRtaW4=", RoleId = 1, MemberNo = "", NameLastName = "Administrator"}
-            };
+                await GetUser();
+
+                _users = new List<User>{new User{ Id = 0, LoginName = "admin", Password = "YWRtaW4=", RoleId = 1, MemberNo = "", NameLastName = "Administrator"}};
+            }
         }
 
         public async Task GetUser()

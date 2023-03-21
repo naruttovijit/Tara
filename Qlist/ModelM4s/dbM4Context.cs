@@ -37,6 +37,7 @@ namespace Qlist.ModelM4s
         public virtual DbSet<MasterRole> MasterRoles { get; set; }
         public virtual DbSet<MasterTambon> MasterTambons { get; set; }
         public virtual DbSet<MasterType> MasterTypes { get; set; }
+        public virtual DbSet<Member> Members { get; set; }
         public virtual DbSet<MemberAddress> MemberAddresses { get; set; }
         public virtual DbSet<MemberBizType> MemberBizTypes { get; set; }
         public virtual DbSet<MemberCategory> MemberCategories { get; set; }
@@ -49,6 +50,7 @@ namespace Qlist.ModelM4s
         public virtual DbSet<Mou> Mous { get; set; }
         public virtual DbSet<ProductImage> ProductImages { get; set; }
         public virtual DbSet<SlipImage> SlipImages { get; set; }
+        public virtual DbSet<TaraTube> TaraTubes { get; set; }
         public virtual DbSet<TbPosition> TbPositions { get; set; }
         public virtual DbSet<Technology> Technologies { get; set; }
         public virtual DbSet<User> Users { get; set; }
@@ -81,6 +83,8 @@ namespace Qlist.ModelM4s
 
                 entity.ToTable("BizMatching");
 
+                entity.Property(e => e.Email).HasMaxLength(50);
+
                 entity.Property(e => e.Id)
                     .ValueGeneratedOnAdd()
                     .HasColumnName("id");
@@ -96,8 +100,6 @@ namespace Qlist.ModelM4s
                 entity.Property(e => e.Name).HasMaxLength(100);
 
                 entity.Property(e => e.Product).HasMaxLength(50);
-
-                entity.Property(e => e.Requirement).HasMaxLength(500);
 
                 entity.Property(e => e.Telephone).HasMaxLength(50);
 
@@ -179,6 +181,12 @@ namespace Qlist.ModelM4s
                 entity.HasNoKey();
 
                 entity.ToTable("CompanyProfile");
+
+                entity.Property(e => e.CreateDate)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.FileName1).HasMaxLength(100);
 
                 entity.Property(e => e.Id)
                     .ValueGeneratedOnAdd()
@@ -373,11 +381,19 @@ namespace Qlist.ModelM4s
 
                 entity.ToTable("MasterPieceProject");
 
+                entity.Property(e => e.CreateDate)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.FileName1).HasMaxLength(100);
+
                 entity.Property(e => e.Id)
                     .ValueGeneratedOnAdd()
                     .HasColumnName("id");
 
-                entity.Property(e => e.MemberNo).HasMaxLength(50);
+                entity.Property(e => e.MemberNo)
+                    .IsRequired()
+                    .HasMaxLength(50);
             });
 
             modelBuilder.Entity<MasterProvince>(entity =>
@@ -478,6 +494,25 @@ namespace Qlist.ModelM4s
                     .HasColumnName("id");
 
                 entity.Property(e => e.MemberType).HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<Member>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToTable("Member_S");
+
+                entity.Property(e => e.CompanyNameTh)
+                    .HasMaxLength(255)
+                    .HasColumnName("CompanyNameTH");
+
+                entity.Property(e => e.F5).HasMaxLength(255);
+
+                entity.Property(e => e.MemberNo)
+                    .HasMaxLength(255)
+                    .HasColumnName("memberNo");
+
+                entity.Property(e => e.Telephone).HasMaxLength(255);
             });
 
             modelBuilder.Entity<MemberAddress>(entity =>
@@ -726,6 +761,10 @@ namespace Qlist.ModelM4s
 
                 entity.ToTable("MOU");
 
+                entity.Property(e => e.CreateDate)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
                 entity.Property(e => e.Id)
                     .ValueGeneratedOnAdd()
                     .HasColumnName("id");
@@ -793,6 +832,23 @@ namespace Qlist.ModelM4s
                     .HasDefaultValueSql("(getdate())");
             });
 
+            modelBuilder.Entity<TaraTube>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToTable("Tara_Tube");
+
+                entity.Property(e => e.Id)
+                    .ValueGeneratedOnAdd()
+                    .HasColumnName("id");
+
+                entity.Property(e => e.Name).HasMaxLength(50);
+
+                entity.Property(e => e.Url)
+                    .HasMaxLength(200)
+                    .HasColumnName("URL");
+            });
+
             modelBuilder.Entity<TbPosition>(entity =>
             {
                 entity.HasNoKey();
@@ -858,11 +914,11 @@ namespace Qlist.ModelM4s
 
                 entity.Property(e => e.RoleId).HasColumnName("RoleID");
 
-                entity.HasOne(d => d.Role)
-                    .WithMany(p => p.Users)
-                    .HasForeignKey(d => d.RoleId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_USERS_MasterRole");
+                //entity.HasOne(d => d.Role)
+                //    .WithMany(p => p.Users)
+                //    .HasForeignKey(d => d.RoleId)
+                //    .OnDelete(DeleteBehavior.ClientSetNull)
+                //    .HasConstraintName("FK_USERS_MasterRole");
             });
 
             OnModelCreatingPartial(modelBuilder);
