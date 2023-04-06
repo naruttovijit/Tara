@@ -187,7 +187,14 @@
 }
 <br />
 <div class="card">
-    <div class="card-header">Project Sub List</div>
+    <div class="card-header">
+        <div class="row">
+            <div class="col">Project Sub List</div>
+            <div class="col-sm-auto">
+                <RadzenButton Click=@(args => Gosubedit()) Icon="add" ButtonStyle="ButtonStyle.Primary" Size="ButtonSize.Medium" Text="ADD PROJECT SUB" />
+            </div>
+        </div>
+    </div>
     <div class="card-body">
         <div class="row">
             <p>
@@ -284,6 +291,11 @@
     private void Goback()
     {
         NavManager.NavigateTo("/Data/Project");
+    }
+
+    private void Gosubedit()
+    {
+        NavManager.NavigateTo("/Data/AddProjectSub/" + id.ToString());
     }
 
     public void Dispose()

@@ -1,0 +1,300 @@
+﻿@page "/Data/AddProjectSub/{id:int}"
+
+@implements IDisposable;
+
+@using ModelM2s;
+@using ModelM4s;
+@using Data;
+@using System.IO;
+@using System.Globalization;
+@using Radzen;
+@using Radzen.Blazor;
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Components.Authorization
+
+@inject IWebHostEnvironment env
+@inject ProjectData pj;
+@inject NavigationManager NavManager
+@inject DialogService DialogService
+@inject IJSRuntime js
+@inject BlazorSpinner.SpinnerService spin
+
+@attribute [Authorize(Roles = "1,2")]
+
+<br />
+<h3>Add Project Sub</h3>
+<br />
+
+<div class="card">
+    <div class="card-header">Create Project Sub</div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-2"><p><b>Project Sub Name</b> <a style="font-size:medium; color:red">*</a></p></div>
+            <div class="col"><p><RadzenTextBox class="rz-border-danger" style="width: 100%" id="SubName" @bind-Value="formsub.ProjectSubName" /></p></div>
+        </div>
+        <div class="row">
+            <div class="col-2"><p><b>Description</b></p></div>
+            <div class="col"><p><RadzenTextArea style="width: 100%" @bind-Value="subdesc" Cols="30" Rows="3" /></p></div>
+        </div>
+        <div class="row">
+            <div class="col-2"><p><b>Remark</b></p></div>
+            <div class="col"><p><RadzenTextArea style="width: 100%" @bind-Value="subremark" Cols="30" Rows="3" /></p></div>
+        </div>
+        <div class="row">
+            <div class="col-2"><p><b>Budget</b></p></div>
+            <div class="col"><p><RadzenNumeric TValue="double?" Placeholder="0.0" Step="0.5" @bind-Value=@formsub.Budget Class="w-100" /></p></div>
+            <div class="col-1"><p>THB</p></div>
+        </div>
+        <div class="row">
+            <div class="col-2"><p><b>Started Date</b></p></div>
+            <div class="col">
+                <p>
+                    <RadzenDatePicker @bind-Value=@formsub.PlanStartDate DateFormat="dd/MM/yyyy" Class="w-100">
+                        <FooterTemplate>
+                            <RadzenButton Click=@OnTodaySubStart Text="Today" Class="my-3 w-100" />
+                        </FooterTemplate>
+                    </RadzenDatePicker>
+                </p>
+            </div>
+            <div class="col-2"><p><b>Finished Date</b></p></div>
+            <div class="col">
+                <p>
+                    <RadzenDatePicker @bind-Value=@formsub.PlanFinishDate DateFormat="dd/MM/yyyy" Class="w-100">
+                        <FooterTemplate>
+                            <RadzenButton Click=@OnTodaySubFinish Text="Today" Class="my-3 w-100" />
+                        </FooterTemplate>
+                    </RadzenDatePicker>
+                </p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-2"><p><b>RA Type</b> <a style="font-size:medium; color:red">*</a></p></div>
+            <div class="col">
+                @if (ratype is not null)
+                {
+                    <p>
+                        <RadzenDropDown AllowClear="true" AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" @bind-Value=@formRAType.RatypeMasterId Placeholder="Select..."
+                                    Data=@ratype TextProperty="Name" ValueProperty="Id" class="rz-border-danger" Style="width:100%" />
+                    </p>
+                }
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-2"><p><b>Capability</b> <a style="font-size:medium; color:red">*</a></p></div>
+            <div class="col">
+                @if (subcap is not null)
+                {
+                    <p>
+                        <RadzenDropDown AllowClear="true" AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                    @bind-Value=@multipleValues Multiple="true" Placeholder="Select..." Data=@subcap TextProperty="CategoryCatSub" ValueProperty="Id"
+                                    Change=@(args => OnChange(args, "DropDown with multiple selection")) class="rz-border-danger" Style="width:100%">
+                            <Template>
+                                @getcap(((context as MasterCapabilityCatSub).CategoryCatId)) - @((context as MasterCapabilityCatSub).CategoryCatSub)
+                            </Template>
+                        </RadzenDropDown>
+                    </p>
+                }
+            </div>
+        </div>
+
+        <br>
+        <div class="row-cols-sm-auto">
+            <RadzenButton Click=@(args => SaveProjectSub()) Text="Add Project Sub" Icon="add" ButtonStyle="ButtonStyle.Primary" />
+        </div>
+    </div>
+</div>
+<br />
+
+@code {
+    [Parameter]
+    public int id { get; set; }
+
+    public ProjectHd formmain { get; set; } = new ProjectHd();
+    public ProjectSubProjectTl formsub { get; set; } = new ProjectSubProjectTl();
+    public ProjectRatypeTl formRAType { get; set; } = new ProjectRatypeTl();
+    public List<CustomContact> ListContact { get; set; } = new List<CustomContact>();
+    public List<MasterCapabilityCatSub> ListCategory { get; set; } = new List<MasterCapabilityCatSub>();
+    public List<ProjectHdhistory> HDhis { get; set; } = new List<ProjectHdhistory>();
+    public List<ProjectSubProjectTlhistory> Subhis { get; set; } = new List<ProjectSubProjectTlhistory>();
+    public List<CustomCustomer> CustomerData { get; set; } = new List<CustomCustomer>();
+
+    private List<MasterCapabilityCat> cap;
+    private List<MasterCapabilityCatSub> subcap;
+    private List<RatypeMaster> ratype;
+    private List<MasterCapabilityCatSub> showcate;
+
+    DateTime? value = DateTime.Now;
+
+    string subdesc;
+    string subremark;
+
+
+    [CascadingParameter]
+    private Task<AuthenticationState> authenticationStateTask { get; set; }
+
+    private ClaimsPrincipal AuthenticationStateUser { get; set; }
+
+    int userrole;
+    string usermemberno;
+    int userid;
+
+    IEnumerable<int> multipleValues = new int[] { };
+
+    protected override async Task OnInitializedAsync()
+    {
+        spin.Show();
+        await Initial();
+        StateHasChanged();
+        spin.Hide();
+    }
+
+    async Task Initial()
+    {
+        await GetDataAuthen();
+        formmain = await pj.GetProjectHDbyID(id);
+        ratype = await pj.GetRATypeMaster();
+        cap = await pj.GetAllCapability();
+        subcap = await pj.GetAllSubCapability();
+        subcap = subcap.OrderBy(w => w.CategoryCatId).ToList();
+        formsub.PlanStartDate = DateTime.Now;
+        formsub.PlanFinishDate = DateTime.Now;
+        DialogService.OnOpen += Open;
+        DialogService.OnClose += Close;
+    }
+
+    async Task GetDataAuthen()
+    {
+        usermemberno = string.Empty;
+
+        AuthenticationState authenticationState;
+        authenticationState = await authenticationStateTask;
+        this.AuthenticationStateUser = authenticationState.User;
+        var claim = this.AuthenticationStateUser.Claims.ToList();
+        userrole = int.Parse(claim[1].Value);
+        usermemberno = claim[2].Value;
+        userid = int.Parse(claim[3].Value);
+    }
+
+    async void SaveProjectSub() //Add data to Project Sub List<>
+    {
+        if (string.IsNullOrEmpty(formsub.ProjectSubName))
+        {
+            await ErrorMessage("Please fill in Project Sub Name!");
+            return;
+        }
+        if (formRAType.RatypeMasterId == 0)
+        {
+            await ErrorMessage("Please select RA Type!");
+            return;
+        }
+        if (ListCategory.Count == 0)
+        {
+            await ErrorMessage("Please select Cappability!");
+            return;
+        }
+
+        var list = await pj.GetProjectSubbySubName(formsub.ProjectSubName);
+        if (list is not null && list.Count() > 0)
+        {
+            await ErrorMessage("This Sub Project Name has already existed!");
+            return;
+        }
+
+        formRAType.MemberCapability = Newtonsoft.Json.JsonConvert.SerializeObject(ListCategory);
+        formRAType.Active = "Y";
+        formRAType.EditorId = userid;
+        formsub.ProjectRatypeTls.Add(formRAType);
+
+        if (!string.IsNullOrEmpty(subdesc))
+        {
+            formsub.Description = subdesc.Replace("\r\n", "" + ((char)13).ToString() + (char)10).ToString();
+        }
+        if (!string.IsNullOrEmpty(subremark))
+        {
+            formsub.Remark = subremark.Replace("\r\n", "" + ((char)13).ToString() + (char)10).ToString();
+        }
+
+        if (formsub.Budget is null) { formsub.Budget = 0; }
+
+        var obj = formmain.ProjectSubProjectTls.OrderByDescending(o => o.ProjectSubRunNo).FirstOrDefault();
+        int runno = int.Parse(obj.ProjectSubRunNo.Substring(obj.ProjectSubRunNo.Length - 3)) + 1;
+        string addrun = "000" + runno.ToString();
+       
+        formsub.ProjectSubRunNo = formmain.ProjectHdrunNo + "-" + addrun.Substring(addrun.Length - 3);
+        formsub.ProjectHdid = id;
+        formsub.ProjectSubStatus = "Inquiry";
+        formsub.Active = "Y";
+        formsub.ProjectSubProjectTlhistories.Add(new ProjectSubProjectTlhistory() { ProjectSubProjectTlid = formsub.Id, Remark = "Create and Inquiry", EditorId = userid });
+        formmain.ProjectSubProjectTls.Add(formsub);
+        formmain.ProjectHdhistories.Add(new ProjectHdhistory() { ProjectHdid = formmain.Id, Remark = "Add new Sub Project", EditorId = userid });
+        formmain.ProjectHdstatus = "Open";
+
+        var result = await pj.SaveProjectHD(formmain);
+        NavManager.NavigateTo("/Data/Project");
+    }
+
+    private string getcap(int? id)
+    {
+        string get = string.Empty;
+        var main = cap.Where(w => w.Id == id).FirstOrDefault();
+        get = main.CategoryCat;
+        return get;
+    }
+
+    void OnChange(object value, string name)
+    {
+        ListCategory = new List<MasterCapabilityCatSub>();
+        var str = value is IEnumerable<object> ? string.Join(", ", (IEnumerable<object>)value) : value;
+        foreach (var item in multipleValues)
+        {
+            var sub = subcap.Where(w => w.Id == item).FirstOrDefault();
+            ListCategory.Add(new MasterCapabilityCatSub() { Id = sub.Id, CategoryCatId = sub.CategoryCatId, CategoryCatSub = sub.CategoryCatSub, CategoryCat = sub.CategoryCat });
+        }
+
+    }
+
+    void OnTodaySubStart()
+    {
+        formsub.PlanStartDate = DateTime.Now;
+    }
+
+    void OnTodaySubFinish()
+    {
+        formsub.PlanFinishDate = DateTime.Now;
+    }
+
+    async Task ErrorMessage(string message)
+    {
+        await DialogService.OpenAsync("Warning", ds =>
+    @<div>
+        @message
+    </div>
+    , new DialogOptions() { CloseDialogOnOverlayClick = true });
+    }
+
+    void Open(string title, Type type, Dictionary<string, object> parameters, DialogOptions options)
+    {
+
+    }
+
+    void Close(dynamic result)
+    {
+
+    }
+
+    public void Dispose()
+    {
+        if (ListContact is not null) ListContact.Clear();
+        if (ListCategory is not null) ListCategory.Clear();
+        if (HDhis is not null) HDhis.Clear();
+        if (Subhis is not null) Subhis.Clear();
+        if (CustomerData is not null) CustomerData.Clear();
+        if (cap is not null) cap.Clear();
+        if (subcap is not null) subcap.Clear();
+        if (ratype is not null) ratype.Clear();
+        if (showcate is not null) showcate.Clear();
+        DialogService.OnOpen -= Open;
+        DialogService.OnClose -= Close;
+    }
+
+}

@@ -96,12 +96,17 @@
                         <RadzenDataGridColumn TItem="ProjectHd" Property="CreateDated" Title="Create Date" FormatString="{0:dd/MM/yyyy}" TextAlign="TextAlign.Center" Width="170px" />
                         @if (userrole == 1)
                         {
-                            <RadzenDataGridColumn TItem="ProjectHd" Property="ProjectHdrunNo" Width="70px" >
+                            <RadzenDataGridColumn TItem="ProjectHd" Property="ProjectHdrunNo" Width="50px" >
+                                <Template Context="hd">
+                                    <a><RadzenButton Click=@(args => AddSub(hd.Id)) Icon="add" ButtonStyle="ButtonStyle.Success" Size="ButtonSize.Medium" /></a>
+                                </Template>
+                            </RadzenDataGridColumn>
+                            <RadzenDataGridColumn TItem="ProjectHd" Property="ProjectHdrunNo" Width="50px" >
                                 <Template Context="hd">
                                     <a><RadzenButton Click=@(args => MainEdit(hd.Id)) Icon="edit" ButtonStyle="ButtonStyle.Primary" Size="ButtonSize.Medium" /></a>
                                 </Template>
                             </RadzenDataGridColumn>
-                            <RadzenDataGridColumn TItem="ProjectHd" Property="ProjectHdrunNo" Width="70px">
+                            <RadzenDataGridColumn TItem="ProjectHd" Property="ProjectHdrunNo" Width="50px">
                                 <Template Context="hd">
                                     <a><RadzenButton Click=@(args => MainDelete(hd.Id)) Icon="delete" ButtonStyle="ButtonStyle.Danger" Size="ButtonSize.Medium" /></a>
                                 </Template>
@@ -201,6 +206,11 @@
     private void MainEdit(int id)
     {
         NavManager.NavigateTo("/Data/ProjectEdit/" + id.ToString(), true);
+    }
+
+    private void AddSub(int id)
+    {
+        NavManager.NavigateTo("/Data/AddProjectSub/" + id.ToString(), true);
     }
 
     private void SubEdit(int id)

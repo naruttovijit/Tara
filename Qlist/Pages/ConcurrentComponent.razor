@@ -25,11 +25,12 @@
     private string messages;
 
     bool IsAvailable = true;
+    string ip = "http://apim2.theworkpc.com/";
 
     protected override async Task OnInitializedAsync()
     {
         hubConnection = new HubConnectionBuilder()
-            .WithUrl("http://119.59.114.151:8001/concurrenthub")
+            .WithUrl(ip + "concurrenthub")
             .WithAutomaticReconnect()
             .Build();
 

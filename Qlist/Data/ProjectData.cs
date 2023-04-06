@@ -14,9 +14,7 @@ namespace Qlist.Data
 {
     public class ProjectData
     {
-        //string ip = "http://119.59.114.151:8001/api/"; //Testserver
-        string ip = "http://apim2.theworkpc.com/api/";   //Production test
-        //string ip = "http://apim2.thaitara.org/api/";  //Production
+        string ip = "http://apim2.theworkpc.com/api/";   //Production
         string header = "";
 
         #region Module 2
@@ -56,15 +54,6 @@ namespace Qlist.Data
             return obj;
         }
 
-        //public async Task<List<ProjectSubProjectTl>> GetProjectSubProjectTL() //get project sub by project master id
-        //{
-        //    HttpClient hc = new HttpClient();
-        //    var response = await hc.GetAsync(ip + "ProjectSubProjectTl/");
-
-        //    var obj = await response.Content.ReadFromJsonAsync<List<ProjectSubProjectTl>>();
-        //    return obj;
-        //}
-
         public async Task<ProjectSubProjectTl> GetProjectSubProjectTLbyID(int id) //get project sub by project master id
         {
             HttpClient hc = new HttpClient();
@@ -82,15 +71,6 @@ namespace Qlist.Data
             var obj = await response.Content.ReadFromJsonAsync<List<RatypeMaster>>();
             return obj;
         }
-
-        //public async Task<List<ProjectDocument>> GetAllProjectDocument() //get all project document data
-        //{
-        //    HttpClient hc = new HttpClient();
-        //    var response = await hc.GetAsync(ip + "ProjectDocument");
-
-        //    var obj = await response.Content.ReadFromJsonAsync<List<ProjectDocument>>();
-        //    return obj;
-        //}
 
         public async Task<List<ProjectDocument>> GetProjectDocumentByProjectSubID(int id) //get project document by project sub id
         {
@@ -145,15 +125,6 @@ namespace Qlist.Data
             var obj = await response.Content.ReadFromJsonAsync<List<ProjectSubMemberAsgmt>>();
             return obj;
         }
-
-        //public async Task<List<MemberAsgmtawardedHistory>> GetAllMemberAwarded() //get all awarded member assignment
-        //{
-        //    HttpClient hc = new HttpClient();
-        //    var response = await hc.GetAsync(ip + "MemberAssignmentAwaredHistory");
-
-        //    var obj = await response.Content.ReadFromJsonAsync<List<MemberAsgmtawardedHistory>>();
-        //    return obj;
-        //}
 
         public async Task<List<Tickets>> GetAllTicket() //get all ticket data
         {
@@ -254,6 +225,12 @@ namespace Qlist.Data
             var result = await response.Content.ReadFromJsonAsync<MemberAsgmtawardedHistory>();
             return result;
         }
+
+        public async Task DeleteDoc(int id)
+        {
+            HttpClient hc = new HttpClient();
+            var response = await hc.DeleteAsync(ip + "ProjectDocument/" + id.ToString());
+        }
         #endregion
 
 
@@ -294,66 +271,12 @@ namespace Qlist.Data
             return obj;
         }
 
-        //public async Task<MemberMaster> GetMemberByMemberNo(string numberno) //get member by member no
-        //{
-        //    HttpClient hc = new HttpClient();
-        //    var response = await hc.GetAsync(ip + "MemberMaster/GetByNo/" + numberno);
-
-        //    var obj = await response.Content.ReadFromJsonAsync<MemberMaster>();
-        //    return obj;
-        //}
-
-        public async Task<List<MemberMaster>> GetMemberByContain(string engname) //get member by contain english name
-        {
-            HttpClient hc = new HttpClient();
-            var response = await hc.GetAsync(ip + "MemberMaster/GetByCompanyName/" + engname);
-
-            var obj = await response.Content.ReadFromJsonAsync<List<MemberMaster>>();
-            return obj;
-        }
-
-        //public async Task<List<MemberContactPerson>> GetAllContact() //get all contact
-        //{
-        //    HttpClient hc = new HttpClient();
-        //    var response = await hc.GetAsync(ip + "MemberContactPerson");
-
-        //    var obj = await response.Content.ReadFromJsonAsync<List<MemberContactPerson>>();
-        //    return obj;
-        //}
-
-        public async Task<List<MemberContactPerson>> GetContactByMemberNo(string numberno) //get contact by member no
-        {
-            HttpClient hc = new HttpClient();
-            var response = await hc.GetAsync(ip + "MemberContactPerson/GetByMemberNo/" + numberno);
-
-            var obj = await response.Content.ReadFromJsonAsync<List<MemberContactPerson>>();
-            return obj;
-        }
-
-        public async Task<List<MemberAddress>> GetAddressByMemberNo(string numberno) //get address by member no
-        {
-            HttpClient hc = new HttpClient();
-            var response = await hc.GetAsync(ip + "MemberAddress/GetByMemberNo/" + numberno);
-
-            var obj = await response.Content.ReadFromJsonAsync<List<MemberAddress>>();
-            return obj;
-        }
-
         public async Task<List<User>> GetAllUser() //get all user
         {
             HttpClient hc = new HttpClient();
             var response = await hc.GetAsync(ip + "User");
 
             var obj = await response.Content.ReadFromJsonAsync<List<User>>();
-            return obj;
-        }
-
-        public async Task<List<Customer>> GetCustomerByContain(string cusname)
-        {
-            HttpClient hc = new HttpClient();
-            var response = await hc.GetAsync(ip + "Customer/GetByName/" + cusname);
-
-            var obj = await response.Content.ReadFromJsonAsync<List<Customer>>();
             return obj;
         }
 

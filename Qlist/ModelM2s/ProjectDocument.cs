@@ -12,6 +12,7 @@ namespace Qlist.ModelM2s
         public string Active { get; set; }
         public DateTime LastUpdated { get; set; }
         public int EditorId { get; set; }
+        public string Path { get; set; }
 
         public virtual ProjectSubProjectTl ProjectSubProjectTl { get; set; }
     }

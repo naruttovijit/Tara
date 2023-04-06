@@ -36,7 +36,7 @@
                 <div class="col-2"><p><b>Target Date</b> <a style="font-size:medium; color:red">*</a></p></div>
                 <div class="col">
                     <p>
-                        <RadzenDatePicker @bind-Value=@ticket.TargetDate DateFormat="dd/MM/yyyy" Class="w-100">
+                        <RadzenDatePicker @bind-Value=@ticket.TargetDate DateFormat="dd/MM/yyyy" class="rz-border-danger" style="width: 100%">
                             <FooterTemplate>
                                 <RadzenButton Click=@OnTodayDate Text="Today" Class="my-3 w-100" />
                             </FooterTemplate>

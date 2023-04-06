@@ -95,8 +95,8 @@
                         <p>
                             <RadzenDropDown AllowClear="true" AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
                                             @bind-Value=@multipleValues Multiple="true" Placeholder="Select..." Data=@subcap TextProperty="CategoryCatSub" ValueProperty="Id"
-                                            Change=@(args => OnChange(args, "DropDown with multiple selection")) Class="w-100">
-                                            <Template Context="cap">
+                                        Change=@(args => OnChange(args, "DropDown with multiple selection")) class="rz-border-danger" style="width: 100%">
+                                <Template Context="cap">
                                                 @getcap((cap.CategoryCatId)) - @(cap.CategoryCatSub)
                                             </Template>
                                     </RadzenDropDown>
@@ -127,14 +127,14 @@
                             <div class="col"><img src="@doc.DocumentPath" width="300px" /></div>
                         }
                         <div class="col"><a style="white-space: pre-wrap;">@doc.Description</a></div>
-                        <div class="col-1"><RadzenButton Click=@(args => projectdoc.Remove(doc)) Icon="delete" ButtonStyle="ButtonStyle.Danger" /></div>
+                        <div class="col-1"><RadzenButton Click=@(args => RemoveFile(doc)) Icon="delete" ButtonStyle="ButtonStyle.Danger" /></div>
                     </div>
                 }
             }
 
             <br />
             <div class="row">
-                <div class="col-5"><p><InputFile OnChange="OnInputFileChange" /><a style="color:red">Prefered file types : PDF, BMP, JPG, JPEG, PNG</a></p></div>
+                <div class="col-auto"><p><InputFile OnChange="OnInputFileChange" /><a style="color:red">Prefered file types : PDF, BMP, JPG, JPEG, PNG</a></p></div>
             </div>
             <div class="row">
                 <div class="col-2"><p>Document Description</p></div>
@@ -172,6 +172,7 @@
 
     string Message = "No file(s) selected";
     string DocDesc;
+    string filepath = @"C:\Websites\Tara-Qlist\wwwroot";
     IBrowserFile selectedFile;
 
     string[] stringArray = { "PDF", "BMP", "JPG", "JPEG", "PNG" };
@@ -276,8 +277,8 @@
             stream.Close();
             fs.Close();
 
-            projectsub.ProjectDocuments.Add(new ProjectDocument() { ProjectSubProjectTlid = projectsub.Id, DocumentPath = filepath, Description = DocDesc, Active = "Y", EditorId = userid });
-            projectdoc.Add(new ProjectDocument() { ProjectSubProjectTlid = projectsub.Id, DocumentPath = filepath, Description = DocDesc, Active = "Y", EditorId = userid });
+            projectsub.ProjectDocuments.Add(new ProjectDocument() { ProjectSubProjectTlid = projectsub.Id, DocumentPath = filepath, Description = DocDesc, Active = "Y", EditorId = userid, Path = path });
+            projectdoc.Add(new ProjectDocument() { ProjectSubProjectTlid = projectsub.Id, DocumentPath = filepath, Description = DocDesc, Active = "Y", EditorId = userid, Path = path  });
         }
 
         this.StateHasChanged();
@@ -332,7 +333,7 @@
         @<div>
             @message
         </div>
-        , new DialogOptions() { CloseDialogOnOverlayClick = true });
+    , new DialogOptions() { CloseDialogOnOverlayClick = true });
     }
 
     void OnChange(object value, string name)
@@ -344,6 +345,32 @@
             subcategory.Add(new MasterCapabilityCatSub() { Id = sub.Id, CategoryCatId = sub.CategoryCatId, CategoryCatSub = sub.CategoryCatSub, CategoryCat = sub.CategoryCat });
         }
 
+    }
+
+    private async void RemoveFile(ProjectDocument doc)
+    {
+        if (File.Exists(doc.Path))
+        {
+            File.Delete(doc.Path);
+        }
+
+        projectdoc.Remove(doc);
+
+        foreach (ProjectDocument Doc in projectsub.ProjectDocuments)
+        {
+            if (Doc.DocumentPath == doc.DocumentPath)
+            {
+                projectsub.ProjectDocuments.Remove(Doc);
+                break;
+            }
+        }
+
+        if (doc.Id > 0)
+        {
+            await pj.DeleteDoc(doc.Id);
+        }
+
+        this.StateHasChanged();
     }
 
     public void Dispose()

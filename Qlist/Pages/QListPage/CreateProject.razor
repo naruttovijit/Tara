@@ -244,7 +244,7 @@
                     {
                         <p>
                             <RadzenDropDown AllowClear="true" AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" @bind-Value=@formRAType.RatypeMasterId Placeholder="Select..."
-                                    Data=@ratype TextProperty="Name" ValueProperty="Id" class="rz-border-danger; w-100" />
+                                    Data=@ratype TextProperty="Name" ValueProperty="Id" class="rz-border-danger" Style="width:100%" />
                         </p>
                     }
                 </div>
@@ -257,7 +257,7 @@
                         <p>
                             <RadzenDropDown AllowClear="true" AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
                                             @bind-Value=@multipleValues Multiple="true" Placeholder="Select..." Data=@subcap TextProperty="CategoryCatSub" ValueProperty="Id"
-                                    Change=@(args => OnChange(args, "DropDown with multiple selection")) class="rz-border-danger; w-100">
+                                    Change=@(args => OnChange(args, "DropDown with multiple selection")) class="rz-border-danger" Style="width:100%">
                                             <Template>
                                                 @getcap(((context as MasterCapabilityCatSub).CategoryCatId)) - @((context as MasterCapabilityCatSub).CategoryCatSub)
                                             </Template>
