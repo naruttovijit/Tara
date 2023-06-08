@@ -14,7 +14,7 @@ namespace Qlist.Data
 {
     public class ProjectData
     {
-        string ip = "http://apim2.theworkpc.com/api/";   //Production
+        string ip = "http://apim2.thaitara.org/api/";   //Production
         string header = "";
 
         #region Module 2

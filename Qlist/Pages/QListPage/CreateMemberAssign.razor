@@ -268,6 +268,7 @@
     private List<MasterCapabilityCatSub> subcapability;
     private List<MemberContactPerson> contact;
     private List<MemberMaster> member;
+    private List<MemberMaster> membernotnull;
     private List<MemberMaster> custommember;
     private List<ProjectSubMemberAsgmt> assign;
     private List<MemberAddress> membercap;
@@ -507,6 +508,7 @@
 
     private async Task OnLoadData(LoadDataArgs args)
     {
+
         if (args.Filter.Length <= 2)
         {
             if (custommember is not null)
@@ -516,7 +518,11 @@
         }
         if (args.Filter.Length > 2)
         {
-            custommember = member.Where(c => c.CompanyNameEn.ToUpper().Contains(args.Filter.ToUpper())).ToList();
+            string search = args.Filter;
+            membernotnull = new List<MemberMaster>();
+            membernotnull = member.Where(c => c.CompanyNameEn != "").ToList();
+            custommember = new List<MemberMaster>();
+            custommember = membernotnull.Where(c => c.CompanyNameEn.ToUpper().Contains(search.ToUpper())).ToList();
             InvokeAsync(StateHasChanged);
         }
     }

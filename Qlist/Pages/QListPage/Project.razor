@@ -17,6 +17,12 @@
 
 @attribute [Authorize(Roles = "1,2,3")]
 
+<style>
+    .row-highlight{
+        background-color: green;
+    }
+</style>
+
 <br />
 <div class="row">
     <div class="col"><h3>Queue List</h3></div>
@@ -35,8 +41,8 @@
             }
             else
             {
-                <RadzenDataGrid @ref="grid" AllowFiltering="true" AllowPaging="true" PageSize="10" AllowSorting="true" RowRender="@RowRender" ExpandMode="DataGridExpandMode.Single"
-                            Data="@project" TItem="ProjectHd" RowExpand="RowExpand" GridLines="DataGridGridLines.Horizontal" >
+                <RadzenDataGrid @ref="grid" AllowFiltering="true" AllowPaging="true" PageSize="10" AllowSorting="true" RowRender="@RowRender" ExpandMode="DataGridExpandMode.Multiple"
+                            Data="@project" TItem="ProjectHd" RowExpand="RowExpand" GridLines="DataGridGridLines.Horizontal">
                     <Template Context="sub">
                         <RadzenDataGrid AllowPaging="true" AllowSorting="true" Data="@sub.ProjectSubProjectTls" TItem="ProjectSubProjectTl">
                             <Columns>
@@ -51,11 +57,11 @@
                                         @String.Format(new System.Globalization.CultureInfo("th-TH"), "{0:C}", budg.Budget)
                                     </Template>
                                 </RadzenDataGridColumn>
-                                <RadzenDataGridColumn TItem="ProjectSubProjectTl" Property="Id" Title="Capability" Width="400px">
+                                @*<RadzenDataGridColumn TItem="ProjectSubProjectTl" Property="Id" Title="Capability" Width="400px">
                                     <Template Context="cap">
                                         <p style="white-space:pre-wrap">@Getcap(cap.Id)</p>
                                     </Template>
-                                </RadzenDataGridColumn>
+                                </RadzenDataGridColumn>*@
                                 <RadzenDataGridColumn TItem="ProjectSubProjectTl" Property="ProjectSubStatus" Title="Status" Width="150px" />
                                 <RadzenDataGridColumn TItem="ProjectSubProjectTl" Property="CreateDated" Title="Create Date" FormatString="{0:dd/MM/yyyy}" TextAlign="TextAlign.Center" Width="170px" />
                                 @if (userrole == 1)
@@ -136,6 +142,8 @@
     int userrole;
     string usermemberno;
     int userid;
+    private int rowCounter = 0;
+    private string[] statusesToHighlight = new string[] { "Open", "Inquiry" };
 
     protected override async Task OnInitializedAsync()
     {
@@ -145,6 +153,7 @@
         await Initial();
         StateHasChanged();
         spin.Hide();
+        await Expandrow();
     }
 
     async Task Initial()
@@ -172,15 +181,13 @@
     void RowRender(RowRenderEventArgs<ProjectHd> args)
     {
         args.Expandable = true;
-        //args.Attributes.Add("style", "background-color: var(--rz-success-light)");
-        //args.Attributes.Add("style", "background-color: var(--rz-success-light)");
+        args.Attributes.Add("style", "background-color: transparent;");
     }
 
     void RowExpand(ProjectHd hd)
     {
         if (hd.ProjectSubProjectTls == null)
         {
-
             hd.ProjectSubProjectTls = hd.ProjectSubProjectTls.Where(o => o.ProjectHdid == hd.Id).ToList();
         }
     }
@@ -195,6 +202,14 @@
             {
                 //await grid.ExpandRow(project.FirstOrDefault());
             }
+        }
+    }
+
+    async Task Expandrow()
+    {
+        foreach (var row in project)
+        {
+            await grid.ExpandRow(row);
         }
     }
 
