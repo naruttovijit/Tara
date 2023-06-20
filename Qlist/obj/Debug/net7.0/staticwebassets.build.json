@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "bt+w2o9WgzHFyYcGq0RvkOx9JwVNm6El7M8H8Bw/W8I=",
+  "Hash": "7mIQQUyPI2avVJuCZXV3kG+h6CzBa+DXAWFtmbibq5A=",
   "Source": "Qlist",
   "BasePath": "_content/Qlist",
   "Mode": "Default",
@@ -10,17 +10,17 @@
     {
       "Name": "Qlist\\wwwroot",
       "Source": "Qlist",
-      "ContentRoot": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\",
+      "ContentRoot": "D:\\Blazor\\Tara\\Qlist\\wwwroot\\",
       "BasePath": "_content/Qlist",
       "Pattern": "**"
     }
   ],
   "Assets": [
     {
-      "Identity": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\css\\dark.css",
+      "Identity": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\css\\dark.css",
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\",
       "BasePath": "_content/Radzen.Blazor",
       "RelativePath": "css/dark.css",
       "AssetKind": "All",
@@ -31,13 +31,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\css\\dark.css"
+      "OriginalItemSpec": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\css\\dark.css"
     },
     {
-      "Identity": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\css\\dark-base.css",
+      "Identity": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\css\\dark-base.css",
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\",
       "BasePath": "_content/Radzen.Blazor",
       "RelativePath": "css/dark-base.css",
       "AssetKind": "All",
@@ -48,13 +48,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\css\\dark-base.css"
+      "OriginalItemSpec": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\css\\dark-base.css"
     },
     {
-      "Identity": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\css\\default.css",
+      "Identity": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\css\\default.css",
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\",
       "BasePath": "_content/Radzen.Blazor",
       "RelativePath": "css/default.css",
       "AssetKind": "All",
@@ -65,13 +65,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\css\\default.css"
+      "OriginalItemSpec": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\css\\default.css"
     },
     {
-      "Identity": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\css\\default-base.css",
+      "Identity": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\css\\default-base.css",
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\",
       "BasePath": "_content/Radzen.Blazor",
       "RelativePath": "css/default-base.css",
       "AssetKind": "All",
@@ -82,13 +82,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\css\\default-base.css"
+      "OriginalItemSpec": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\css\\default-base.css"
     },
     {
-      "Identity": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\css\\humanistic.css",
+      "Identity": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\css\\humanistic.css",
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\",
       "BasePath": "_content/Radzen.Blazor",
       "RelativePath": "css/humanistic.css",
       "AssetKind": "All",
@@ -99,13 +99,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\css\\humanistic.css"
+      "OriginalItemSpec": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\css\\humanistic.css"
     },
     {
-      "Identity": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\css\\humanistic-base.css",
+      "Identity": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\css\\humanistic-base.css",
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\",
       "BasePath": "_content/Radzen.Blazor",
       "RelativePath": "css/humanistic-base.css",
       "AssetKind": "All",
@@ -116,13 +116,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\css\\humanistic-base.css"
+      "OriginalItemSpec": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\css\\humanistic-base.css"
     },
     {
-      "Identity": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\css\\material.css",
+      "Identity": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\css\\material.css",
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\",
       "BasePath": "_content/Radzen.Blazor",
       "RelativePath": "css/material.css",
       "AssetKind": "All",
@@ -133,13 +133,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\css\\material.css"
+      "OriginalItemSpec": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\css\\material.css"
     },
     {
-      "Identity": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\css\\material-base.css",
+      "Identity": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\css\\material-base.css",
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\",
       "BasePath": "_content/Radzen.Blazor",
       "RelativePath": "css/material-base.css",
       "AssetKind": "All",
@@ -150,13 +150,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\css\\material-base.css"
+      "OriginalItemSpec": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\css\\material-base.css"
     },
     {
-      "Identity": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\css\\software.css",
+      "Identity": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\css\\software.css",
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\",
       "BasePath": "_content/Radzen.Blazor",
       "RelativePath": "css/software.css",
       "AssetKind": "All",
@@ -167,13 +167,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\css\\software.css"
+      "OriginalItemSpec": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\css\\software.css"
     },
     {
-      "Identity": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\css\\software-base.css",
+      "Identity": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\css\\software-base.css",
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\",
       "BasePath": "_content/Radzen.Blazor",
       "RelativePath": "css/software-base.css",
       "AssetKind": "All",
@@ -184,13 +184,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\css\\software-base.css"
+      "OriginalItemSpec": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\css\\software-base.css"
     },
     {
-      "Identity": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\css\\standard.css",
+      "Identity": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\css\\standard.css",
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\",
       "BasePath": "_content/Radzen.Blazor",
       "RelativePath": "css/standard.css",
       "AssetKind": "All",
@@ -201,13 +201,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\css\\standard.css"
+      "OriginalItemSpec": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\css\\standard.css"
     },
     {
-      "Identity": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\css\\standard-base.css",
+      "Identity": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\css\\standard-base.css",
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\",
       "BasePath": "_content/Radzen.Blazor",
       "RelativePath": "css/standard-base.css",
       "AssetKind": "All",
@@ -218,13 +218,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\css\\standard-base.css"
+      "OriginalItemSpec": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\css\\standard-base.css"
     },
     {
-      "Identity": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\MaterialIcons-Regular.woff",
+      "Identity": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\MaterialIcons-Regular.woff",
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\",
       "BasePath": "_content/Radzen.Blazor",
       "RelativePath": "fonts/MaterialIcons-Regular.woff",
       "AssetKind": "All",
@@ -235,13 +235,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\MaterialIcons-Regular.woff"
+      "OriginalItemSpec": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\MaterialIcons-Regular.woff"
     },
     {
-      "Identity": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\roboto-v15-latin-300.woff",
+      "Identity": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\roboto-v15-latin-300.woff",
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\",
       "BasePath": "_content/Radzen.Blazor",
       "RelativePath": "fonts/roboto-v15-latin-300.woff",
       "AssetKind": "All",
@@ -252,13 +252,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\roboto-v15-latin-300.woff"
+      "OriginalItemSpec": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\roboto-v15-latin-300.woff"
     },
     {
-      "Identity": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\roboto-v15-latin-700.woff",
+      "Identity": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\roboto-v15-latin-700.woff",
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\",
       "BasePath": "_content/Radzen.Blazor",
       "RelativePath": "fonts/roboto-v15-latin-700.woff",
       "AssetKind": "All",
@@ -269,13 +269,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\roboto-v15-latin-700.woff"
+      "OriginalItemSpec": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\roboto-v15-latin-700.woff"
     },
     {
-      "Identity": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\roboto-v15-latin-regular.woff",
+      "Identity": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\roboto-v15-latin-regular.woff",
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\",
       "BasePath": "_content/Radzen.Blazor",
       "RelativePath": "fonts/roboto-v15-latin-regular.woff",
       "AssetKind": "All",
@@ -286,13 +286,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\roboto-v15-latin-regular.woff"
+      "OriginalItemSpec": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\roboto-v15-latin-regular.woff"
     },
     {
-      "Identity": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\roboto-v30-latin-300.woff",
+      "Identity": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\roboto-v30-latin-300.woff",
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\",
       "BasePath": "_content/Radzen.Blazor",
       "RelativePath": "fonts/roboto-v30-latin-300.woff",
       "AssetKind": "All",
@@ -303,13 +303,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\roboto-v30-latin-300.woff"
+      "OriginalItemSpec": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\roboto-v30-latin-300.woff"
     },
     {
-      "Identity": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\roboto-v30-latin-500.woff",
+      "Identity": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\roboto-v30-latin-500.woff",
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\",
       "BasePath": "_content/Radzen.Blazor",
       "RelativePath": "fonts/roboto-v30-latin-500.woff",
       "AssetKind": "All",
@@ -320,13 +320,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\roboto-v30-latin-500.woff"
+      "OriginalItemSpec": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\roboto-v30-latin-500.woff"
     },
     {
-      "Identity": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\roboto-v30-latin-700.woff",
+      "Identity": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\roboto-v30-latin-700.woff",
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\",
       "BasePath": "_content/Radzen.Blazor",
       "RelativePath": "fonts/roboto-v30-latin-700.woff",
       "AssetKind": "All",
@@ -337,13 +337,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\roboto-v30-latin-700.woff"
+      "OriginalItemSpec": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\roboto-v30-latin-700.woff"
     },
     {
-      "Identity": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\roboto-v30-latin-regular.woff",
+      "Identity": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\roboto-v30-latin-regular.woff",
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\",
       "BasePath": "_content/Radzen.Blazor",
       "RelativePath": "fonts/roboto-v30-latin-regular.woff",
       "AssetKind": "All",
@@ -354,13 +354,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\roboto-v30-latin-regular.woff"
+      "OriginalItemSpec": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\roboto-v30-latin-regular.woff"
     },
     {
-      "Identity": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\SourceSansPro-Black.woff",
+      "Identity": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\SourceSansPro-Black.woff",
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\",
       "BasePath": "_content/Radzen.Blazor",
       "RelativePath": "fonts/SourceSansPro-Black.woff",
       "AssetKind": "All",
@@ -371,13 +371,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\SourceSansPro-Black.woff"
+      "OriginalItemSpec": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\SourceSansPro-Black.woff"
     },
     {
-      "Identity": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\SourceSansPro-BlackIt.woff",
+      "Identity": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\SourceSansPro-BlackIt.woff",
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\",
       "BasePath": "_content/Radzen.Blazor",
       "RelativePath": "fonts/SourceSansPro-BlackIt.woff",
       "AssetKind": "All",
@@ -388,13 +388,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\SourceSansPro-BlackIt.woff"
+      "OriginalItemSpec": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\SourceSansPro-BlackIt.woff"
     },
     {
-      "Identity": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\SourceSansPro-Bold.woff",
+      "Identity": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\SourceSansPro-Bold.woff",
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\",
       "BasePath": "_content/Radzen.Blazor",
       "RelativePath": "fonts/SourceSansPro-Bold.woff",
       "AssetKind": "All",
@@ -405,13 +405,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\SourceSansPro-Bold.woff"
+      "OriginalItemSpec": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\SourceSansPro-Bold.woff"
     },
     {
-      "Identity": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\SourceSansPro-BoldIt.woff",
+      "Identity": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\SourceSansPro-BoldIt.woff",
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\",
       "BasePath": "_content/Radzen.Blazor",
       "RelativePath": "fonts/SourceSansPro-BoldIt.woff",
       "AssetKind": "All",
@@ -422,13 +422,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\SourceSansPro-BoldIt.woff"
+      "OriginalItemSpec": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\SourceSansPro-BoldIt.woff"
     },
     {
-      "Identity": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\SourceSansPro-ExtraLight.woff",
+      "Identity": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\SourceSansPro-ExtraLight.woff",
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\",
       "BasePath": "_content/Radzen.Blazor",
       "RelativePath": "fonts/SourceSansPro-ExtraLight.woff",
       "AssetKind": "All",
@@ -439,13 +439,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\SourceSansPro-ExtraLight.woff"
+      "OriginalItemSpec": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\SourceSansPro-ExtraLight.woff"
     },
     {
-      "Identity": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\SourceSansPro-ExtraLightIt.woff",
+      "Identity": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\SourceSansPro-ExtraLightIt.woff",
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\",
       "BasePath": "_content/Radzen.Blazor",
       "RelativePath": "fonts/SourceSansPro-ExtraLightIt.woff",
       "AssetKind": "All",
@@ -456,13 +456,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\SourceSansPro-ExtraLightIt.woff"
+      "OriginalItemSpec": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\SourceSansPro-ExtraLightIt.woff"
     },
     {
-      "Identity": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\SourceSansPro-It.woff",
+      "Identity": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\SourceSansPro-It.woff",
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\",
       "BasePath": "_content/Radzen.Blazor",
       "RelativePath": "fonts/SourceSansPro-It.woff",
       "AssetKind": "All",
@@ -473,13 +473,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\SourceSansPro-It.woff"
+      "OriginalItemSpec": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\SourceSansPro-It.woff"
     },
     {
-      "Identity": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\SourceSansPro-Light.woff",
+      "Identity": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\SourceSansPro-Light.woff",
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\",
       "BasePath": "_content/Radzen.Blazor",
       "RelativePath": "fonts/SourceSansPro-Light.woff",
       "AssetKind": "All",
@@ -490,13 +490,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\SourceSansPro-Light.woff"
+      "OriginalItemSpec": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\SourceSansPro-Light.woff"
     },
     {
-      "Identity": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\SourceSansPro-LightIt.woff",
+      "Identity": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\SourceSansPro-LightIt.woff",
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\",
       "BasePath": "_content/Radzen.Blazor",
       "RelativePath": "fonts/SourceSansPro-LightIt.woff",
       "AssetKind": "All",
@@ -507,13 +507,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\SourceSansPro-LightIt.woff"
+      "OriginalItemSpec": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\SourceSansPro-LightIt.woff"
     },
     {
-      "Identity": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\SourceSansPro-Regular.woff",
+      "Identity": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\SourceSansPro-Regular.woff",
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\",
       "BasePath": "_content/Radzen.Blazor",
       "RelativePath": "fonts/SourceSansPro-Regular.woff",
       "AssetKind": "All",
@@ -524,13 +524,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\SourceSansPro-Regular.woff"
+      "OriginalItemSpec": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\SourceSansPro-Regular.woff"
     },
     {
-      "Identity": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\SourceSansPro-Semibold.woff",
+      "Identity": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\SourceSansPro-Semibold.woff",
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\",
       "BasePath": "_content/Radzen.Blazor",
       "RelativePath": "fonts/SourceSansPro-Semibold.woff",
       "AssetKind": "All",
@@ -541,13 +541,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\SourceSansPro-Semibold.woff"
+      "OriginalItemSpec": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\SourceSansPro-Semibold.woff"
     },
     {
-      "Identity": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\SourceSansPro-SemiboldIt.woff",
+      "Identity": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\SourceSansPro-SemiboldIt.woff",
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\",
       "BasePath": "_content/Radzen.Blazor",
       "RelativePath": "fonts/SourceSansPro-SemiboldIt.woff",
       "AssetKind": "All",
@@ -558,13 +558,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\SourceSansPro-SemiboldIt.woff"
+      "OriginalItemSpec": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\fonts\\SourceSansPro-SemiboldIt.woff"
     },
     {
-      "Identity": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\Radzen.Blazor.js",
+      "Identity": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\Radzen.Blazor.js",
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\",
       "BasePath": "_content/Radzen.Blazor",
       "RelativePath": "Radzen.Blazor.js",
       "AssetKind": "All",
@@ -575,13 +575,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\tovij\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\Radzen.Blazor.js"
+      "OriginalItemSpec": "C:\\Users\\veera\\.nuget\\packages\\radzen.blazor\\4.4.7\\staticwebassets\\Radzen.Blazor.js"
     },
     {
-      "Identity": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\obj\\Debug\\net7.0\\scopedcss\\bundle\\Qlist.styles.css",
+      "Identity": "D:\\Blazor\\Tara\\Qlist\\obj\\Debug\\net7.0\\scopedcss\\bundle\\Qlist.styles.css",
       "SourceId": "Qlist",
       "SourceType": "Computed",
-      "ContentRoot": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\obj\\Debug\\net7.0\\scopedcss\\bundle\\",
+      "ContentRoot": "D:\\Blazor\\Tara\\Qlist\\obj\\Debug\\net7.0\\scopedcss\\bundle\\",
       "BasePath": "_content/Qlist",
       "RelativePath": "Qlist.styles.css",
       "AssetKind": "All",
@@ -592,13 +592,13 @@
       "AssetTraitValue": "ApplicationBundle",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\obj\\Debug\\net7.0\\scopedcss\\bundle\\Qlist.styles.css"
+      "OriginalItemSpec": "D:\\Blazor\\Tara\\Qlist\\obj\\Debug\\net7.0\\scopedcss\\bundle\\Qlist.styles.css"
     },
     {
-      "Identity": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\obj\\Debug\\net7.0\\scopedcss\\projectbundle\\Qlist.bundle.scp.css",
+      "Identity": "D:\\Blazor\\Tara\\Qlist\\obj\\Debug\\net7.0\\scopedcss\\projectbundle\\Qlist.bundle.scp.css",
       "SourceId": "Qlist",
       "SourceType": "Computed",
-      "ContentRoot": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\obj\\Debug\\net7.0\\scopedcss\\projectbundle\\",
+      "ContentRoot": "D:\\Blazor\\Tara\\Qlist\\obj\\Debug\\net7.0\\scopedcss\\projectbundle\\",
       "BasePath": "_content/Qlist",
       "RelativePath": "Qlist.bundle.scp.css",
       "AssetKind": "All",
@@ -609,13 +609,13 @@
       "AssetTraitValue": "ProjectBundle",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\obj\\Debug\\net7.0\\scopedcss\\projectbundle\\Qlist.bundle.scp.css"
+      "OriginalItemSpec": "D:\\Blazor\\Tara\\Qlist\\obj\\Debug\\net7.0\\scopedcss\\projectbundle\\Qlist.bundle.scp.css"
     },
     {
-      "Identity": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\css\\.DS_Store",
+      "Identity": "D:\\Blazor\\Tara\\Qlist\\wwwroot\\css\\.DS_Store",
       "SourceId": "Qlist",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\",
+      "ContentRoot": "D:\\Blazor\\Tara\\Qlist\\wwwroot\\",
       "BasePath": "_content/Qlist",
       "RelativePath": "css/.DS_Store",
       "AssetKind": "All",
@@ -629,10 +629,10 @@
       "OriginalItemSpec": "wwwroot\\css\\.DS_Store"
     },
     {
-      "Identity": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\css\\bootstrap\\bootstrap.min.css",
+      "Identity": "D:\\Blazor\\Tara\\Qlist\\wwwroot\\css\\bootstrap\\bootstrap.min.css",
       "SourceId": "Qlist",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\",
+      "ContentRoot": "D:\\Blazor\\Tara\\Qlist\\wwwroot\\",
       "BasePath": "_content/Qlist",
       "RelativePath": "css/bootstrap/bootstrap.min.css",
       "AssetKind": "All",
@@ -646,10 +646,10 @@
       "OriginalItemSpec": "wwwroot\\css\\bootstrap\\bootstrap.min.css"
     },
     {
-      "Identity": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\css\\bootstrap\\bootstrap.min.css.map",
+      "Identity": "D:\\Blazor\\Tara\\Qlist\\wwwroot\\css\\bootstrap\\bootstrap.min.css.map",
       "SourceId": "Qlist",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\",
+      "ContentRoot": "D:\\Blazor\\Tara\\Qlist\\wwwroot\\",
       "BasePath": "_content/Qlist",
       "RelativePath": "css/bootstrap/bootstrap.min.css.map",
       "AssetKind": "All",
@@ -663,10 +663,10 @@
       "OriginalItemSpec": "wwwroot\\css\\bootstrap\\bootstrap.min.css.map"
     },
     {
-      "Identity": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\css\\open-iconic\\font\\css\\open-iconic-bootstrap.min.css",
+      "Identity": "D:\\Blazor\\Tara\\Qlist\\wwwroot\\css\\open-iconic\\font\\css\\open-iconic-bootstrap.min.css",
       "SourceId": "Qlist",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\",
+      "ContentRoot": "D:\\Blazor\\Tara\\Qlist\\wwwroot\\",
       "BasePath": "_content/Qlist",
       "RelativePath": "css/open-iconic/font/css/open-iconic-bootstrap.min.css",
       "AssetKind": "All",
@@ -680,10 +680,10 @@
       "OriginalItemSpec": "wwwroot\\css\\open-iconic\\font\\css\\open-iconic-bootstrap.min.css"
     },
     {
-      "Identity": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.eot",
+      "Identity": "D:\\Blazor\\Tara\\Qlist\\wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.eot",
       "SourceId": "Qlist",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\",
+      "ContentRoot": "D:\\Blazor\\Tara\\Qlist\\wwwroot\\",
       "BasePath": "_content/Qlist",
       "RelativePath": "css/open-iconic/font/fonts/open-iconic.eot",
       "AssetKind": "All",
@@ -697,10 +697,10 @@
       "OriginalItemSpec": "wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.eot"
     },
     {
-      "Identity": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.otf",
+      "Identity": "D:\\Blazor\\Tara\\Qlist\\wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.otf",
       "SourceId": "Qlist",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\",
+      "ContentRoot": "D:\\Blazor\\Tara\\Qlist\\wwwroot\\",
       "BasePath": "_content/Qlist",
       "RelativePath": "css/open-iconic/font/fonts/open-iconic.otf",
       "AssetKind": "All",
@@ -714,10 +714,10 @@
       "OriginalItemSpec": "wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.otf"
     },
     {
-      "Identity": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.svg",
+      "Identity": "D:\\Blazor\\Tara\\Qlist\\wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.svg",
       "SourceId": "Qlist",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\",
+      "ContentRoot": "D:\\Blazor\\Tara\\Qlist\\wwwroot\\",
       "BasePath": "_content/Qlist",
       "RelativePath": "css/open-iconic/font/fonts/open-iconic.svg",
       "AssetKind": "All",
@@ -731,10 +731,10 @@
       "OriginalItemSpec": "wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.svg"
     },
     {
-      "Identity": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.ttf",
+      "Identity": "D:\\Blazor\\Tara\\Qlist\\wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.ttf",
       "SourceId": "Qlist",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\",
+      "ContentRoot": "D:\\Blazor\\Tara\\Qlist\\wwwroot\\",
       "BasePath": "_content/Qlist",
       "RelativePath": "css/open-iconic/font/fonts/open-iconic.ttf",
       "AssetKind": "All",
@@ -748,10 +748,10 @@
       "OriginalItemSpec": "wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.ttf"
     },
     {
-      "Identity": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.woff",
+      "Identity": "D:\\Blazor\\Tara\\Qlist\\wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.woff",
       "SourceId": "Qlist",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\",
+      "ContentRoot": "D:\\Blazor\\Tara\\Qlist\\wwwroot\\",
       "BasePath": "_content/Qlist",
       "RelativePath": "css/open-iconic/font/fonts/open-iconic.woff",
       "AssetKind": "All",
@@ -765,10 +765,10 @@
       "OriginalItemSpec": "wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.woff"
     },
     {
-      "Identity": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\css\\open-iconic\\FONT-LICENSE",
+      "Identity": "D:\\Blazor\\Tara\\Qlist\\wwwroot\\css\\open-iconic\\FONT-LICENSE",
       "SourceId": "Qlist",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\",
+      "ContentRoot": "D:\\Blazor\\Tara\\Qlist\\wwwroot\\",
       "BasePath": "_content/Qlist",
       "RelativePath": "css/open-iconic/FONT-LICENSE",
       "AssetKind": "All",
@@ -782,10 +782,10 @@
       "OriginalItemSpec": "wwwroot\\css\\open-iconic\\FONT-LICENSE"
     },
     {
-      "Identity": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\css\\open-iconic\\ICON-LICENSE",
+      "Identity": "D:\\Blazor\\Tara\\Qlist\\wwwroot\\css\\open-iconic\\ICON-LICENSE",
       "SourceId": "Qlist",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\",
+      "ContentRoot": "D:\\Blazor\\Tara\\Qlist\\wwwroot\\",
       "BasePath": "_content/Qlist",
       "RelativePath": "css/open-iconic/ICON-LICENSE",
       "AssetKind": "All",
@@ -799,10 +799,10 @@
       "OriginalItemSpec": "wwwroot\\css\\open-iconic\\ICON-LICENSE"
     },
     {
-      "Identity": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\css\\open-iconic\\README.md",
+      "Identity": "D:\\Blazor\\Tara\\Qlist\\wwwroot\\css\\open-iconic\\README.md",
       "SourceId": "Qlist",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\",
+      "ContentRoot": "D:\\Blazor\\Tara\\Qlist\\wwwroot\\",
       "BasePath": "_content/Qlist",
       "RelativePath": "css/open-iconic/README.md",
       "AssetKind": "All",
@@ -816,10 +816,10 @@
       "OriginalItemSpec": "wwwroot\\css\\open-iconic\\README.md"
     },
     {
-      "Identity": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\css\\site.css",
+      "Identity": "D:\\Blazor\\Tara\\Qlist\\wwwroot\\css\\site.css",
       "SourceId": "Qlist",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\",
+      "ContentRoot": "D:\\Blazor\\Tara\\Qlist\\wwwroot\\",
       "BasePath": "_content/Qlist",
       "RelativePath": "css/site.css",
       "AssetKind": "All",
@@ -833,10 +833,10 @@
       "OriginalItemSpec": "wwwroot\\css\\site.css"
     },
     {
-      "Identity": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\favicon.ico",
+      "Identity": "D:\\Blazor\\Tara\\Qlist\\wwwroot\\favicon.ico",
       "SourceId": "Qlist",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\",
+      "ContentRoot": "D:\\Blazor\\Tara\\Qlist\\wwwroot\\",
       "BasePath": "_content/Qlist",
       "RelativePath": "favicon.ico",
       "AssetKind": "All",
@@ -850,10 +850,10 @@
       "OriginalItemSpec": "wwwroot\\favicon.ico"
     },
     {
-      "Identity": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\images\\logo.png",
+      "Identity": "D:\\Blazor\\Tara\\Qlist\\wwwroot\\images\\logo.png",
       "SourceId": "Qlist",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\",
+      "ContentRoot": "D:\\Blazor\\Tara\\Qlist\\wwwroot\\",
       "BasePath": "_content/Qlist",
       "RelativePath": "images/logo.png",
       "AssetKind": "All",
@@ -867,10 +867,10 @@
       "OriginalItemSpec": "wwwroot\\images\\logo.png"
     },
     {
-      "Identity": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\PDFFiles\\_pincode.pdf",
+      "Identity": "D:\\Blazor\\Tara\\Qlist\\wwwroot\\PDFFiles\\_pincode.pdf",
       "SourceId": "Qlist",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\",
+      "ContentRoot": "D:\\Blazor\\Tara\\Qlist\\wwwroot\\",
       "BasePath": "_content/Qlist",
       "RelativePath": "PDFFiles/_pincode.pdf",
       "AssetKind": "All",
@@ -884,10 +884,10 @@
       "OriginalItemSpec": "wwwroot\\PDFFiles\\_pincode.pdf"
     },
     {
-      "Identity": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\PDFFiles\\_test.pdf",
+      "Identity": "D:\\Blazor\\Tara\\Qlist\\wwwroot\\PDFFiles\\_test.pdf",
       "SourceId": "Qlist",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\",
+      "ContentRoot": "D:\\Blazor\\Tara\\Qlist\\wwwroot\\",
       "BasePath": "_content/Qlist",
       "RelativePath": "PDFFiles/_test.pdf",
       "AssetKind": "All",
@@ -901,10 +901,10 @@
       "OriginalItemSpec": "wwwroot\\PDFFiles\\_test.pdf"
     },
     {
-      "Identity": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\PDFFiles\\_TR.02_CartonBarcodeScanned.pdf",
+      "Identity": "D:\\Blazor\\Tara\\Qlist\\wwwroot\\PDFFiles\\_TR.02_CartonBarcodeScanned.pdf",
       "SourceId": "Qlist",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\",
+      "ContentRoot": "D:\\Blazor\\Tara\\Qlist\\wwwroot\\",
       "BasePath": "_content/Qlist",
       "RelativePath": "PDFFiles/_TR.02_CartonBarcodeScanned.pdf",
       "AssetKind": "All",
@@ -918,10 +918,10 @@
       "OriginalItemSpec": "wwwroot\\PDFFiles\\_TR.02_CartonBarcodeScanned.pdf"
     },
     {
-      "Identity": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\PDFFiles\\23010008-001_test.pdf",
+      "Identity": "D:\\Blazor\\Tara\\Qlist\\wwwroot\\PDFFiles\\23010008-001_test.pdf",
       "SourceId": "Qlist",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\",
+      "ContentRoot": "D:\\Blazor\\Tara\\Qlist\\wwwroot\\",
       "BasePath": "_content/Qlist",
       "RelativePath": "PDFFiles/23010008-001_test.pdf",
       "AssetKind": "All",
@@ -935,10 +935,10 @@
       "OriginalItemSpec": "wwwroot\\PDFFiles\\23010008-001_test.pdf"
     },
     {
-      "Identity": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\PDFFiles\\23020001-001_test.pdf",
+      "Identity": "D:\\Blazor\\Tara\\Qlist\\wwwroot\\PDFFiles\\23020001-001_test.pdf",
       "SourceId": "Qlist",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\",
+      "ContentRoot": "D:\\Blazor\\Tara\\Qlist\\wwwroot\\",
       "BasePath": "_content/Qlist",
       "RelativePath": "PDFFiles/23020001-001_test.pdf",
       "AssetKind": "All",
@@ -952,10 +952,10 @@
       "OriginalItemSpec": "wwwroot\\PDFFiles\\23020001-001_test.pdf"
     },
     {
-      "Identity": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\PicFiles\\_10-medical-industry.jpg",
+      "Identity": "D:\\Blazor\\Tara\\Qlist\\wwwroot\\PicFiles\\_10-medical-industry.jpg",
       "SourceId": "Qlist",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\",
+      "ContentRoot": "D:\\Blazor\\Tara\\Qlist\\wwwroot\\",
       "BasePath": "_content/Qlist",
       "RelativePath": "PicFiles/_10-medical-industry.jpg",
       "AssetKind": "All",
@@ -969,10 +969,10 @@
       "OriginalItemSpec": "wwwroot\\PicFiles\\_10-medical-industry.jpg"
     },
     {
-      "Identity": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\PicFiles\\_12_Interface_Cable_terminal.jpg",
+      "Identity": "D:\\Blazor\\Tara\\Qlist\\wwwroot\\PicFiles\\_12_Interface_Cable_terminal.jpg",
       "SourceId": "Qlist",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\",
+      "ContentRoot": "D:\\Blazor\\Tara\\Qlist\\wwwroot\\",
       "BasePath": "_content/Qlist",
       "RelativePath": "PicFiles/_12_Interface_Cable_terminal.jpg",
       "AssetKind": "All",
@@ -986,10 +986,10 @@
       "OriginalItemSpec": "wwwroot\\PicFiles\\_12_Interface_Cable_terminal.jpg"
     },
     {
-      "Identity": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\PicFiles\\_FANUC_6-axis_welding_robots.jpg",
+      "Identity": "D:\\Blazor\\Tara\\Qlist\\wwwroot\\PicFiles\\_FANUC_6-axis_welding_robots.jpg",
       "SourceId": "Qlist",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\",
+      "ContentRoot": "D:\\Blazor\\Tara\\Qlist\\wwwroot\\",
       "BasePath": "_content/Qlist",
       "RelativePath": "PicFiles/_FANUC_6-axis_welding_robots.jpg",
       "AssetKind": "All",
@@ -1003,10 +1003,10 @@
       "OriginalItemSpec": "wwwroot\\PicFiles\\_FANUC_6-axis_welding_robots.jpg"
     },
     {
-      "Identity": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\PicFiles\\_Screenshot 2022-03-22 152836.png",
+      "Identity": "D:\\Blazor\\Tara\\Qlist\\wwwroot\\PicFiles\\_Screenshot 2022-03-22 152836.png",
       "SourceId": "Qlist",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\",
+      "ContentRoot": "D:\\Blazor\\Tara\\Qlist\\wwwroot\\",
       "BasePath": "_content/Qlist",
       "RelativePath": "PicFiles/_Screenshot 2022-03-22 152836.png",
       "AssetKind": "All",
@@ -1020,10 +1020,10 @@
       "OriginalItemSpec": "wwwroot\\PicFiles\\_Screenshot 2022-03-22 152836.png"
     },
     {
-      "Identity": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\PicFiles\\_Screenshot 2022-03-22 153833.png",
+      "Identity": "D:\\Blazor\\Tara\\Qlist\\wwwroot\\PicFiles\\_Screenshot 2022-03-22 153833.png",
       "SourceId": "Qlist",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\",
+      "ContentRoot": "D:\\Blazor\\Tara\\Qlist\\wwwroot\\",
       "BasePath": "_content/Qlist",
       "RelativePath": "PicFiles/_Screenshot 2022-03-22 153833.png",
       "AssetKind": "All",
@@ -1037,10 +1037,10 @@
       "OriginalItemSpec": "wwwroot\\PicFiles\\_Screenshot 2022-03-22 153833.png"
     },
     {
-      "Identity": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\PicFiles\\_Screenshot 2022-03-22 153854.png",
+      "Identity": "D:\\Blazor\\Tara\\Qlist\\wwwroot\\PicFiles\\_Screenshot 2022-03-22 153854.png",
       "SourceId": "Qlist",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\",
+      "ContentRoot": "D:\\Blazor\\Tara\\Qlist\\wwwroot\\",
       "BasePath": "_content/Qlist",
       "RelativePath": "PicFiles/_Screenshot 2022-03-22 153854.png",
       "AssetKind": "All",
@@ -1054,10 +1054,10 @@
       "OriginalItemSpec": "wwwroot\\PicFiles\\_Screenshot 2022-03-22 153854.png"
     },
     {
-      "Identity": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\PicFiles\\22120004-001_FEA-RO-IA-AM100iC-Dual.jpg",
+      "Identity": "D:\\Blazor\\Tara\\Qlist\\wwwroot\\PicFiles\\22120004-001_FEA-RO-IA-AM100iC-Dual.jpg",
       "SourceId": "Qlist",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\",
+      "ContentRoot": "D:\\Blazor\\Tara\\Qlist\\wwwroot\\",
       "BasePath": "_content/Qlist",
       "RelativePath": "PicFiles/22120004-001_FEA-RO-IA-AM100iC-Dual.jpg",
       "AssetKind": "All",
@@ -1071,10 +1071,10 @@
       "OriginalItemSpec": "wwwroot\\PicFiles\\22120004-001_FEA-RO-IA-AM100iC-Dual.jpg"
     },
     {
-      "Identity": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\PicFiles\\22120005-001_FANUC_6-axis_welding_robots.jpg",
+      "Identity": "D:\\Blazor\\Tara\\Qlist\\wwwroot\\PicFiles\\22120005-001_FANUC_6-axis_welding_robots.jpg",
       "SourceId": "Qlist",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\",
+      "ContentRoot": "D:\\Blazor\\Tara\\Qlist\\wwwroot\\",
       "BasePath": "_content/Qlist",
       "RelativePath": "PicFiles/22120005-001_FANUC_6-axis_welding_robots.jpg",
       "AssetKind": "All",
@@ -1088,10 +1088,10 @@
       "OriginalItemSpec": "wwwroot\\PicFiles\\22120005-001_FANUC_6-axis_welding_robots.jpg"
     },
     {
-      "Identity": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\PicFiles\\23010001-001_10-medical-industry.jpg",
+      "Identity": "D:\\Blazor\\Tara\\Qlist\\wwwroot\\PicFiles\\23010001-001_10-medical-industry.jpg",
       "SourceId": "Qlist",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\",
+      "ContentRoot": "D:\\Blazor\\Tara\\Qlist\\wwwroot\\",
       "BasePath": "_content/Qlist",
       "RelativePath": "PicFiles/23010001-001_10-medical-industry.jpg",
       "AssetKind": "All",
@@ -1105,10 +1105,10 @@
       "OriginalItemSpec": "wwwroot\\PicFiles\\23010001-001_10-medical-industry.jpg"
     },
     {
-      "Identity": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\PicFiles\\23010008-001_12_Interface_Cable_terminal.jpg",
+      "Identity": "D:\\Blazor\\Tara\\Qlist\\wwwroot\\PicFiles\\23010008-001_12_Interface_Cable_terminal.jpg",
       "SourceId": "Qlist",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\",
+      "ContentRoot": "D:\\Blazor\\Tara\\Qlist\\wwwroot\\",
       "BasePath": "_content/Qlist",
       "RelativePath": "PicFiles/23010008-001_12_Interface_Cable_terminal.jpg",
       "AssetKind": "All",
@@ -1122,10 +1122,10 @@
       "OriginalItemSpec": "wwwroot\\PicFiles\\23010008-001_12_Interface_Cable_terminal.jpg"
     },
     {
-      "Identity": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\PicFiles\\23020001-001_Screenshot 2022-03-22 152836.png",
+      "Identity": "D:\\Blazor\\Tara\\Qlist\\wwwroot\\PicFiles\\23020001-001_Screenshot 2022-03-22 152836.png",
       "SourceId": "Qlist",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\",
+      "ContentRoot": "D:\\Blazor\\Tara\\Qlist\\wwwroot\\",
       "BasePath": "_content/Qlist",
       "RelativePath": "PicFiles/23020001-001_Screenshot 2022-03-22 152836.png",
       "AssetKind": "All",
@@ -1139,10 +1139,10 @@
       "OriginalItemSpec": "wwwroot\\PicFiles\\23020001-001_Screenshot 2022-03-22 152836.png"
     },
     {
-      "Identity": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\TicketImages\\webclip.png",
+      "Identity": "D:\\Blazor\\Tara\\Qlist\\wwwroot\\TicketImages\\webclip.png",
       "SourceId": "Qlist",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\wwwroot\\",
+      "ContentRoot": "D:\\Blazor\\Tara\\Qlist\\wwwroot\\",
       "BasePath": "_content/Qlist",
       "RelativePath": "TicketImages/webclip.png",
       "AssetKind": "All",

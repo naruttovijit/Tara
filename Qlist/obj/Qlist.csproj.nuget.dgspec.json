@@ -1,23 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\Qlist.csproj": {}
+    "D:\\Blazor\\Tara\\Qlist\\Qlist.csproj": {}
   },
   "projects": {
-    "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\Qlist.csproj": {
+    "D:\\Blazor\\Tara\\Qlist\\Qlist.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\Qlist.csproj",
+        "projectUniqueName": "D:\\Blazor\\Tara\\Qlist\\Qlist.csproj",
         "projectName": "Qlist",
-        "projectPath": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\Qlist.csproj",
-        "packagesPath": "C:\\Users\\tovij\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\tovij\\source\\repos\\QList\\Qlist\\obj\\",
+        "projectPath": "D:\\Blazor\\Tara\\Qlist\\Qlist.csproj",
+        "packagesPath": "C:\\Users\\veera\\.nuget\\packages\\",
+        "outputPath": "D:\\Blazor\\Tara\\Qlist\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
+          "C:\\Program Files\\DevExpress 22.2\\Components\\Offline Packages",
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\tovij\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\veera\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\DevExpress 22.2.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -26,7 +28,8 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\sdk\\7.0.304\\Sdks\\Microsoft.NET.Sdk.Web\\library-packs": {},
+          "C:\\Program Files\\DevExpress 22.2\\Components\\System\\Components\\Packages": {},
+          "C:\\Program Files\\dotnet\\sdk\\7.0.302\\Sdks\\Microsoft.NET.Sdk.Web\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -89,7 +92,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.304\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.302\\RuntimeIdentifierGraph.json"
         }
       }
     }
